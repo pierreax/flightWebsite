@@ -17,7 +17,7 @@
         // Function to read data from the "airports.txt" file
         async function readAirportsData() {
             try {
-                const response = await fetch('https://gist.githubusercontent.com/pierreax/db1d5d2f749cf2af3da55102dfc46589/raw/7350dcb992ce481f023c9c0dd78ebd7c7d0d7a86/airports.txt');
+                const response = await fetch('airports.txt');
                 const text = await response.text();
 
                 // Split text into lines and create a dictionary
