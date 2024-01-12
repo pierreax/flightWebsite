@@ -136,7 +136,7 @@
                     }, 3000);
 
                     // Show browser alert
-                    alert('Thank you for your submission! We will let you know when we find a matching flight!.');
+                    alert('Thank you for your submission! We will for prices check daily and let you know when we find a matching flight!.');
                     // Set default values for "From" and "To" fields
                     $('#iataCodeFrom').val('OSL').trigger('change');
                     $('#iataCodeTo').val('PMI').trigger('change');
