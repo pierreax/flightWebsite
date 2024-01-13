@@ -39,6 +39,10 @@
             }
         }
 
+        function parseInputValue(value) {
+            return isNaN(value) ? "" : value;
+        }
+
         // Initialize Select2 for the "IATA Code From" field
         $('#iataCodeFrom').select2({
             placeholder: 'Start typing to search...',
@@ -69,20 +73,16 @@
         });
 
             // Listen to changes in the flight type dropdown
-        $('#flightType').on('change', function() {
-            console.log("Selected value: ", $(this).val()); // Debugging line
-            if ($(this).val() === 'one-way') {
-                // Hide return date fields
-                $('#returnDateFrom').hide();
-                $('#returnDateTo').hide();
-                $('label[for="returnDateFrom"]').hide();
-                $('label[for="returnDateTo"]').hide();
+        $('#flightType').on('select2:select', function() {
+        console.log("Selected value: ", $(this).val()); // Debugging line
+          if ($(this).val() === 'one-way') {
+                // Hide and remove required attribute from return date fields
+                $('#returnDateFrom, #returnDateTo').hide().removeAttr('required');
+                $('label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
             } else {
-                // Show return date fields
-                $('#returnDateFrom').show();
-                $('#returnDateTo').show();
-                $('label[for="returnDateFrom"]').show();
-                $('label[for="returnDateTo"]').show();
+                // Show and add required attribute to return date fields
+                $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
+                $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
             }
         });
 
@@ -119,15 +119,15 @@
                     iataCodeTo: extractIATACode('iataCodeTo'),
                     flightType: document.getElementById('flightType').value,
                     maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
-                    maxStops: parseInt(document.getElementById('maxStops').value),
-                    nbrPassengers: parseInt(document.getElementById('nbrPassengers').value),
+                    maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
+                    nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
                     depDateFrom: formatDate(document.getElementById('depDateFrom').value),
                     depDateTo: formatDate(document.getElementById('depDateTo').value),
                     returnDateFrom: formatDate(document.getElementById('returnDateFrom').value),
                     returnDateTo: formatDate(document.getElementById('returnDateTo').value),
-                    nightsFrom: parseInt(document.getElementById('nightsFrom').value),
-                    nightsTo: parseInt(document.getElementById('nightsTo').value),
-                    maxFlightDuration: parseFloat(document.getElementById('maxFlightDuration').value),
+                    nightsFrom: parseInputValue(parseInt(document.getElementById('nightsFrom').value)),
+                    nightsTo: parseInputValue(parseInt(document.getElementById('nightsTo').value)),
+                    maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                     email: document.getElementById('email').value
                 }
             };
