@@ -45,15 +45,15 @@ form {
 
 label {
     display: block;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     font-weight: 400; /* Optional: font-weight for labels */
-    padding: 12px; /* Slightly larger padding */
+    padding: 10px; /* Slightly larger padding */
 }
 
 input, select {
     width: 100%;
-    padding: 12px; /* Slightly larger padding */
-    margin-bottom: 15px;
+    padding: 10px; /* Slightly larger padding */
+    margin-bottom: 12px;
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
