@@ -68,6 +68,26 @@
             $('#iataCodeTo').val('PMI').trigger('change');
         });
 
+            // Listen to changes in the flight type dropdown
+        $('#flightType').on('change', function() {
+            if ($(this).val() === 'One-Way') {
+                // Hide return date fields
+                $('#returnDateFrom').hide();
+                $('#returnDateTo').hide();
+                $('label[for="returnDateFrom"]').hide();
+                $('label[for="returnDateTo"]').hide();
+            } else {
+                // Show return date fields
+                $('#returnDateFrom').show();
+                $('#returnDateTo').show();
+                $('label[for="returnDateFrom"]').show();
+                $('label[for="returnDateTo"]').show();
+            }
+        });
+
+    // Trigger change on page load in case the flightType is already set to 'one-way'
+    $('#flightType').trigger('change');
+
 
         document.getElementById('sheetyForm').addEventListener('submit', function (event) {
             event.preventDefault();
