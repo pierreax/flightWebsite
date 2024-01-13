@@ -70,7 +70,8 @@
 
             // Listen to changes in the flight type dropdown
         $('#flightType').on('change', function() {
-            if ($(this).val() === 'One-Way') {
+            console.log("Selected value: ", $(this).val()); // Debugging line
+            if ($(this).val() === 'one-way') {
                 // Hide return date fields
                 $('#returnDateFrom').hide();
                 $('#returnDateTo').hide();

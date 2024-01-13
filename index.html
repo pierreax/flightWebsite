@@ -34,7 +34,7 @@
         <label for="flightType">Flight Type: (more options will be available soon)</label>
         <select id="flightType" name="flightType" required>
             <option value="return">Return</option>
-            <option value="return">One-Way</option>
+            <option value="one-way">One-Way</option>
         </select>
 
         <label for="maxPricePerPerson">Max Price per person: (optional)</label>
@@ -47,10 +47,10 @@
         <input type="number" id="nbrPassengers" name="nbrPassengers" value="1" required>
 
         <label for="depDateFrom">Departure Date From:</label>
-        <input type="date" id="depDateFrom" name="depDateFrom">
+        <input type="date" id="depDateFrom" name="depDateFrom" required>
 
         <label for="depDateTo">Departure Date To:</label>
-        <input type="date" id="depDateTo" name="depDateTo">
+        <input type="date" id="depDateTo" name="depDateTo" required>
 
         <label for="returnDateFrom">Return Date From:</label>
         <input type="date" id="returnDateFrom" name="returnDateFrom">
