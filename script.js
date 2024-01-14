@@ -42,8 +42,12 @@
         }
 
         function parseInputValue(value) {
-            return isNaN(value) ? "" : value;
+            if (isNaN(value) || value === "NaN/NaN/NaN") {
+                return "";
+            }
+            return value;
         }
+
 
         // Initialize Select2 for the "IATA Code From" field
         $('#iataCodeFrom').select2({
