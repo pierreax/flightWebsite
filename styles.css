@@ -1,46 +1,53 @@
 body {
     font-family: 'Roboto', sans-serif;
     margin: 20px;
-    line-height: 1.6; /* Improved line height for readability */
+    line-height: 1.6;
+    background-color: #f0f0f0; /* Add a background color to the entire page */
 }
 
 h1 {
     font-size: 2.5em;
-    font-weight: 700; /* Increased weight */
-    color: #222; /* Darker color */
+    font-weight: 700;
+    color: #fff; /* Change text color to white */
     margin-bottom: 0.5em;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* Subtle shadow */
-    letter-spacing: 0.5px; /* Slightly increased spacing */
-    text-align:center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
+    text-align: center;
+    background-color: #4CAF50; /* Add a green background color */
+    padding: 10px 0; /* Add some padding to the heading */
 }
 
 h2 {
     font-size: 2em;
-    font-weight: 650; /* Increased weight */
-    color: #444; /* Darker color */
+    font-weight: 650;
+    color: #fff;
     margin-bottom: 0.4em;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
     letter-spacing: 0.4px;
-    text-align:center;
+    text-align: center;
+    background-color: #45a049; /* Add a slightly different green background color */
+    padding: 8px 0; /* Adjust padding */
 }
 
 h3 {
     font-size: 1.5em;
-    font-weight: 600; /* Increased weight */
-    color: #666; /* Darker color */
+    font-weight: 600;
+    color: #fff;
     margin-bottom: 0.3em;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     letter-spacing: 0.3px;
-    text-align:center;
+    text-align: center;
+    background-color: #4CAF50; /* Reuse the same green background color as h1 */
+    padding: 6px 0; /* Adjust padding */
 }
 
 form {
     max-width: 400px;
-    margin: 20px auto; /* Adjusted for responsive design */
+    margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Added shadow to form */
-    background: #fff; /* Optional: background color for form */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #fff;
 }
 
 label {
