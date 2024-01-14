@@ -1,5 +1,7 @@
+    console.log("Loaded JS");
     // Wait for the document to be ready before initializing Select2
     $(document).ready(function () {
+    console.log("Loaded JS");
 
         // Function to populate a dropdown with options using Select2
         function populateDropdownWithSelect2(selectElement, data) {
@@ -86,8 +88,8 @@
             }
         });
 
-    // Trigger change on page load in case the flightType is already set to 'one-way'
-    $('#flightType').trigger('change');
+        // Trigger change on page load in case the flightType is already set to 'one-way'
+        $('#flightType').trigger('change');
 
 
         document.getElementById('sheetyForm').addEventListener('submit', function (event) {
