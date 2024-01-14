@@ -1,7 +1,6 @@
-    console.log("Loaded JS2");
     // Wait for the document to be ready before initializing Select2
     $(document).ready(function () {
-    console.log("Loaded JS2");
+    console.log("Loaded JS");
 
         // Function to populate a dropdown with options using Select2
         function populateDropdownWithSelect2(selectElement, data) {
