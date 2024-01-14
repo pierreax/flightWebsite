@@ -54,16 +54,19 @@ input, select {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border: 1px solid #ddd; /* Subtle border */
     background: #ffcc66;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Change the background color of the Select2 dropdown selection */
 #select2-iataCodeFrom-container, #select2-iataCodeTo-container {
     background-color: #ffcc66;
     font-weight: bold;
+    font-family: 'Roboto', sans-serif;
 }
 
 .select2-selection__rendered {
     font-weight: bold;
+    font-family: 'Roboto', sans-serif;
 }
 
 
