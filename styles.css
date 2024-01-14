@@ -17,15 +17,15 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 1em;
+    font-size: 1.5em;
 }
 
 h2 {
-    font-size: 0.7em;
+    font-size: 1.2em;
 }
 
 h3 {
-    font-size: 0.3em;
+    font-size: 1.0em;
 }
 
 form {
@@ -101,13 +101,13 @@ input:focus, select:focus {
         margin: 10px;
     }
     h1 {
-        font-size: 0.8em; /* smaller on mobile */
+        font-size: 1.2em; /* smaller on mobile */
     }
     h2 {
-        font-size: 0.6em;
+        font-size: 1.0em;
     }
     h3 {
-        font-size: 0.4em;
+        font-size: 0.8em;
     }
     h1, h2, h3 {
         text-shadow: none; /* Removing shadow on mobile if it looks too heavy */
