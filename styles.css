@@ -43,6 +43,7 @@ label {
     margin-bottom: 5px;
     font-weight: 400; /* Optional: font-weight for labels */
     padding: 10px; /* Slightly larger padding */
+    font-weight: bold;
 }
 
 input, select {
@@ -55,6 +56,7 @@ input, select {
     border: 1px solid #ddd; /* Subtle border */
     background: #ffcc66;
     font-family: 'Roboto', sans-serif;
+    font-weight: bold;
 }
 
 /* Change the background color of the Select2 dropdown selection */
