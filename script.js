@@ -76,6 +76,15 @@
 
         $('#flightType').change(function() {
             console.log("Standard change event selected value:", $(this).val());
+            if ($(this).val() === 'one-way') {
+                // Hide and remove required attribute from return date fields
+                $('#returnDateFrom, #returnDateTo').hide().removeAttr('required');
+                $('label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
+            } else {
+                // Show and add required attribute to return date fields
+                $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
+                $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
+            }
         });
 
 
