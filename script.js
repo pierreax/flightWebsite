@@ -95,10 +95,12 @@
         console.log("Selected value: ", $(this).val()); // Debugging line
           if ($(this).val() === 'one-way') {
                 // Hide and remove required attribute from return date fields
+                console.log("Removing the fields Select2.")
                 $('#returnDateFrom, #returnDateTo').hide().removeAttr('required');
                 $('label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
             } else {
                 // Show and add required attribute to return date fields
+                console.log("Removing the fields select2.")
                 $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
                 $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
             }
