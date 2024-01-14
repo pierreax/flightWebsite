@@ -1,7 +1,7 @@
-    console.log("Loaded JS");
+    console.log("Loaded JS2");
     // Wait for the document to be ready before initializing Select2
     $(document).ready(function () {
-    console.log("Loaded JS");
+    console.log("Loaded JS2");
 
         // Function to populate a dropdown with options using Select2
         function populateDropdownWithSelect2(selectElement, data) {
@@ -73,6 +73,11 @@
             $('#iataCodeFrom').val('OSL').trigger('change');
             $('#iataCodeTo').val('PMI').trigger('change');
         });
+
+        $('#flightType').change(function() {
+            console.log("Standard change event selected value:", $(this).val());
+        });
+
 
             // Listen to changes in the flight type dropdown
         $('#flightType').on('select2:select', function() {
