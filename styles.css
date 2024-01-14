@@ -53,7 +53,7 @@ input, select {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border: 1px solid #ddd; /* Subtle border */
-    background: #bc8a24;
+    background: #ffcc66;
 }
 
 input[type="date"] {
