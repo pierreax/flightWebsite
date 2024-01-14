@@ -59,6 +59,11 @@ input, select {
 /* Change the background color of the Select2 dropdown selection */
 #select2-iataCodeFrom-container, #select2-iataCodeTo-container {
     background-color: #ffcc66;
+    font-weight: bold;
+}
+
+.select2-selection__rendered {
+    font-weight: bold;
 }
 
 
