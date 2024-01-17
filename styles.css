@@ -57,6 +57,7 @@ input, select {
     background: #ffcc66;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
+    -webkit-appearance: none;
 }
 
 /* Change the background color of the Select2 dropdown selection */
