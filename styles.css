@@ -73,7 +73,7 @@ input, select {
 
 
 input[type="date"] {
-    /*width: calc(100% - 14px); /* Adjust for date input arrow */
+    -webkit-appearance: none;
 }
 
 input[type="submit"] {
