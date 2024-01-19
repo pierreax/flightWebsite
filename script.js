@@ -116,9 +116,6 @@
         document.getElementById('sheetyForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Replace 'your-sheety-url' with your actual Sheety API endpoint
-            let url = 'https://api.sheety.co/f3a65c5d3619ab6b57dcfe118df98456/flightDeals/prices';
-
             // Function to format dates as needed
             function formatDate(dateString) {
                 const date = new Date(dateString);
@@ -136,6 +133,24 @@
                 return iataCode.trim();
             }
 
+
+            // Function to generate a unique token for each submission
+            function generateToken() {
+                let token;
+                if (window.crypto && window.crypto.randomUUID) {
+                    // Use crypto API if available
+                    token = window.crypto.randomUUID();
+                } else {
+                    // Fallback: Use a timestamp + random number
+                    token = new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
+                }
+                console.log(token)
+                return token;
+            }
+
+            // Sheety API function
+            let url = 'https://api.sheety.co/f3a65c5d3619ab6b57dcfe118df98456/flightDeals/prices';
+
             let formData = {
                 price: {
                     iataCodeFrom: extractIATACode('iataCodeFrom'),
@@ -151,7 +166,8 @@
                     nightsFrom: parseInputValue(parseInt(document.getElementById('nightsFrom').value)),
                     nightsTo: parseInputValue(parseInt(document.getElementById('nightsTo').value)),
                     maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
-                    email: document.getElementById('email').value
+                    email: document.getElementById('email').value,
+                    token: generateToken()  // Generate and include the unique token
                 }
             };
 
