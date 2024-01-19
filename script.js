@@ -168,7 +168,7 @@
                     maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                     email: document.getElementById('email').value,
                     token: generateToken(),  // Generate and include the unique token
-                    lastFetchedPrice: '0'
+                    lastFetchedPrice: 0
                 }
             };
 
