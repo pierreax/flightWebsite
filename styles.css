@@ -75,6 +75,17 @@ input, select {
 
 input[type="date"] {
     -webkit-appearance: none;
+    width: 100%;
+    padding: 10px; /* Slightly larger padding */
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ddd; /* Subtle border */
+    background: #ffcc66;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    -webkit-appearance: none;
 }
 
 input[type="submit"] {
