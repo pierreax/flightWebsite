@@ -62,7 +62,8 @@ $(document).ready(function () {
                 max_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
                 adults: 1,
-                curr: 'NOK'
+                curr: 'NOK',
+                limit: 1
             });
 
             const response = await fetch(`${url}?${params.toString()}`, {
