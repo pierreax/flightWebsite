@@ -53,6 +53,7 @@ $(document).ready(function () {
     // Example function to calculate suggested price limit (implement your own logic)
     function calculateSuggestedPriceLimit(data) {
         // Example: return the average price
+        console.log("Calculating the Price.");
         return data.flights.reduce((acc, flight) => acc + flight.price, 0) / data.flights.length;
     }
 
