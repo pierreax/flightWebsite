@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded");
+    console.log("Loaded File");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -24,6 +24,7 @@ $(document).ready(function () {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         const formattedDate = `${day}/${month}/${date.getFullYear()}`;
+        console.log(formattedDate);
         return formattedDate;
     }
 
