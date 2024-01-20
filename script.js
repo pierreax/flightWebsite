@@ -18,6 +18,15 @@ $(document).ready(function () {
         return iataCode.trim();
     }
 
+        // Function to format dates as needed
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const formattedDate = `${day}/${month}/${date.getFullYear()}`;
+            return formattedDate;
+        }
+
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
         console.log("Button clicked!!"); // This line is for debugging purposes.
@@ -154,14 +163,6 @@ $(document).ready(function () {
     document.getElementById('sheetyForm').addEventListener('submit', function (event) {
         event.preventDefault();
 
-        // Function to format dates as needed
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            const formattedDate = `${day}/${month}/${date.getFullYear()}`;
-            return formattedDate;
-        }
 
         // Function to generate a unique token for each submission
         function generateToken() {
