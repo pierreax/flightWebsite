@@ -1,5 +1,22 @@
 $(document).ready(function () {
-    console.log("Loaded JS!");
+    console.log("Loaded JS");
+
+    // Define the extractIATACode function here so it's available when suggestPriceLimit is called
+    function extractIATACode(elementId) {
+        const selectElement = document.getElementById(elementId);
+        if (!selectElement) {
+            console.error('Select element not found');
+            return '';
+        }
+        const selectedOptionData = $(selectElement).select2('data');
+        if (!selectedOptionData || !selectedOptionData.length) {
+            console.error('No data found in Select2 for: ' + elementId);
+            return '';
+        }
+        const selectedOptionText = selectedOptionData[0].text;
+        const iataCode = selectedOptionText.split(' - ')[0];
+        return iataCode.trim();
+    }
 
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
@@ -144,14 +161,6 @@ $(document).ready(function () {
             const day = date.getDate().toString().padStart(2, '0');
             const formattedDate = `${day}/${month}/${date.getFullYear()}`;
             return formattedDate;
-        }
-
-        // Function to extract IATA code from Select2 option text
-        function extractIATACode(elementId) {
-            const selectElement = document.getElementById(elementId);
-            const selectedOptionText = $(selectElement).select2('data')[0].text;
-            const iataCode = selectedOptionText.split(' - ')[0];
-            return iataCode.trim();
         }
 
         // Function to generate a unique token for each submission
