@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded JS.");
+    console.log("Loaded JS...");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -25,6 +25,13 @@ $(document).ready(function () {
             const day = date.getDate().toString().padStart(2, '0');
             const formattedDate = `${day}/${month}/${date.getFullYear()}`;
             return formattedDate;
+        }
+
+        function parseInputValue(value) {
+            if (isNaN(value) || value === "NaN/NaN/NaN") {
+                return "";
+            }
+            return value;
         }
 
     // Event listener for the Suggest Price Limit button
@@ -120,12 +127,6 @@ $(document).ready(function () {
         }
     }
 
-    function parseInputValue(value) {
-        if (isNaN(value) || value === "NaN/NaN/NaN") {
-            return "";
-        }
-        return value;
-    }
 
     // Initialize Select2 for the "IATA Code From" and "IATA Code To" fields
     $('#iataCodeFrom, #iataCodeTo').select2({
