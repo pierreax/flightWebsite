@@ -4,6 +4,7 @@
 
         // Function to make an API request to Tequila API and suggest a price limit
         async function suggestPriceLimit() {
+            console.log("Sending Current Price request");
             const origin = extractIATACode('iataCodeFrom');
             const destination = extractIATACode('iataCodeTo');
             const startDate = formatDate(document.getElementById('depDateFrom').value);
