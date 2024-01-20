@@ -5,6 +5,7 @@
         $('#suggestPriceBtn').on('click', function() {
             console.log("Button clicked"); // This line is for debugging purposes.
             suggestPriceLimit();
+        }
 
         // Function to make an API request to Tequila API and suggest a price limit
         async function suggestPriceLimit() {
