@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded JS!");
+    console.log("Loaded JS");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -18,21 +18,21 @@ $(document).ready(function () {
         return iataCode.trim();
     }
 
-        // Function to format dates as needed
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            const formattedDate = `${day}/${month}/${date.getFullYear()}`;
-            return formattedDate;
-        }
+    // Function to format dates as needed
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const formattedDate = `${day}/${month}/${date.getFullYear()}`;
+        return formattedDate;
+    }
 
-        function parseInputValue(value) {
-            if (isNaN(value) || value === "NaN/NaN/NaN") {
-                return "";
-            }
-            return value;
+    function parseInputValue(value) {
+        if (isNaN(value) || value === "NaN/NaN/NaN") {
+            return "";
         }
+        return value;
+    }
 
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
@@ -72,9 +72,9 @@ $(document).ready(function () {
                 }
             });
 
-            const data = await response.json();
-            console.log('Tequila API response:', data);  // Log the response data to the console
-            const suggestedPriceLimit = calculateSuggestedPriceLimit(data); // Implement this function based on your logic
+            const currentPriceData = await response.json();
+            console.log('Tequila API response:', currentPriceData);  // Log the response data to the console
+            const suggestedPriceLimit = calculateSuggestedPriceLimit(currentPriceData); // Implement this function based on your logic
             document.getElementById('maxPricePerPerson').value = suggestedPriceLimit;
 
         } catch (error) {
@@ -83,21 +83,19 @@ $(document).ready(function () {
     }
 
     // Example function to calculate suggested price limit (implement your own logic)
-    function calculateSuggestedPriceLimit(data) {
+    function calculateSuggestedPriceLimit(currentPriceData) {
         // Example: return the average price
         console.log("Calculating the Price.");
-        const data = await response.json();
-        console.log('Tequila API response:', data);
-
-        if(data && data.length > 0) {
-            const firstItem = data[0];
+        if(currentPriceData && currentPriceData.data && currentPriceData.data.length > 0) {
+            const firstItem = currentPriceData.data[0];
             console.log('First item data:', firstItem);
             // Now you can use firstItem data to suggest price limit or do other things
+            // For now, just returning the price of the first item as an example
+            return firstItem.price; // Replace 'price' with the actual key if different
         } else {
             console.log('No data found in the response');
-            // Handle the case where the data array is empty or doesn't exist
+            return 0; // Handle the case where the data array is empty or doesn't exist
         }
-        return data.flights.reduce((acc, flight) => acc + flight.price, 0) / data.flights.length;
     }
 
     // Function to populate a dropdown with options using Select2
@@ -138,7 +136,6 @@ $(document).ready(function () {
         }
     }
 
-
     // Initialize Select2 for the "IATA Code From" and "IATA Code To" fields
     $('#iataCodeFrom, #iataCodeTo').select2({
         placeholder: 'Start typing to search...',
@@ -174,7 +171,6 @@ $(document).ready(function () {
     // Form submission event listener
     document.getElementById('sheetyForm').addEventListener('submit', function (event) {
         event.preventDefault();
-
 
         // Function to generate a unique token for each submission
         function generateToken() {
