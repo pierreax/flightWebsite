@@ -143,6 +143,12 @@ $(document).ready(function () {
         width: '100%'
     });
 
+    // Copy value from depDateFrom to depDateTo when depDateFrom changes
+    $('#depDateFrom').change(function() {
+        const departureDate = $(this).val();
+        $('#depDateTo').val(departureDate);
+    });
+
     // Additional code to focus on the search field when Select2 is opened
     $(document).on('select2:open', () => {
         document.querySelector('.select2-search__field').focus();
