@@ -103,6 +103,32 @@ input[type="submit"]:hover, input[type="submit"]:active {
     transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
+.price-limit-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.price-limit-label {
+    flex-grow: 1;
+}
+
+#suggestPriceBtn {
+    margin-left: 10px;
+    padding: 5px 10px; /* Adjust padding as needed */
+    cursor: pointer; /* Gives a pointer cursor on hover */
+    background-color: #4CAF50; /* Same as your submit button */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Match other inputs */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effect */
+}
+
+#suggestPriceBtn:hover, #suggestPriceBtn:active {
+    background-color: #45a049; /* Darker shade for hover state */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
 input:focus, select:focus {
     outline: none;
     border-color: #4CAF50;
