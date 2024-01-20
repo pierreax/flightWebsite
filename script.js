@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!!");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -21,19 +21,26 @@ $(document).ready(function () {
     // Function to format dates as needed
     function formatDate(dateString) {
         const date = new Date(dateString);
+        if (isNaN(date.getTime())) { // Check if the date is invalid
+            console.error('Invalid date:', dateString);
+            return "NaN/NaN/NaN";
+        }
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         const formattedDate = `${day}/${month}/${date.getFullYear()}`;
-        console.log(formattedDate);
         return formattedDate;
     }
 
     function parseInputValue(value) {
-        if (isNaN(value) || value === "NaN/NaN/NaN") {
+        if (typeof value === 'string' && value === "NaN/NaN/NaN") {
+            return "";  // Or handle the invalid date case as needed
+        }
+        if (isNaN(value)) {
             return "";
         }
         return value;
     }
+
 
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
@@ -47,6 +54,12 @@ $(document).ready(function () {
         const destination = extractIATACode('iataCodeTo');
         const startDate = formatDate(document.getElementById('depDateFrom').value);
         const endDate = formatDate(document.getElementById('depDateTo').value);
+        console.log('Parsed Departure Date From:', startDate);
+        console.log('Parsed Departure Date To:', endDate);
+        const startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
+        const endDateReturn = formatDate(document.getElementById('returnDateTo').value);
+        console.log('Parsed Return Date From:', parseInputValue(startDateReturn));
+        console.log('Parsed Return Date To:', parseInputValue(endDateReturn));
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
 
@@ -62,6 +75,8 @@ $(document).ready(function () {
                 fly_to: destination,
                 date_from: startDate,
                 date_to: endDate,
+                return_from: startDateReturn,
+                return_to: endDateReturn,
                 max_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
                 adults: 1,
