@@ -49,7 +49,7 @@ $(document).ready(function () {
 
     // Function to make an API request to Tequila API and suggest a price limit
     async function suggestPriceLimit() {
-            console.log("Sending Current Price request");
+         console.log("Sending Current Price request");
         // Extracting and logging IATA codes
         const origin = extractIATACode('iataCodeFrom');
         const destination = extractIATACode('iataCodeTo');
