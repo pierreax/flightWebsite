@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded JS");
+    console.log("Loaded JS!");
 
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
