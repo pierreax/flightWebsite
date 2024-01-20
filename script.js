@@ -86,6 +86,17 @@ $(document).ready(function () {
     function calculateSuggestedPriceLimit(data) {
         // Example: return the average price
         console.log("Calculating the Price.");
+        const data = await response.json();
+        console.log('Tequila API response:', data);
+
+        if(data && data.length > 0) {
+            const firstItem = data[0];
+            console.log('First item data:', firstItem);
+            // Now you can use firstItem data to suggest price limit or do other things
+        } else {
+            console.log('No data found in the response');
+            // Handle the case where the data array is empty or doesn't exist
+        }
         return data.flights.reduce((acc, flight) => acc + flight.price, 0) / data.flights.length;
     }
 
