@@ -2,10 +2,11 @@
     $(document).ready(function () {
     console.log("Loaded JS");
 
+     // Event listener for the Suggest Price Limit button
         $('#suggestPriceBtn').on('click', function() {
             console.log("Button clicked"); // This line is for debugging purposes.
             suggestPriceLimit();
-        }
+        }); // <- Make sure this line has the closing parenthesis and semicolon
 
         // Function to make an API request to Tequila API and suggest a price limit
         async function suggestPriceLimit() {
