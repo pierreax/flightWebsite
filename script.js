@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded File");
+    console.log("Loaded New File");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -148,6 +148,13 @@ $(document).ready(function () {
         console.log("Copying the date to next field.");
         const departureDate = $(this).val();
         $('#depDateTo').val(departureDate);
+    });
+
+    // Copy value from returnDateFrom to returnDateTo when returnDateFrom changes
+    $('#returnDateFrom').change(function() {
+        console.log("Copying the return date to next field.");
+        const returnDate = $(this).val();
+        $('#returnDateTo').val(returnDate);
     });
 
     // Additional code to focus on the search field when Select2 is opened
