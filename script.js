@@ -211,8 +211,8 @@ $(document).ready(function () {
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
                 depDateFrom: formatDate(document.getElementById('depDateFrom').value),
                 depDateTo: formatDate(document.getElementById('depDateTo').value),
-                returnDateFrom: parseInputValue(document.getElementById('returnDateFrom').value),
-                returnDateTo: parseInputValue(document.getElementById('returnDateTo').value),
+                returnDateFrom: formatDate(document.getElementById('returnDateFrom').value),
+                returnDateTo: formatDate(document.getElementById('returnDateTo').value),
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),  // Generate and include the unique token
