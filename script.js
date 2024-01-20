@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
-        console.log("Button clicked"); // This line is for debugging purposes.
+        console.log("Button clicked!!"); // This line is for debugging purposes.
         suggestPriceLimit();
     });
 
