@@ -49,17 +49,31 @@ $(document).ready(function () {
 
     // Function to make an API request to Tequila API and suggest a price limit
     async function suggestPriceLimit() {
-        console.log("Sending Current Price request");
+            console.log("Sending Current Price request");
+        // Extracting and logging IATA codes
         const origin = extractIATACode('iataCodeFrom');
         const destination = extractIATACode('iataCodeTo');
+        console.log('Origin IATA:', origin);
+        console.log('Destination IATA:', destination);
+
+        // Extracting, formatting, and logging departure dates
         const startDate = formatDate(document.getElementById('depDateFrom').value);
         const endDate = formatDate(document.getElementById('depDateTo').value);
-        console.log('Parsed Departure Date From:', startDate);
-        console.log('Parsed Departure Date To:', endDate);
-        const startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
-        const endDateReturn = formatDate(document.getElementById('returnDateTo').value);
-        console.log('Parsed Return Date From:', parseInputValue(startDateReturn));
-        console.log('Parsed Return Date To:', parseInputValue(endDateReturn));
+        console.log('Raw Departure Date From:', document.getElementById('depDateFrom').value);
+        console.log('Raw Departure Date To:', document.getElementById('depDateTo').value);
+        console.log('Formatted Departure Date From:', startDate);
+        console.log('Formatted Departure Date To:', endDate);
+
+        // Extracting, formatting, and logging return dates
+        const rawStartDateReturn = document.getElementById('returnDateFrom').value;
+        const rawEndDateReturn = document.getElementById('returnDateTo').value;
+        console.log('Raw Return Date From:', rawStartDateReturn);
+        console.log('Raw Return Date To:', rawEndDateReturn);
+
+        const startDateReturn = formatDate(rawStartDateReturn);
+        const endDateReturn = formatDate(rawEndDateReturn);
+        console.log('Formatted Return Date From:', startDateReturn);
+        console.log('Formatted Return Date To:', endDateReturn);
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
 
