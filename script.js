@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded File");
+    console.log("Loaded");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
