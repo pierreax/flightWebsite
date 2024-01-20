@@ -2,6 +2,56 @@
     $(document).ready(function () {
     console.log("Loaded JS");
 
+        // Function to make an API request to Tequila API and suggest a price limit
+        async function suggestPriceLimit() {
+            const origin = extractIATACode('iataCodeFrom');
+            const destination = extractIATACode('iataCodeTo');
+            const startDate = formatDate(document.getElementById('depDateFrom').value);
+            const endDate = formatDate(document.getElementById('depDateTo').value);
+            const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
+            const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
+
+            const url = 'https://tequila-api.kiwi.com/v2/search';
+            const apiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
+
+            try {
+                const params = new URLSearchParams({
+                    fly_from: origin,
+                    fly_to: destination,
+                    date_from: startDate,
+                    date_to: endDate,
+                    max_stopovers: maxStops,
+                    max_fly_duration: maxFlyDuration,
+                    adults: 1,
+                    curr: 'NOK'
+                });
+
+                const response = await fetch(`${url}?${params.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'apikey': apiKey
+                    }
+                });
+
+                const data = await response.json();
+                console.log('Tequila API response:', data);  // Log the response data to the console
+                // Process data to suggest price limit
+                // For example, use the average or lowest price from the response
+                const suggestedPriceLimit = calculateSuggestedPriceLimit(data); // Implement this function based on your logic
+                document.getElementById('maxPricePerPerson').value = suggestedPriceLimit;
+
+            } catch (error) {
+                console.error('Error fetching data from Tequila API:', error);
+            }
+        }
+
+        // Example function to calculate suggested price limit (implement your own logic)
+        function calculateSuggestedPriceLimit(data) {
+            // Example: return the average price
+            // You should implement your own logic based on the response structure
+            return data.flights.reduce((acc, flight) => acc + flight.price, 0) / data.flights.length;
+        }
+
         // Function to populate a dropdown with options using Select2
         function populateDropdownWithSelect2(selectElement, data) {
             $(selectElement).select2({
