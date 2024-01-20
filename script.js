@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded File");
+    console.log("Loaded Site");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -37,7 +37,6 @@ $(document).ready(function () {
 
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
-        console.log("Button clicked!!"); // This line is for debugging purposes.
         suggestPriceLimit();
     });
 
@@ -87,13 +86,10 @@ $(document).ready(function () {
     // Example function to calculate suggested price limit (implement your own logic)
     function calculateSuggestedPriceLimit(currentPriceData) {
         // Example: return the average price
-        console.log("Calculating the Price.");
         if(currentPriceData && currentPriceData.data && currentPriceData.data.length > 0) {
             const firstItem = currentPriceData.data[0];
             console.log('First item data:', firstItem);
-            // Now you can use firstItem data to suggest price limit or do other things
-            // For now, just returning the price of the first item as an example
-            return firstItem.price; // Replace 'price' with the actual key if different
+            return firstItem.price;
         } else {
             console.log('No data found in the response');
             return 0; // Handle the case where the data array is empty or doesn't exist
@@ -147,14 +143,12 @@ $(document).ready(function () {
 
     // Copy value from depDateFrom to depDateTo when depDateFrom changes
     $('#depDateFrom').change(function() {
-        console.log("Copying the date to next field.");
         const departureDate = $(this).val();
         $('#depDateTo').val(departureDate);
     });
 
     // Copy value from returnDateFrom to returnDateTo when returnDateFrom changes
     $('#returnDateFrom').change(function() {
-        console.log("Copying the return date to next field.");
         const returnDate = $(this).val();
         $('#returnDateTo').val(returnDate);
     });
