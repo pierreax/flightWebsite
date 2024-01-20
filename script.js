@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded JS");
+    console.log("Loaded JS!");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -152,6 +152,10 @@ $(document).ready(function () {
     readAirportsData().then(airportData => {
         populateDropdownWithSelect2('#iataCodeFrom', airportData);
         populateDropdownWithSelect2('#iataCodeTo', airportData);
+
+        // Set default values for "From" and "To" fields
+        $('#iataCodeFrom').val('OSL').trigger('change');
+        $('#iataCodeTo').val('PMI').trigger('change');
     });
 
     // Change event listener for flightType
@@ -195,8 +199,6 @@ $(document).ready(function () {
                 depDateTo: formatDate(document.getElementById('depDateTo').value),
                 returnDateFrom: parseInputValue(document.getElementById('returnDateFrom').value),
                 returnDateTo: parseInputValue(document.getElementById('returnDateTo').value),
-                nightsFrom: parseInputValue(parseInt(document.getElementById('nightsFrom').value)),
-                nightsTo: parseInputValue(parseInt(document.getElementById('nightsTo').value)),
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),  // Generate and include the unique token
