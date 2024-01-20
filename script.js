@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -52,6 +52,9 @@ $(document).ready(function () {
 
         const url = 'https://tequila-api.kiwi.com/v2/search';
         const apiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
+        console.log('Flight Duration: ', maxFlightDuration);
+        console.log('Fly Duration:: ', maxFlyDuration);
+
 
         try {
             const params = new URLSearchParams({
@@ -75,8 +78,21 @@ $(document).ready(function () {
 
             const currentPriceData = await response.json();
             console.log('Tequila API response:', currentPriceData);  // Log the response data to the console
-            const suggestedPriceLimit = calculateSuggestedPriceLimit(currentPriceData); // Implement this function based on your logic
-            document.getElementById('maxPricePerPerson').value = suggestedPriceLimit;
+            const suggestedPriceLimit = calculateSuggestedPriceLimit(currentPriceData);
+
+            // Check if the suggested price limit is 0 and warn the user if so
+            if (suggestedPriceLimit === 0) {
+                // Display a warning message to the user
+                alert("No flight data found for the given parameters. Please consider increasing the maximum number of stops or changing the dates.");
+                // Optionally, you can also focus on the problematic input fields or highlight them
+                document.getElementById('maxStops').focus();
+                document.getElementById('maxStops').style.borderColor = 'red';
+                document.getElementById('depDateFrom').style.borderColor = 'red';
+                document.getElementById('depDateTo').style.borderColor = 'red';
+            } else {
+                // If the price limit is not 0, proceed as normal
+                document.getElementById('maxPricePerPerson').value = suggestedPriceLimit;
+            }
 
         } catch (error) {
             console.error('Error fetching data from Tequila API:', error);
