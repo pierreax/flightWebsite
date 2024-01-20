@@ -1,4 +1,3 @@
-// Wait for the document to be ready before initializing Select2
 $(document).ready(function () {
     console.log("Loaded JS");
 
@@ -130,7 +129,7 @@ $(document).ready(function () {
         } else {
             console.log("Adding the fields.");
             $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
-            $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
+            $('label[for="returnDateFrom"], label[for["returnDateTo"]').show();
         }
     });
 
@@ -157,14 +156,11 @@ $(document).ready(function () {
 
         // Function to generate a unique token for each submission
         function generateToken() {
-            let token;
             if (window.crypto && window.crypto.randomUUID) {
-                token = window.crypto.randomUUID();
+                return window.crypto.randomUUID();
             } else {
-                token = new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
+                return new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
             }
-            console.log(token);
-            return token;
         }
 
         // Sheety API function
