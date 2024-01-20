@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!!");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -83,7 +83,7 @@ $(document).ready(function () {
             // Check if the suggested price limit is 0 and warn the user if so
             if (suggestedPriceLimit === 0) {
                 // Display a warning message to the user
-                alert("No flight data found for the given parameters. Please consider increasing the maximum number of stops or changing the dates.");
+                alert("No flight available for the given parameters. Please consider increasing the maximum number of stops, flight duration or changing the dates.");
                 // Optionally, you can also focus on the problematic input fields or highlight them
                 document.getElementById('maxStops').focus();
                 document.getElementById('maxStops').style.borderColor = 'red';
@@ -192,7 +192,7 @@ $(document).ready(function () {
         } else {
             console.log("Adding the fields.");
             $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
-            $('label[for="returnDateFrom"], label[for["returnDateTo"]').show();
+            $('label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
         }
     });
 
