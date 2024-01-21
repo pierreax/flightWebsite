@@ -1,9 +1,16 @@
 $(document).ready(function () {
-    console.log("Loaded Site...");
+    console.log("Loaded Site");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
     let endDateReturn = '';
+
+    // Set the 'min' attribute for date inputs to today's date to prevent past dates
+    const today = new Date().toISOString().split('T')[0];
+    $('#depDateFrom').attr('min', today);
+    $('#depDateTo').attr('min', today);
+    $('#returnDateFrom').attr('min', today);
+    $('#returnDateTo').attr('min', today);
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
