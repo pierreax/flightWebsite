@@ -146,6 +146,154 @@ input:focus, select:focus {
     color: #4CAF50;
 }
 
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 20px;
+    line-height: 1.6;
+    background-color: #ffcc66; /* Light beige background for background */
+
+}
+
+h1, h2, h3 {
+    font-weight: bold; /* Simplify font-weight for all headings */
+    color: #4d4d4d; /* Dark gray text color for all headings */
+    margin: 0; /* Remove default margins for headings */
+    text-align: center;
+    padding: 20px 0; /* Add padding to all headings */
+    background-color: #ffcc66; /* Light beige background for h1, h2, h3 */
+
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+h3 {
+    font-size: 1.0em;
+}
+
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #FFDD95;
+}
+
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 400; /* Optional: font-weight for labels */
+    padding: 10px; /* Slightly larger padding */
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px; /* Slightly larger padding */
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ddd; /* Subtle border */
+    background: #ffcc66;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    -webkit-appearance: none;
+}
+
+/* Change the background color of the Select2 dropdown selection */
+#select2-iataCodeFrom-container, #select2-iataCodeTo-container {
+    background-color: #ffcc66;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+
+.select2-selection__rendered {
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+
+
+input[type="date"] {
+    -webkit-appearance: none;
+    width: 100%;
+    padding: 10px; /* Slightly larger padding */
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ddd; /* Subtle border */
+    background: #ffcc66;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
+    border-radius: 5px; /* Match other inputs */
+}
+
+input[type="submit"]:hover, input[type="submit"]:active {
+    background-color: #45a049;
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.price-limit-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.price-limit-label {
+    flex-grow: 1;
+}
+
+#suggestPriceBtn {
+    margin-left: 10px;
+    padding: 5px 10px; /* Adjust padding as needed */
+    cursor: pointer; /* Gives a pointer cursor on hover */
+    background-color: #4CAF50; /* Same as your submit button */
+    color: white;
+    border: none;
+    border-radius: 5px; /* Match other inputs */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effect */
+}
+
+#suggestPriceBtn:hover, #suggestPriceBtn:active {
+    background-color: #45a049; /* Darker shade for hover state */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+::placeholder {
+    color: #aaa;
+}
+
+#submissionMessage {
+    display: none;
+    margin-top: 30px;
+    text-align: center;
+    color: #4CAF50;
+}
+
 .checkbox-container {
     display: inline-block;  /* or 'inline-flex' if you need internal flexbox layout */
     margin-right: 20px;     /* Adds some space between the checkbox sets */
@@ -154,6 +302,30 @@ input:focus, select:focus {
 .checkbox-container label {
     margin-right: 5px;      /* Adds some space between the label and the checkbox */
 }
+
+
+@media screen and (max-width: 600px) {
+    body {
+        margin: 10px;
+    }
+    form {
+        max-width: 100%;
+        margin: 10px;
+    }
+    h1 {
+        font-size: 1.2em; /* smaller on mobile */
+    }
+    h2 {
+        font-size: 1.0em;
+    }
+    h3 {
+        font-size: 0.8em;
+    }
+    h1, h2, h3 {
+        text-shadow: none; /* Removing shadow on mobile if it looks too heavy */
+    }
+}
+
 
 
 @media screen and (max-width: 600px) {
