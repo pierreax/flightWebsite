@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site!");
+    console.log("Loaded Site!!");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -250,8 +250,8 @@ $(document).ready(function () {
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
                 depDateFrom: formatDate(document.getElementById('depDateFrom').value),
                 depDateTo: formatDate(document.getElementById('depDateTo').value),
-                returnDateFrom: parseInputValue(formatDate(document.getElementById('returnDateFrom').value)),
-                returnDateTo: parseInputValue(formatDate(document.getElementById('returnDateTo').value)),
+                returnDateFrom: formatDate(document.getElementById('returnDateFrom').value),
+                returnDateTo: formatDate(document.getElementById('returnDateTo').value),
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),  // Generate and include the unique token
