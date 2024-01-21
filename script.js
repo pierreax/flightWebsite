@@ -1,9 +1,11 @@
 $(document).ready(function () {
-    console.log("Loaded Site!");
+    console.log("Loaded Site");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
     let endDateReturn = '';
+    const url = 'https://tequila-api.kiwi.com/v2/search';
+    const apiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -91,6 +93,7 @@ $(document).ready(function () {
         console.log('Fly Duration:: ', maxFlyDuration);
 
 
+        // API call using the globally defined url and apiKey
         try {
             const params = new URLSearchParams({
                 fly_from: origin,
@@ -268,6 +271,7 @@ $(document).ready(function () {
 
         console.log('Sending data to Sheety:', formData);
 
+        // Sheety API call using the globally defined url
         fetch(url, {
             method: 'POST',
             headers: {
