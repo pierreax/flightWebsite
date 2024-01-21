@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site!");
+    console.log("Loaded Site");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
@@ -25,6 +25,37 @@ $(document).ready(function () {
         const returnDate = $(this).val();
         $('#returnDateTo').attr('min', returnDate); // Ensure returnDateTo is not before returnDateFrom
     });
+
+    // Event listener for the flightType checkbox changes
+    $('#flightType').change(function() {
+        if ($(this).is(':checked')) {
+            console.log("One-Way flight selected.");
+            $('#returnDateFrom, #returnDateTo').hide().removeAttr('required');
+            $('label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
+        } else {
+            console.log("Return flight selected (default).");
+            $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
+            $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
+        }
+    });
+    // Event listener for the flexibleDates checkbox changes
+    $('#flexibleDates').change(function() {
+        if ($(this).is(':checked')) {
+            console.log("Flexible dates selected.");
+            $('#depDateTo, #returnDateFrom, #returnDateTo').show().attr('required', 'required');
+            $('label[for="depDateTo"], label[for="returnDateFrom"], label[for="returnDateTo"]').show();
+        } else {
+            console.log("Exact dates selected.");
+            $('#depDateTo, #returnDateFrom, #returnDateTo').hide().removeAttr('required');
+            $('label[for="depDateTo"], label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
+        }
+    });
+
+    // Trigger change on page load to apply the correct visibility based on the default checkbox state
+    $('#flexibleDates').change();
+
+    // Trigger change on page load to apply the correct visibility based on the default checkbox state
+    $('#flightType').change();
 
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called

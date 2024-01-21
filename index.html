@@ -31,11 +31,15 @@
             <!-- Dropdown options will be populated dynamically using JavaScript -->
         </select>
 
-        <label for="flightType">Flight Type:</label>
-        <select id="flightType" name="flightType" required>
-            <option value="return">Return</option>
-            <option value="one-way">One-Way</option>
-        </select>
+        <div class="checkbox-container">
+            <label for="flightType">One-Way Flight:</label>
+            <input type="checkbox" id="flightType" name="flightType">
+        </div>
+
+        <div class="checkbox-container">
+            <label for="flexibleDates">Flexible Dates:</label>
+            <input type="checkbox" id="flexibleDates" name="flexibleDates">
+        </div>
 
         <label for="depDateFrom">Departure Date From:</label>
         <input type="date" id="depDateFrom" name="depDateFrom" required>
