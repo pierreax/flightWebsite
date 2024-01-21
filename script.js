@@ -38,6 +38,7 @@ $(document).ready(function () {
             $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
         }
     });
+
     // Event listener for flexibleDates checkbox changes
     $('#flexibleDates').change(function() {
         if ($(this).is(':checked')) {
@@ -258,23 +259,10 @@ $(document).ready(function () {
         $('#iataCodeTo').val('PMI').trigger('change');
     });
 
-    // Change event listener for flightType
-    $('#flightType').change(function() {
-        console.log("Standard change event selected value:", $(this).val());
-        if ($(this).val() === 'one-way') {
-            console.log("Removing the fields.");
-            $('#returnDateFrom, #returnDateTo').hide().removeAttr('required');
-            $('label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
-        } else {
-            console.log("Adding the fields.");
-            $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
-            $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
-        }
-    });
-
     // Form submission event listener
     document.getElementById('sheetyForm').addEventListener('submit', function (event) {
         event.preventDefault();
+
 
         // Function to generate a unique token for each submission
         function generateToken() {
@@ -291,7 +279,7 @@ $(document).ready(function () {
             price: {
                 iataCodeFrom: extractIATACode('iataCodeFrom'),
                 iataCodeTo: extractIATACode('iataCodeTo'),
-                flightType: document.getElementById('flightType').value,
+                flightType: $('#flightType').is(':checked') ? 'one-way' : 'return',
                 maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
                 maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
