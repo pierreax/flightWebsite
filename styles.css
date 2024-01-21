@@ -153,7 +153,6 @@ input:focus, select:focus {
     border-radius: 5px; /* Rounded corners */
     font-weight: bold; /* Make the text bold */
     font-family: 'Roboto', sans-serif; /* Keep the font consistent */
-    margin-left: 10px; /* Space from the preceding element */
     width: 100%;
 }
 
