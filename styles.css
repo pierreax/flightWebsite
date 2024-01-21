@@ -188,7 +188,6 @@ input[type="checkbox"] {
 @media screen and (max-width: 600px) {
     body {
         margin: 10px;
-        font-size: 0.4em;
     }
     form {
         max-width: 100%;
