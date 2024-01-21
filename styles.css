@@ -154,6 +154,7 @@ input:focus, select:focus {
     font-weight: bold; /* Make the text bold */
     font-family: 'Roboto', sans-serif; /* Keep the font consistent */
     margin-left: 10px; /* Space from the preceding element */
+    width: 100%;
 }
 
 #suggestPriceBtn:hover, #suggestPriceBtn:active {
