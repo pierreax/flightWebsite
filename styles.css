@@ -109,33 +109,57 @@ input:focus, select:focus {
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
-/* Reset styles for checkboxes to ensure visibility */
+/* Style for the checkbox row */
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align items to the start of the container */
+    margin-bottom: 20px; /* Space between this row and the next element */
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* Space between checkboxes */
+}
+
+.checkbox-container label {
+    margin-right: 5px; /* Space between label and checkbox */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+#suggestPriceBtn {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 15px; /* Padding inside the button */
+    border: none; /* No border */
+    cursor: pointer; /* Cursor changes to pointer when hovered */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Make the text bold */
+    font-family: 'Roboto', sans-serif; /* Keep the font consistent */
+    margin-left: 10px; /* Space from the preceding element */
+}
+
+#suggestPriceBtn:hover, #suggestPriceBtn:active {
+    background-color: #45a049; /* Darker shade of green when hovered or clicked */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+/* Make the checkbox inputs smaller and more manageable */
 input[type="checkbox"] {
     width: auto; /* Restore default width */
-    margin: 4px 10px 4px 4px; /* Add some margin */
+    margin: 0 10px 0 0; /* Adjust margin */
     padding: 0; /* Reset padding */
-    box-shadow: none; /* Remove box-shadow */
-    border: 1px solid #ddd; /* Optional: Add a subtle border */
-    background: transparent; /* Ensure background is transparent or set a color */
+    vertical-align: middle; /* Align checkbox vertically */
     cursor: pointer; /* Change cursor to pointer on hover */
-    display: inline-block; /* Ensure checkboxes are not hidden */
+}
+
+/* Reset the appearance of the checkboxes to the system default */
+input[type="checkbox"] {
     -webkit-appearance: checkbox; /* Apply default browser checkbox appearance */
     -moz-appearance: checkbox; /* For Firefox */
     appearance: checkbox; /* Standard syntax */
-}
-
-/* Style for checkbox container */
-.checkbox-container {
-    display: inline-block;  /* Display inline-block for alignment */
-    margin-right: 20px;     /* Adds some space between the checkbox sets */
-    vertical-align: middle; /* Aligns items vertically */
-}
-
-/* Style for the label associated with checkboxes */
-.checkbox-container label {
-    margin-right: 5px;      /* Adds some space between the label and the checkbox */
-    vertical-align: middle; /* Aligns items vertically */
-    cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 
