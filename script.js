@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site...");
+    console.log("Loaded Site");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
@@ -13,7 +13,7 @@ $(document).ready(function () {
     $('#returnDateTo').attr('min', today);
 
     // Event listener for departure date changes
-    $('#depDateFrom').change(function() {
+    $('#depDateFrom').change(function () {
         const departureDate = $(this).val();
         $('#depDateTo').val(departureDate); // Copy value to depDateTo if needed
         $('#returnDateFrom').attr('min', departureDate);
@@ -21,45 +21,78 @@ $(document).ready(function () {
     });
 
     // Event listener for return date from changes
-    $('#returnDateFrom').change(function() {
+    $('#returnDateFrom').change(function () {
         const returnDate = $(this).val();
         $('#returnDateTo').attr('min', returnDate); // Ensure returnDateTo is not before returnDateFrom
     });
 
     // Event listener for flexibleDates checkbox changes
-    $('#flexibleDates').change(function() {
-        if ($(this).is(':checked')) {
+    $('#flexibleDates').change(function () {
+        updateDateFieldsBasedOnFlexibility();
+    });
+
+    // Event listener for oneWayTrip checkbox changes
+    $('#oneWayTrip').change(function () {
+        updateDateFieldsBasedOnTripType();
+    });
+
+    // Function to update date fields based on the flexibility selection
+    function updateDateFieldsBasedOnFlexibility() {
+        if ($('#flexibleDates').is(':checked')) {
             console.log("Flexible dates selected.");
             // Change labels for flexible dates
             $('#labelDepDateFrom').text('Departure Date From:');
             $('#labelDepDateTo').text('Departure Date To:').show();
-            $('#labelReturnDateFrom').text('Return Date From:').show();
-            $('#labelReturnDateTo').text('Return Date To:').show();
-            // Show the fields for date ranges
             $('#depDateTo').show().attr('required', 'required');
-            $('#returnDateFrom').show().attr('required', 'required');
-            $('#returnDateTo').show().attr('required', 'required');
+
+            if (!$('#oneWayTrip').is(':checked')) {
+                $('#labelReturnDateFrom').text('Return Date From:').show();
+                $('#labelReturnDateTo').text('Return Date To:').show();
+                $('#returnDateFrom').show().attr('required', 'required');
+                $('#returnDateTo').show().attr('required', 'required');
+            }
         } else {
             console.log("Exact dates selected.");
             // Change labels for exact dates
             $('#labelDepDateFrom').text('Departure Date:');
             $('#labelDepDateTo').hide();
-            // Only hide 'Return Date From' label if 'One-Way' is checked
-            if ($('#flightType').is(':checked')) {
-                $('#labelReturnDateFrom').hide();
+            $('#depDateTo').hide().removeAttr('required');
+
+            if (!$('#oneWayTrip').is(':checked')) {
+                $('#labelReturnDateFrom').text('Return Date:').show();
+                $('#returnDateTo').hide().removeAttr('required');
+                $('#labelReturnDateTo').hide();
+            }
+        }
+    }
+
+    // Function to update date fields based on the trip type selection
+    function updateDateFieldsBasedOnTripType() {
+        if ($('#oneWayTrip').is(':checked')) {
+            console.log("One-Way trip selected.");
+            $('#labelReturnDateFrom').hide();
+            $('#labelReturnDateTo').hide();
+            $('#returnDateFrom').hide().removeAttr('required');
+            $('#returnDateTo').hide().removeAttr('required');
+        } else {
+            console.log("Return trip selected.");
+            if ($('#flexibleDates').is(':checked')) {
+                $('#labelReturnDateFrom').text('Return Date From:').show();
+                $('#labelReturnDateTo').text('Return Date To:').show();
+                $('#returnDateFrom').show().attr('required', 'required');
+                $('#returnDateTo').show().attr('required', 'required');
             } else {
                 $('#labelReturnDateFrom').text('Return Date:').show();
+                $('#returnDateFrom').show().attr('required', 'required');
+                $('#returnDateTo').hide().removeAttr('required');
+                $('#labelReturnDateTo').hide();
             }
-            $('#labelReturnDateTo').hide();
-            // Hide the fields for date ranges, only show the fields for single dates
-            $('#depDateTo').hide().removeAttr('required');
-            $('#returnDateTo').hide().removeAttr('required');
         }
-    });
+    }
 
     // Trigger change on page load to apply the correct visibility based on the default checkbox state
     $('#flexibleDates').change();
-    $('#flightType').change();
+    $('#oneWayTrip').change();
 
 
 
@@ -121,7 +154,7 @@ $(document).ready(function () {
         const endDate = formatDate(document.getElementById('depDateTo').value);
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
-        const flightType = document.getElementById('flightType').value;
+        const flightType = document.getElementById('oneWayTrip').value;
 
         startDateReturn = '';  // Reset the values
         endDateReturn = '';
@@ -273,7 +306,7 @@ $(document).ready(function () {
             price: {
                 iataCodeFrom: extractIATACode('iataCodeFrom'),
                 iataCodeTo: extractIATACode('iataCodeTo'),
-                flightType: $('#flightType').is(':checked') ? 'one-way' : 'return',
+                flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
                 maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
                 maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
