@@ -135,7 +135,6 @@ input:focus, select:focus {
 .checkbox-container {
     display: flex;
     align-items: center;
-    margin-right: 20px; /* Space between checkboxes */
 }
 
 .checkbox-container label {
@@ -199,10 +198,10 @@ input[type="checkbox"] {
         margin: 10px;
     }
     h1 {
-        font-size: 1.2em; /* smaller on mobile */
+        font-size: 1.0em; /* smaller on mobile */
     }
     h2 {
-        font-size: 1.0em;
+        font-size: 0.8em;
     }
 
     h1, h2 {
