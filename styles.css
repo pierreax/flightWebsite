@@ -203,4 +203,17 @@ input[type="checkbox"] {
     h1, h2 {
         text-shadow: none; /* Removing shadow on mobile if it looks too heavy */
     }
+
+    /* Add styles for smaller font sizes for labels, inputs, and other text elements */
+    label, input, select, button, .checkbox-container label {
+        font-size: 0.8em; /* Adjust the font size as needed */
+    }
+
+    /* Adjust padding inside form elements if needed */
+    input, select, button {
+        padding: 8px; /* Slightly smaller padding */
+    }
+
+    /* Adjust any other styles as needed to improve the layout on mobile */
 }
+
