@@ -185,7 +185,7 @@ input[type="checkbox"] {
     color: #4CAF50;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-device-width: 600px) {
     body {
         margin: 10px;
     }
@@ -206,14 +206,19 @@ input[type="checkbox"] {
 
     /* Add styles for smaller font sizes for labels, inputs, and other text elements */
     label, input, select, button, .checkbox-container label {
-        font-size: 0.8em; /* Adjust the font size as needed */
+        font-size: 0.7em; /* Adjust the font size as needed */
     }
 
     /* Adjust padding inside form elements if needed */
     input, select, button {
-        padding: 8px; /* Slightly smaller padding */
+        padding: 5px; /* Slightly smaller padding */
     }
+    /* Ensure the form width is not exceeding the screen width */
 
+    form {
+        width: 100%; /* Adjust as needed */
+        box-sizing: border-box; /* Ensures padding doesn't add to the width */
+    }
     /* Adjust any other styles as needed to improve the layout on mobile */
 }
 
