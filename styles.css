@@ -92,7 +92,6 @@ input[type="date"] {
     -webkit-appearance: none;
     width: 100%;
     padding: 10px; /* Slightly larger padding */
-    margin-bottom: 10x;
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -127,7 +126,7 @@ input:focus, select:focus {
 .checkbox-row {
     display: flex;
     align-items: center;
-    padding: 15px; /* Space between this row and the next element */
+    padding: 10px; /* Space between this row and the next element */
 }
 
 .checkbox-container {
@@ -136,7 +135,6 @@ input:focus, select:focus {
 }
 
 .checkbox-container label {
-    margin-right: 5px; /* Space between label and checkbox */
     cursor: pointer; /* Change cursor to pointer on hover */
 }
 
