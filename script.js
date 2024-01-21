@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
@@ -11,6 +11,21 @@ $(document).ready(function () {
     $('#depDateTo').attr('min', today);
     $('#returnDateFrom').attr('min', today);
     $('#returnDateTo').attr('min', today);
+
+    // Event listener for departure date changes
+    $('#depDateFrom').change(function() {
+        const departureDate = $(this).val();
+        $('#depDateTo').val(departureDate); // Copy value to depDateTo if needed
+        $('#returnDateFrom').attr('min', departureDate);
+        $('#returnDateTo').attr('min', departureDate);
+    });
+
+    // Event listener for return date from changes
+    $('#returnDateFrom').change(function() {
+        const returnDate = $(this).val();
+        $('#returnDateTo').attr('min', returnDate); // Ensure returnDateTo is not before returnDateFrom
+    });
+
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
