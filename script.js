@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site...");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
@@ -26,47 +26,41 @@ $(document).ready(function () {
         $('#returnDateTo').attr('min', returnDate); // Ensure returnDateTo is not before returnDateFrom
     });
 
-    // Event listener for the flightType checkbox changes
-    $('#flightType').change(function() {
-        if ($(this).is(':checked')) {
-            console.log("One-Way flight selected.");
-            $('#returnDateFrom, #returnDateTo').hide().removeAttr('required');
-            $('label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
-        } else {
-            console.log("Return flight selected (default).");
-            $('#returnDateFrom, #returnDateTo').show().attr('required', 'required');
-            $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
-        }
-    });
-
     // Event listener for flexibleDates checkbox changes
     $('#flexibleDates').change(function() {
         if ($(this).is(':checked')) {
             console.log("Flexible dates selected.");
+            // Change labels for flexible dates
+            $('#labelDepDateFrom').text('Departure Date From:');
+            $('#labelDepDateTo').text('Departure Date To:').show();
+            $('#labelReturnDateFrom').text('Return Date From:').show();
+            $('#labelReturnDateTo').text('Return Date To:').show();
             // Show the fields for date ranges
             $('#depDateTo').show().attr('required', 'required');
-            $('label[for="depDateTo"]').show();
             $('#returnDateFrom').show().attr('required', 'required');
-            $('label[for="returnDateFrom"]').show();
             $('#returnDateTo').show().attr('required', 'required');
-            $('label[for="returnDateTo"]').show();
         } else {
             console.log("Exact dates selected.");
+            // Change labels for exact dates
+            $('#labelDepDateFrom').text('Departure Date:');
+            $('#labelDepDateTo').hide();
+            // Only hide 'Return Date From' label if 'One-Way' is checked
+            if ($('#flightType').is(':checked')) {
+                $('#labelReturnDateFrom').hide();
+            } else {
+                $('#labelReturnDateFrom').text('Return Date:').show();
+            }
+            $('#labelReturnDateTo').hide();
             // Hide the fields for date ranges, only show the fields for single dates
             $('#depDateTo').hide().removeAttr('required');
-            $('label[for="depDateTo"]').hide();
-            $('#returnDateFrom').hide().removeAttr('required');
-            $('label[for="returnDateFrom"]').hide();
             $('#returnDateTo').hide().removeAttr('required');
-            $('label[for="returnDateTo"]').hide();
         }
     });
 
     // Trigger change on page load to apply the correct visibility based on the default checkbox state
     $('#flexibleDates').change();
-
-    // Trigger change on page load to apply the correct visibility based on the default checkbox state
     $('#flightType').change();
+
 
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
