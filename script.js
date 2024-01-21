@@ -1,5 +1,9 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!");
+
+    // Globally define return date variables within the document.ready scope
+    let startDateReturn = '';
+    let endDateReturn = '';
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -66,16 +70,16 @@ $(document).ready(function () {
 
         // Extracting, formatting, and logging return dates
         const flightType = document.getElementById('flightType').value;
-           let startDateReturn = '';
-           let endDateReturn = '';
+        startDateReturn = '';  // Reset the values
+        endDateReturn = '';
 
-           // Only process return dates if the flight type is not one-way
-           if (flightType !== 'one-way') {
-               startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
-               endDateReturn = formatDate(document.getElementById('returnDateTo').value);
-               console.log('Formatted Return Date From:', startDateReturn);
-               console.log('Formatted Return Date To:', endDateReturn);
-           }
+        // Only process return dates if the flight type is not one-way
+        if (flightType !== 'one-way') {
+            startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
+            endDateReturn = formatDate(document.getElementById('returnDateTo').value);
+            console.log('Formatted Return Date From:', startDateReturn);
+            console.log('Formatted Return Date To:', endDateReturn);
+        }
 
 
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
@@ -242,8 +246,7 @@ $(document).ready(function () {
             }
         }
 
-        // Sheety API function
-        let url = 'https://api.sheety.co/f3a65c5d3619ab6b57dcfe118df98456/flightDeals/prices';
+        // Prepare formData using the globally defined startDateReturn and endDateReturn
         let formData = {
             price: {
                 iataCodeFrom: extractIATACode('iataCodeFrom'),
@@ -254,16 +257,17 @@ $(document).ready(function () {
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
                 depDateFrom: formatDate(document.getElementById('depDateFrom').value),
                 depDateTo: formatDate(document.getElementById('depDateTo').value),
-                returnDateFrom: flightType !== 'one-way' ? startDateReturn : '',
-                returnDateTo: flightType !== 'one-way' ? endDateReturn : '',
+                returnDateFrom: startDateReturn,
+                returnDateTo: endDateReturn,
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
-                token: generateToken(),  // Generate and include the unique token
+                token: generateToken(),
                 lastFetchedPrice: 0
             }
         };
 
         console.log('Sending data to Sheety:', formData);
+
         fetch(url, {
             method: 'POST',
             headers: {
