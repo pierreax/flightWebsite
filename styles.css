@@ -294,14 +294,31 @@ input:focus, select:focus {
     color: #4CAF50;
 }
 
-.checkbox-container {
-    display: inline-block;  /* or 'inline-flex' if you need internal flexbox layout */
-    margin-right: 20px;     /* Adds some space between the checkbox sets */
+/* Style for checkbox input */
+input[type="checkbox"] {
+    width: auto; /* Reset width to default */
+    margin: 4px; /* Add some margin */
+    padding: 0; /* Reset padding */
+    box-shadow: none; /* Remove box-shadow */
+    border: none; /* Remove border */
+    background: none; /* Remove background */
+    cursor: pointer; /* Change cursor to pointer when hovering over the checkbox */
 }
 
+/* Style the container for checkbox and label */
+.checkbox-container {
+    display: inline-block;  /* Display inline-block for alignment */
+    margin-right: 20px;     /* Adds some space between the checkbox sets */
+    vertical-align: middle; /* Aligns items vertically */
+}
+
+/* Style the label associated with checkboxes */
 .checkbox-container label {
     margin-right: 5px;      /* Adds some space between the label and the checkbox */
+    vertical-align: middle; /* Aligns items vertically */
+    cursor: pointer; /* Change cursor to pointer when hovering over the label */
 }
+
 
 
 @media screen and (max-width: 600px) {
