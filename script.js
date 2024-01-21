@@ -1,11 +1,9 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site...");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
     let endDateReturn = '';
-    const url = 'https://tequila-api.kiwi.com/v2/search';
-    const apiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -47,7 +45,6 @@ $(document).ready(function () {
         return value;
     }
 
-
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
         suggestPriceLimit();
@@ -56,22 +53,18 @@ $(document).ready(function () {
     // Function to make an API request to Tequila API and suggest a price limit
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
-        // Extracting and logging IATA codes
+
+        const tequilaApiUrl = 'https://tequila-api.kiwi.com/v2/search';
+        const tequilaApiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
+
         const origin = extractIATACode('iataCodeFrom');
         const destination = extractIATACode('iataCodeTo');
-        console.log('Origin IATA:', origin);
-        console.log('Destination IATA:', destination);
-
-        // Extracting, formatting, and logging departure dates
         const startDate = formatDate(document.getElementById('depDateFrom').value);
         const endDate = formatDate(document.getElementById('depDateTo').value);
-        console.log('Raw Departure Date From:', document.getElementById('depDateFrom').value);
-        console.log('Raw Departure Date To:', document.getElementById('depDateTo').value);
-        console.log('Formatted Departure Date From:', startDate);
-        console.log('Formatted Departure Date To:', endDate);
-
-        // Extracting, formatting, and logging return dates
+        const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
+        const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
         const flightType = document.getElementById('flightType').value;
+
         startDateReturn = '';  // Reset the values
         endDateReturn = '';
 
@@ -79,21 +72,8 @@ $(document).ready(function () {
         if (flightType !== 'one-way') {
             startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
             endDateReturn = formatDate(document.getElementById('returnDateTo').value);
-            console.log('Formatted Return Date From:', startDateReturn);
-            console.log('Formatted Return Date To:', endDateReturn);
         }
 
-
-        const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
-        const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
-
-        const url = 'https://tequila-api.kiwi.com/v2/search';
-        const apiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
-        console.log('Flight Duration: ', maxFlightDuration);
-        console.log('Fly Duration:: ', maxFlyDuration);
-
-
-        // API call using the globally defined url and apiKey
         try {
             const params = new URLSearchParams({
                 fly_from: origin,
@@ -109,26 +89,22 @@ $(document).ready(function () {
                 limit: 1
             });
 
-            const response = await fetch(`${url}?${params.toString()}`, {
+            const response = await fetch(`${tequilaApiUrl}?${params.toString()}`, {
                 method: 'GET',
                 headers: {
-                    'apikey': apiKey
+                    'apikey': tequilaApiKey
                 }
             });
 
             const currentPriceData = await response.json();
-            console.log('Tequila API response:', currentPriceData);  // Log the response data to the console
+            console.log('Tequila API response:', currentPriceData);
             const suggestedPriceLimit = calculateSuggestedPriceLimit(currentPriceData);
 
-            // Check if the suggested price limit is 0 and warn the user if so
             if (suggestedPriceLimit === 0) {
-                // Display a warning message to the user
                 alert("No flight available for the given parameters. Please consider increasing the maximum number of stops, flight duration or changing the dates.");
-                // Optionally, you can also focus on the problematic input fields or highlight them
                 document.getElementById('maxStops').focus();
                 document.getElementById('maxStops').style.borderColor = 'red';
             } else {
-                // If the price limit is not 0, proceed as normal
                 document.getElementById('maxPricePerPerson').value = suggestedPriceLimit;
             }
 
@@ -137,15 +113,12 @@ $(document).ready(function () {
         }
     }
 
-    // Example function to calculate suggested price limit (implement your own logic)
+    // Example function to calculate suggested price limit
     function calculateSuggestedPriceLimit(currentPriceData) {
-        // Example: return the average price
-        if(currentPriceData && currentPriceData.data && currentPriceData.data.length > 0) {
+        if (currentPriceData && currentPriceData.data && currentPriceData.data.length > 0) {
             const firstItem = currentPriceData.data[0];
-            console.log('First item data:', firstItem);
             return firstItem.price;
         } else {
-            console.log('No data found in the response');
             return 0; // Handle the case where the data array is empty or doesn't exist
         }
     }
@@ -249,7 +222,8 @@ $(document).ready(function () {
             }
         }
 
-        // Prepare formData using the globally defined startDateReturn and endDateReturn
+        const sheetyApiUrl = 'https://api.sheety.co/f3a65c5d3619ab6b57dcfe118df98456/flightDeals/prices';
+
         let formData = {
             price: {
                 iataCodeFrom: extractIATACode('iataCodeFrom'),
@@ -271,8 +245,7 @@ $(document).ready(function () {
 
         console.log('Sending data to Sheety:', formData);
 
-        // Sheety API call using the globally defined url
-        fetch(url, {
+        fetch(sheetyApiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
