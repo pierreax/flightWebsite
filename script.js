@@ -38,16 +38,26 @@ $(document).ready(function () {
             $('label[for="returnDateFrom"], label[for="returnDateTo"]').show();
         }
     });
-    // Event listener for the flexibleDates checkbox changes
+    // Event listener for flexibleDates checkbox changes
     $('#flexibleDates').change(function() {
         if ($(this).is(':checked')) {
             console.log("Flexible dates selected.");
-            $('#depDateTo, #returnDateFrom, #returnDateTo').show().attr('required', 'required');
-            $('label[for="depDateTo"], label[for="returnDateFrom"], label[for="returnDateTo"]').show();
+            // Show the fields for date ranges
+            $('#depDateTo').show().attr('required', 'required');
+            $('label[for="depDateTo"]').show();
+            $('#returnDateFrom').show().attr('required', 'required');
+            $('label[for="returnDateFrom"]').show();
+            $('#returnDateTo').show().attr('required', 'required');
+            $('label[for="returnDateTo"]').show();
         } else {
             console.log("Exact dates selected.");
-            $('#depDateTo, #returnDateFrom, #returnDateTo').hide().removeAttr('required');
-            $('label[for="depDateTo"], label[for="returnDateFrom"], label[for="returnDateTo"]').hide();
+            // Hide the fields for date ranges, only show the fields for single dates
+            $('#depDateTo').hide().removeAttr('required');
+            $('label[for="depDateTo"]').hide();
+            $('#returnDateFrom').hide().removeAttr('required');
+            $('label[for="returnDateFrom"]').hide();
+            $('#returnDateTo').hide().removeAttr('required');
+            $('label[for="returnDateTo"]').hide();
         }
     });
 
