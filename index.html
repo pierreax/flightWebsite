@@ -21,15 +21,19 @@
 
     <form id="sheetyForm">
 
-        <label for="iataCodeFrom">From: </label>
-        <select id="iataCodeFrom" name="iataCodeFrom" required>
-            <!-- Dropdown options will be populated dynamically using JavaScript -->
-        </select>
+        <div class="form-group form-row">
+            <label for="iataCodeFrom">From: </label>
+            <select id="iataCodeFrom" name="iataCodeFrom" required>
+                <!-- Dropdown options will be populated dynamically using JavaScript -->
+            </select>
+        </div>
 
-        <label for="iataCodeTo">To:</label>
-        <select id="iataCodeTo" name="iataCodeTo" required>
-            <!-- Dropdown options will be populated dynamically using JavaScript -->
-        </select>
+        <div class="form-group form-row">
+            <label for="iataCodeTo">To:</label>
+            <select id="iataCodeTo" name="iataCodeTo" required>
+                <!-- Dropdown options will be populated dynamically using JavaScript -->
+            </select>
+        </div>
 
         <div class="checkbox-row">
             <div class="checkbox-container">
@@ -43,26 +47,40 @@
             </div>
         </div>
 
-        <label id="labelDepDateFrom" for="depDateFrom">Departure Date From:</label>
-        <input type="date" id="depDateFrom" name="depDateFrom" required>
+        <div class="form-group form-row">
+            <label id="labelDepDateFrom" for="depDateFrom">Departure Date From:</label>
+            <input type="date" id="depDateFrom" name="depDateFrom" required>
+        </div>
 
-        <label id="labelDepDateTo" for="depDateTo" style="display:none;">Departure Date To:</label>
-        <input type="date" id="depDateTo" name="depDateTo" required>
+        <div class="form-group form-row">
+            <label id="labelDepDateTo" for="depDateTo">Departure Date To:</label>
+            <input type="date" id="depDateTo" name="depDateTo" required>
+        </div>
 
-        <label id="labelReturnDateFrom" for="returnDateFrom">Return Date From:</label>
-        <input type="date" id="returnDateFrom" name="returnDateFrom" required>
+        <div class="form-group form-row">
+            <label id="labelReturnDateFrom" for="returnDateFrom">Return Date From:</label>
+            <input type="date" id="returnDateFrom" name="returnDateFrom" required>
+        </div>
 
-        <label id="labelReturnDateTo" for="returnDateTo" style="display:none;">Return Date To:</label>
-        <input type="date" id="returnDateTo" name="returnDateTo" required>
+        <div class="form-group form-row">
+            <label id="labelReturnDateTo" for="returnDateTo">Return Date To:</label>
+            <input type="date" id="returnDateTo" name="returnDateTo" required>
+        </div>
 
-        <label for="maxStops">Max number of layovers: </label>
-        <input type="number" id="maxStops" name="maxStops" value="0" required>
+        <div class="form-group form-row">
+            <label for="maxStops">Max number of layovers: </label>
+            <input type="number" id="maxStops" name="maxStops" value="0" required>
+        </div>
 
-        <label for="nbrPassengers">Number of Passengers:</label>
-        <input type="number" id="nbrPassengers" name="nbrPassengers" value="1" required>
+        <div class="form-group form-row">
+            <label for="nbrPassengers">Number of Passengers:</label>
+            <input type="number" id="nbrPassengers" name="nbrPassengers" value="1" required>
+        </div>
 
-        <label for="maxFlightDuration">Max Flight Duration: (optional)</label>
-        <input type="number" id="maxFlightDuration" name="maxFlightDuration">
+        <div class="form-group form-row">
+            <label for="maxFlightDuration">Max Flight Duration: (optional)</label>
+            <input type="number" id="maxFlightDuration" name="maxFlightDuration">
+        </div>
 
         <div class="price-limit-container">
             <label class="price-limit-label" for="maxPricePerPerson">Max Price per person:</label>
@@ -71,11 +89,14 @@
 
         <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+        <div class="form-group form-row">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
 
         <input type="submit" value="Submit">
     </form>
+
     <div id="submissionMessage">
         <!-- Display message after submission -->
         <p>Submission successful! Thank you.</p>
