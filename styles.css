@@ -107,7 +107,7 @@ input[type="submit"] {
     color: white;
     padding: 12px;
     border: none;
-    margin-top: 20px;
+    margin-top: 15px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
     border-radius: 5px; /* Match other inputs */
