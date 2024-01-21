@@ -166,7 +166,6 @@ input:focus, select:focus {
 /* Make the checkbox inputs smaller and more manageable */
 input[type="checkbox"] {
     width: auto; /* Restore default width */
-    margin: 0 10px 0 0; /* Adjust margin */
     padding: 0; /* Reset padding */
     vertical-align: middle; /* Align checkbox vertically */
     cursor: pointer; /* Change cursor to pointer on hover */
