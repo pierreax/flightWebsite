@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site!!");
+    console.log("Loaded Site");
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -65,15 +65,19 @@ $(document).ready(function () {
         console.log('Formatted Departure Date To:', endDate);
 
         // Extracting, formatting, and logging return dates
-        const rawStartDateReturn = document.getElementById('returnDateFrom').value;
-        const rawEndDateReturn = document.getElementById('returnDateTo').value;
-        console.log('Raw Return Date From:', rawStartDateReturn);
-        console.log('Raw Return Date To:', rawEndDateReturn);
+        const flightType = document.getElementById('flightType').value;
+           let startDateReturn = '';
+           let endDateReturn = '';
 
-        const startDateReturn = formatDate(rawStartDateReturn);
-        const endDateReturn = formatDate(rawEndDateReturn);
-        console.log('Formatted Return Date From:', startDateReturn);
-        console.log('Formatted Return Date To:', endDateReturn);
+           // Only process return dates if the flight type is not one-way
+           if (flightType !== 'one-way') {
+               startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
+               endDateReturn = formatDate(document.getElementById('returnDateTo').value);
+               console.log('Formatted Return Date From:', startDateReturn);
+               console.log('Formatted Return Date To:', endDateReturn);
+           }
+
+
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
 
@@ -250,8 +254,8 @@ $(document).ready(function () {
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
                 depDateFrom: formatDate(document.getElementById('depDateFrom').value),
                 depDateTo: formatDate(document.getElementById('depDateTo').value),
-                returnDateFrom: formatDate(document.getElementById('returnDateFrom').value),
-                returnDateTo: formatDate(document.getElementById('returnDateTo').value),
+                returnDateFrom: flightType !== 'one-way' ? startDateReturn : '',
+                returnDateTo: flightType !== 'one-way' ? endDateReturn : '',
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),  // Generate and include the unique token
