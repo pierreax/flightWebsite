@@ -187,11 +187,11 @@ input[type="checkbox"] {
 
 @media screen and (max-device-width: 600px) {
     body {
-        margin: 10px;
+        margin: 0px;
     }
     form {
         max-width: 100%;
-        margin: 10px;
+        margin: 0px;
     }
     h1 {
         font-size: 1.0em; /* smaller on mobile */
