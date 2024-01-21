@@ -127,7 +127,6 @@ input:focus, select:focus {
 .checkbox-row {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Align items to the start of the container */
     padding: 20px; /* Space between this row and the next element */
 }
 
