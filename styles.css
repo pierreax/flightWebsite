@@ -3,7 +3,6 @@ body {
     margin: 20px;
     line-height: 1.6;
     background-color: #ffcc66; /* Light beige background for background */
-
 }
 
 h1, h2 {
@@ -13,7 +12,6 @@ h1, h2 {
     text-align: center;
     padding: 20px 0; /* Add padding to all headings */
     background-color: #ffcc66; /* Light beige background for h1, h2 */
-
 }
 
 h1 {
@@ -33,7 +31,6 @@ form {
     background: #FFDD95;
 }
 
-
 label {
     display: block;
     margin-bottom: 5px;
@@ -52,6 +49,25 @@ input, select {
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     -webkit-appearance: none;
+}
+
+/* Specific styles for small input fields */
+.small-input {
+    width: 50px; /* Adjust as needed */
+    margin-right: 10px; /* Adds some space between the input and whatever follows */
+    text-align: center; /* Center the text inside the input field */
+}
+
+/* Style for form rows that include small inputs */
+.form-row.small-input-row {
+    justify-content: flex-start; /* Aligns items to the start of the row */
+}
+
+/* Adjust label width in small input rows to prevent it from taking too much space */
+.form-row.small-input-row label {
+    flex-grow: 0;
+    margin-right: 10px; /* Adds space between the label and the input */
+    white-space: nowrap; /* Keeps the label in a single line */
 }
 
 .form-group {

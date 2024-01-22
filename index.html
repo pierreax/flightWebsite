@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Perry's Flight Tracker</title>
+    <title>Automatic Flight Tracker</title>
     <link rel="stylesheet" href="https://pierreax.github.io/flightWebsite/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,26 +67,31 @@
             <input type="date" id="returnDateTo" name="returnDateTo" required>
         </div>
 
+        <!-- Max number of layovers -->
         <div class="form-group form-row">
-            <label for="maxStops">Max number of layovers: </label>
-            <input type="number" id="maxStops" name="maxStops" value="0" required>
+            <label for="maxStops">Layovers (max):</label>
+            <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="0" required>
         </div>
 
+        <!-- Number of passengers -->
         <div class="form-group form-row">
-            <label for="nbrPassengers">Number of Passengers:</label>
-            <input type="number" id="nbrPassengers" name="nbrPassengers" value="1" required>
+            <label for="nbrPassengers">Passengers:</label>
+            <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
         </div>
 
+        <!-- Max flight duration -->
         <div class="form-group form-row">
-            <label for="maxFlightDuration">Max Flight Duration: (optional)</label>
-            <input type="number" id="maxFlightDuration" name="maxFlightDuration">
+            <label for="maxFlightDuration">Max flight duration: (optional)</label>
+            <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="9">
+            <label for="maxFlightDuration">hours</label>
         </div>
 
         <button type="button" id="suggestPriceBtn">Get Current Lowest Price</button>
 
          <div class="form-group form-row">
             <label class="price-limit-label" for="maxPricePerPerson">Max Price per person:</label>
-             <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
+            <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
+             <label class="price-limit-label" for="maxPricePerPerson">NOK</label>
 
         </div>
 
