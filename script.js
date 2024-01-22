@@ -319,7 +319,7 @@ $(document).ready(function () {
                 depDateFrom: formatDate(document.getElementById('depDateFrom').value),
                 depDateTo: formatDate(document.getElementById('depDateTo').value),
                 returnDateFrom: formatDate(document.getElementById('returnDateFrom').value),
-                returnDateTo: formatDate(document.getElementById('returnDateFrom').value),
+                returnDateTo: formatDate(document.getElementById('returnDateTo').value),
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),
