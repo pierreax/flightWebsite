@@ -154,6 +154,7 @@ $(document).ready(function () {
         const endDate = formatDate(document.getElementById('depDateTo').value);
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
+        const nbrPassengers = parseInputValue(parseInt(document.getElementById('nbrPassengers').value));
         const flightType = $('#oneWayTrip').is(':checked') ? 'one-way' : 'return';
 
         startDateReturn = '';  // Reset the values
@@ -179,7 +180,7 @@ $(document).ready(function () {
                 return_to: endDateReturn,
                 max_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
-                adults: 1,
+                adults: nbrPassengers,
                 curr: 'NOK',
                 limit: 1
             });
