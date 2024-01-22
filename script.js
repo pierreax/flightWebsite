@@ -318,8 +318,8 @@ $(document).ready(function () {
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
                 depDateFrom: formatDate(document.getElementById('depDateFrom').value),
                 depDateTo: formatDate(document.getElementById('depDateTo').value),
-                returnDateFrom: startDateReturn,
-                returnDateTo: endDateReturn,
+                returnDateFrom: formatDate(document.getElementById('returnDateFrom').value),
+                returnDateTo: formatDate(document.getElementById('returnDateFrom').value),
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),
@@ -328,6 +328,8 @@ $(document).ready(function () {
         };
 
         console.log('Sending data to Sheety:', formData);
+        console.log('Return Date From:', returnDateFrom);
+        console.log('Return Date To::', returnDateTo);
 
         fetch(sheetyApiUrl, {
             method: 'POST',
