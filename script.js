@@ -154,7 +154,7 @@ $(document).ready(function () {
         const endDate = formatDate(document.getElementById('depDateTo').value);
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
-        const flightType = document.getElementById('oneWayTrip').value;
+        const flightType = $('#oneWayTrip').is(':checked') ? 'one-way' : 'return';
 
         startDateReturn = '';  // Reset the values
         endDateReturn = '';
