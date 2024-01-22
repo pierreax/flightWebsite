@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!!");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
@@ -184,7 +184,7 @@ $(document).ready(function () {
                 limit: 1
             });
 
-            console.log('Tequila Search Params: ',params.tostring());
+            console.log('Tequila Search Params: ',params.toString());
 
             const response = await fetch(`${tequilaApiUrl}?${params.toString()}`, {
                 method: 'GET',
