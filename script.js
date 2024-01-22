@@ -160,6 +160,7 @@ $(document).ready(function () {
         endDateReturn = '';
 
         // Only process return dates if the flight type is not one-way
+        console.log(flightType)
         if (flightType !== 'one-way') {
             startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
             endDateReturn = formatDate(document.getElementById('returnDateTo').value);
