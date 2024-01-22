@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site!");
+    console.log("Loaded Site");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
@@ -184,14 +184,14 @@ $(document).ready(function () {
                 limit: 1
             });
 
+            console.log('Tequila Search Params: ',params.tostring);
+
             const response = await fetch(`${tequilaApiUrl}?${params.toString()}`, {
                 method: 'GET',
                 headers: {
                     'apikey': tequilaApiKey
                 }
             });
-
-            console.log('Tequila Search Params: ',params);
 
             const currentPriceData = await response.json();
             console.log('Tequila API response:', currentPriceData);
@@ -328,8 +328,6 @@ $(document).ready(function () {
         };
 
         console.log('Sending data to Sheety:', formData);
-        console.log('Return Date From:', returnDateFrom);
-        console.log('Return Date To::', returnDateTo);
 
         fetch(sheetyApiUrl, {
             method: 'POST',
