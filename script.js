@@ -184,7 +184,7 @@ $(document).ready(function () {
                 limit: 1
             });
 
-            console.log('Tequila Search Params: ',params.tostring);
+            console.log('Tequila Search Params: ',params.tostring());
 
             const response = await fetch(`${tequilaApiUrl}?${params.toString()}`, {
                 method: 'GET',
