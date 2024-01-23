@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 
     // Initialize Flatpickr
-    flatpickr("#dateFrom", {
+    flatpickr("#dateField", {
         altInput: true,
         mode: "range",
         altFormat: "F j, Y",
