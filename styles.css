@@ -163,8 +163,8 @@ input:focus, select:focus {
 .switch {
   position: relative;
   display: inline-block;
-  width: 28px;
-  height: 16px;
+  width: 18px;
+  height: 9px;
 }
 
 /* Hide default HTML checkbox */
