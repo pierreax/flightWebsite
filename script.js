@@ -41,13 +41,13 @@ $(document).ready(function () {
         if ($('#flexibleDates').is(':checked')) {
             console.log("Flexible dates selected.");
             // Change labels for flexible dates
-            $('#labelDepDateFrom').text('Departure Date From:');
-            $('#labelDepDateTo').text('Departure Date To:').show();
+            $('#labelDepDateFrom').text('Departure From:');
+            $('#labelDepDateTo').text('Departure To:').show();
             $('#depDateTo').show().attr('required', 'required');
 
             if (!$('#oneWayTrip').is(':checked')) {
-                $('#labelReturnDateFrom').text('Return Date From:').show();
-                $('#labelReturnDateTo').text('Return Date To:').show();
+                $('#labelReturnDateFrom').text('Return From:').show();
+                $('#labelReturnDateTo').text('Return To:').show();
                 $('#returnDateFrom').show().attr('required', 'required');
                 $('#returnDateTo').show().attr('required', 'required');
             }
