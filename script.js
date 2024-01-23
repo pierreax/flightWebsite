@@ -6,31 +6,29 @@ $(document).ready(function () {
     let endDateReturn = '';
 
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize Flatpickr
-        const flatpickrInstance = flatpickr("#dateField", {
-            altInput: true,
-            mode: "range",
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-            minDate: "today",
-            onChange: function(selectedDates, dateStr, instance) {
-                console.log(selectedDates, dateStr);
-            }
-        });
+    // Initialize Flatpickr
+    const flatpickrInstance = flatpickr("#dateField", {
+        altInput: true,
+        mode: "range",
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        onChange: function(selectedDates, dateStr, instance) {
+            console.log(selectedDates, dateStr);
+        }
+    });
 
-        var oneWayTripSwitch = document.getElementById("oneWayTrip");
-        oneWayTripSwitch.addEventListener('change', function() {
-            if(this.checked) {
-                console.log("One-way trip selected");
-                // Change Flatpickr to single date selection mode
-                flatpickrInstance.set('mode', 'single');
-            } else {
-                console.log("Return trip selected");
-                // Change Flatpickr back to range selection mode
-                flatpickrInstance.set('mode', 'range');
-            }
-        });
+    // Listener for oneWayTrip switch changes
+    $('#oneWayTrip').change(function() {
+        if ($(this).is(':checked')) {
+            console.log("One-way trip selected");
+            // Change Flatpickr to single date selection mode
+            flatpickrInstance.set('mode', 'single');
+        } else {
+            console.log("Return trip selected");
+            // Change Flatpickr back to range selection mode
+            flatpickrInstance.set('mode', 'range');
+        }
     });
 
 
