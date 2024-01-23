@@ -28,9 +28,11 @@ $(document).ready(function () {
             console.log(selectedDates, dateStr);
             // Update the selected start and end dates
             selectedStartDate = selectedDates[0];
+            console.log('Raw Start Date: ', selectedStartDate);
             selectedStartDate = formatDate(selectedStartDate);
             console.log('Formatted Start date: ',selectedStartDate);
             selectedEndDate = selectedDates.length === 2 ? selectedDates[1] : ''; // If one date is selected, selectedEndDate is null
+            console.log('Raw Return Date: ',selectedEndDate);
             selectedEndDate = formatDate(selectedEndDate);
             console.log('Formatted Return date: ',selectedEndDate);
         }
