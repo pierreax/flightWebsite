@@ -16,6 +16,7 @@ $(document).ready(function () {
 
     // Set the 'min' attribute for date inputs to today's date to prevent past dates
     const today = new Date().toISOString().split('T')[0];
+    $('#dateField').attr('min', today);
     $('#depDateFrom').attr('min', today);
     $('#depDateTo').attr('min', today);
     $('#returnDateFrom').attr('min', today);
