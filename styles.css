@@ -50,15 +50,7 @@ input, select {
     -webkit-appearance: none;
 }
 
-.small-input-container {
-    display: inline-block;
-    margin-right: 10px;
-}
 
-.small-input {
-    width: 100%;
-    text-align: center;
-}
 
 .form-row.small-input-row label {
     flex-grow: 0;
