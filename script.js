@@ -1,10 +1,21 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!!");
 
-    // Globally define return date variables within the document.ready scope
-    let startDateReturn = '';
-    let endDateReturn = '';
+    let selectedStartDate = ''; // Variable to store the selected start date
+    let selectedEndDate = ''; // Variable to store the selected end date
 
+     // Function to format dates as needed
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) { // Check if the date is invalid
+            console.error('Invalid date:', dateString);
+            return "NaN/NaN/NaN";
+        }
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const formattedDate = `${day}/${month}/${date.getFullYear()}`;
+        return formattedDate;
+    }
 
     // Initialize Flatpickr
     const flatpickrInstance = flatpickr("#dateField", {
@@ -15,6 +26,11 @@ $(document).ready(function () {
         minDate: "today",
         onChange: function(selectedDates, dateStr, instance) {
             console.log(selectedDates, dateStr);
+            // Update the selected start and end dates
+            selectedStartDate = selectedDates[0];
+            selectedStartDate = formatDate(selectedStartDate);
+            selectedEndDate = selectedDates.length === 2 ? selectedDates[1] : ''; // If one date is selected, selectedEndDate is null
+            selectedEndDate = formatDate(selectedEndDate);
         }
     });
 
@@ -24,6 +40,7 @@ $(document).ready(function () {
             console.log("One-way trip selected");
             // Change Flatpickr to single date selection mode
             flatpickrInstance.set('mode', 'single');
+            selectedEndDate = null; // Clear the end date since it's a one-way trip
         } else {
             console.log("Return trip selected");
             // Change Flatpickr back to range selection mode
@@ -86,34 +103,24 @@ $(document).ready(function () {
 
         const origin = extractIATACode('iataCodeFrom');
         const destination = extractIATACode('iataCodeTo');
-        const startDate = formatDate(document.getElementById('depDateFrom').value);
-        const endDate = formatDate(document.getElementById('depDateTo').value);
+        const startDate = formatDate(selectedStartDate);
+        const endDate = formatDate(selectedEndDate);
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
         const nbrPassengers = parseInputValue(parseInt(document.getElementById('nbrPassengers').value));
         const flightType = $('#oneWayTrip').is(':checked') ? 'one-way' : 'return';
-
-        startDateReturn = '';  // Reset the values
-        endDateReturn = '';
-
-        // Only process return dates if the flight type is not one-way
         console.log(flightType);
-        if (flightType !== 'one-way') {
-            console.log("Return flight price check");
-            startDateReturn = formatDate(document.getElementById('returnDateFrom').value);
-            endDateReturn = formatDate(document.getElementById('returnDateTo').value);
-            console.log(startDateReturn)
-            console.log(endDateReturn)
-        }
+
+
 
         try {
             const params = new URLSearchParams({
                 fly_from: origin,
                 fly_to: destination,
-                date_from: startDate,
-                date_to: endDate,
-                return_from: startDateReturn,
-                return_to: endDateReturn,
+                date_from: selectedStartDate,
+                date_to: selectedStartDate,
+                return_from: selectedEndDate,
+                return_to: selectedEndDate,
                 max_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
                 adults: nbrPassengers,
@@ -202,17 +209,6 @@ $(document).ready(function () {
         width: '100%'
     });
 
-    // Copy value from depDateFrom to depDateTo when depDateFrom changes
-    $('#depDateFrom').change(function() {
-        const departureDate = $(this).val();
-        $('#depDateTo').val(departureDate);
-    });
-
-    // Copy value from returnDateFrom to returnDateTo when returnDateFrom changes
-    $('#returnDateFrom').change(function() {
-        const returnDate = $(this).val();
-        $('#returnDateTo').val(returnDate);
-    });
 
     // Additional code to focus on the search field when Select2 is opened
     $(document).on('select2:open', () => {
@@ -253,10 +249,10 @@ $(document).ready(function () {
                 maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
                 maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
-                depDateFrom: formatDate(document.getElementById('depDateFrom').value),
-                depDateTo: formatDate(document.getElementById('depDateTo').value),
-                returnDateFrom: formatDate(document.getElementById('returnDateFrom').value),
-                returnDateTo: formatDate(document.getElementById('returnDateTo').value),
+                depDateFrom: selectedStartDate,
+                depDateTo: selectedStartDate,
+                returnDateFrom: selectedEndDate,
+                returnDateTo: selectedEndDate,
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),
