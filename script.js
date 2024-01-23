@@ -68,19 +68,6 @@ $(document).ready(function () {
         return iataCode.trim();
     }
 
-    // Function to format dates as needed
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) { // Check if the date is invalid
-            console.error('Invalid date:', dateString);
-            return "NaN/NaN/NaN";
-        }
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const formattedDate = `${day}/${month}/${date.getFullYear()}`;
-        return formattedDate;
-    }
-
     function parseInputValue(value) {
         if (typeof value === 'string' && value === "NaN/NaN/NaN") {
             return "";  // Or handle the invalid date case as needed
