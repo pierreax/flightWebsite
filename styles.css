@@ -163,7 +163,7 @@ input:focus, select:focus {
 .switch {
   position: relative;
   display: inline-block;
-  width: 32px;
+  width: 28px;
   height: 16px;
 }
 
