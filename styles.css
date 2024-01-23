@@ -184,7 +184,7 @@ input:focus, select:focus {
   bottom: 0;
   background-color: #ccc;
   transition: .4s;
-  border-radius: 10px; /* Fully rounded corners for smaller slider */
+  border-radius: 20px; /* Fully rounded corners for smaller slider */
 }
 
 .slider:before {
