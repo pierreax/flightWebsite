@@ -159,12 +159,14 @@ input:focus, select:focus {
     color: #4CAF50;
 }
 
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
-  width: 10px;
-  height: 5px;
+  width: 40px; /* Set the width of the switch */
+  height: 24px; /* Set the height of the switch */
+  margin: 5px 0; /* Provide some margin around the switch */
 }
 
 /* Hide default HTML checkbox */
@@ -183,42 +185,47 @@ input:focus, select:focus {
   right: 0;
   bottom: 0;
   background-color: #ccc;
+  -webkit-transition: .4s;
   transition: .4s;
-  border-radius: 20px; /* Fully rounded corners for smaller slider */
+  border-radius: 24px; /* Rounded corners */
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 20px; /* Smaller circle */
-  width: 20px; /* Smaller circle */
+  height: 20px; /* Height of the circle inside the slider */
+  width: 20px; /* Width of the circle inside the slider */
   left: 2px;
   bottom: 2px;
   background-color: white;
+  -webkit-transition: .4s;
   transition: .4s;
-  border-radius: 50%; /* Circular shape */
+  border-radius: 50%; /* Circular shape for the slider */
 }
 
 input:checked + .slider {
-  background-color: #4CAF50;
+  background-color: #4CAF50; /* Color when the switch is active/checked */
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #4CAF50;
+  box-shadow: 0 0 1px #4CAF50; /* Optional: add a box-shadow when the switch is focused */
 }
 
 input:checked + .slider:before {
-  transform: translateX(20px); /* Match the new width of the switch */
+  -webkit-transform: translateX(16px); /* Slide the circle to the right on check */
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
 }
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 20px;
+  border-radius: 24px;
 }
 
 .slider.round:before {
   border-radius: 50%;
 }
+
 
 
 @media screen and (max-device-width: 600px) {
