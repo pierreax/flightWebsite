@@ -7,16 +7,17 @@ $(document).ready(function () {
 
 
     // Initialize Flatpickr
-    flatpickr("#dateField", {
+    flatpickr("#dateFrom", {
         altInput: true,
         mode: "range",
         altFormat: "F j, Y",
         dateFormat: "Y-m-d",
+        minDate: "today", // Set the minimum date to today
     });
+
 
     // Set the 'min' attribute for date inputs to today's date to prevent past dates
     const today = new Date().toISOString().split('T')[0];
-    $('#dateField').attr('min', today);
     $('#depDateFrom').attr('min', today);
     $('#depDateTo').attr('min', today);
     $('#returnDateFrom').attr('min', today);
