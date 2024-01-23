@@ -83,9 +83,16 @@ input, select {
     white-space: nowrap;
 }
 
+/* Existing style for form-row input and select */
 .form-row input,
 .form-row select {
     flex-grow: 1;
+}
+
+/* Override flex-grow for date inputs within .form-row */
+.form-row input[type="date"] {
+    flex-grow: 0; /* Do not allow date inputs to grow */
+    width: 180px; /* Fixed width for date inputs */
 }
 
 .airplane-icon {
@@ -116,7 +123,7 @@ input, select {
 
 input[type="date"] {
     -webkit-appearance: none;
-    width: 80px;
+    width: 180px;
     padding: 10px;
     box-sizing: border-box;
     border-radius: 5px;
