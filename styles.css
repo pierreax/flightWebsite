@@ -2,16 +2,16 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 20px;
     line-height: 1.6;
-    background-color: #ffcc66; /* Light beige background for background */
+    background-color: #ffcc66; /* Light beige background */
 }
 
 h1, h2 {
-    font-weight: bold; /* Simplify font-weight for all headings */
-    color: #4d4d4d; /* Dark gray text color for all headings */
-    margin: 0; /* Remove default margins for headings */
+    font-weight: bold;
+    color: #4d4d4d;
+    margin: 0;
     text-align: center;
-    padding: 20px 0; /* Add padding to all headings */
-    background-color: #ffcc66; /* Light beige background for h1, h2 */
+    padding: 20px 0;
+    background-color: #ffcc66;
 }
 
 h1 {
@@ -34,40 +34,38 @@ form {
 label {
     display: block;
     margin-bottom: 5px;
-    padding: 10px; /* Slightly larger padding */
+    padding: 10px;
     font-weight: bold;
 }
 
 input, select {
     width: 100%;
-    padding: 10px; /* Slightly larger padding */
+    padding: 10px;
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #ddd; /* Subtle border */
+    border: 1px solid #ddd;
     background: #ffcc66;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     -webkit-appearance: none;
 }
 
-/* Specific styles for small input fields */
+.small-input-container {
+    display: inline-block;
+    width: 80px;
+    margin-right: 10px;
+}
+
 .small-input {
-    width: 50px; /* Adjust as needed */
-    margin-right: 10px; /* Adds some space between the input and whatever follows */
-    text-align: center; /* Center the text inside the input field */
+    width: 100%;
+    text-align: center;
 }
 
-/* Style for form rows that include small inputs */
-.form-row.small-input-row {
-    justify-content: flex-start; /* Aligns items to the start of the row */
-}
-
-/* Adjust label width in small input rows to prevent it from taking too much space */
 .form-row.small-input-row label {
     flex-grow: 0;
-    margin-right: 10px; /* Adds space between the label and the input */
-    white-space: nowrap; /* Keeps the label in a single line */
+    margin-right: 10px;
+    white-space: nowrap;
 }
 
 .form-group {
@@ -82,7 +80,7 @@ input, select {
 
 .form-row label {
     margin-right: 10px;
-    white-space: nowrap; /* Prevents the label from breaking into multiple lines */
+    white-space: nowrap;
 }
 
 .form-row input,
@@ -90,9 +88,8 @@ input, select {
     flex-grow: 1;
 }
 
-
-/* Change the background color of the Select2 dropdown selection */
-#select2-iataCodeFrom-container, #select2-iataCodeTo-container {
+#select2-iataCodeFrom-container,
+#select2-iataCodeTo-container {
     background-color: #ffcc66;
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
@@ -103,15 +100,14 @@ input, select {
     font-family: 'Roboto', sans-serif;
 }
 
-
 input[type="date"] {
     -webkit-appearance: none;
     width: 100%;
-    padding: 10px; /* Slightly larger padding */
+    padding: 10px;
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #ddd; /* Subtle border */
+    border: 1px solid #ddd;
     background: #ffcc66;
     font-family: 'Roboto', sans-serif;
 }
@@ -123,13 +119,14 @@ input[type="submit"] {
     border: none;
     margin-top: 12px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s; /* Added transform transition */
-    border-radius: 5px; /* Match other inputs */
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
 }
 
-input[type="submit"]:hover, input[type="submit"]:active {
+input[type="submit"]:hover,
+input[type="submit"]:active {
     background-color: #45a049;
-    transform: translateY(-2px); /* Slight lift effect on hover */
+    transform: translateY(-2px);
 }
 
 input:focus, select:focus {
@@ -138,11 +135,10 @@ input:focus, select:focus {
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
-/* Style for the checkbox row */
 .checkbox-row {
     display: flex;
     align-items: center;
-    padding: 10px; /* Space between this row and the next element */
+    padding: 10px;
 }
 
 .checkbox-container {
@@ -151,44 +147,42 @@ input:focus, select:focus {
 }
 
 .checkbox-container label {
-    cursor: pointer; /* Change cursor to pointer on hover */
+    cursor: pointer;
 }
 
 #suggestPriceBtn {
-    background-color: #4CAF50; /* Green background */
-    color: white; /* White text */
-    padding: 10px; /* Padding inside the button */
-    border: none; /* No border */
-    cursor: pointer; /* Cursor changes to pointer when hovered */
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
-    border-radius: 5px; /* Rounded corners */
-    font-weight: bold; /* Make the text bold */
-    font-family: 'Roboto', sans-serif; /* Keep the font consistent */
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
     width: 100%;
     margin-top: 10px;
     margin-bottom: 15px;
 }
 
-#suggestPriceBtn:hover, #suggestPriceBtn:active {
-    background-color: #45a049; /* Darker shade of green when hovered or clicked */
-    transform: translateY(-2px); /* Slight lift effect on hover */
+#suggestPriceBtn:hover,
+#suggestPriceBtn:active {
+    background-color: #45a049;
+    transform: translateY(-2px);
 }
 
-/* Make the checkbox inputs smaller and more manageable */
 input[type="checkbox"] {
-    width: auto; /* Restore default width */
-    padding: 0; /* Reset padding */
-    vertical-align: middle; /* Align checkbox vertically */
-    cursor: pointer; /* Change cursor to pointer on hover */
+    width: auto;
+    padding: 0;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
-/* Reset the appearance of the checkboxes to the system default */
 input[type="checkbox"] {
-    -webkit-appearance: checkbox; /* Apply default browser checkbox appearance */
-    -moz-appearance: checkbox; /* For Firefox */
-    appearance: checkbox; /* Standard syntax */
+    -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
+    appearance: checkbox;
 }
-
 
 ::placeholder {
     color: #aaa;
@@ -217,24 +211,19 @@ input[type="checkbox"] {
     }
 
     h1, h2 {
-        text-shadow: none; /* Removing shadow on mobile if it looks too heavy */
+        text-shadow: none;
     }
 
-    /* Add styles for smaller font sizes for labels, inputs, and other text elements */
     label, input, select, button, .checkbox-container label {
-        font-size: 0.7em; /* Adjust the font size as needed */
+        font-size: 0.7em;
     }
 
-    /* Adjust padding inside form elements if needed */
     input, select, button {
-        padding: 5px; /* Slightly smaller padding */
+        padding: 5px;
     }
-    /* Ensure the form width is not exceeding the screen width */
 
     form {
-        width: 100%; /* Adjust as needed */
-        box-sizing: border-box; /* Ensures padding doesn't add to the width */
+        width: 100%;
+        box-sizing: border-box;
     }
-    /* Adjust any other styles as needed to improve the layout on mobile */
 }
-
