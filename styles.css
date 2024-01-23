@@ -223,20 +223,6 @@ input:checked + .slider:before {
 
 /* Adjust the size of the switch on smaller screens */
 @media screen and (max-device-width: 600px) {
-  .switch {
-    width: 30px; /* Smaller width for mobile */
-    height: 18px; /* Smaller height for mobile */
-  }
-
-  .slider:before {
-    height: 14px; /* Smaller circle for mobile */
-    width: 14px; /* Smaller circle for mobile */
-  }
-
-  input:checked + .slider:before {
-    transform: translateX(12px); /* Slide the circle to the right on check for mobile */
-  }
-
     body {
         margin: 0px;
     }
