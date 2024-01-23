@@ -163,8 +163,8 @@ input:focus, select:focus {
 .switch {
   position: relative;
   display: inline-block;
-  width: 40px; /* Width of the switch */
-  height: 24px; /* Height of the switch */
+  width: 20px; /* Width of the switch */
+  height: 12px; /* Height of the switch */
   margin: 10px 0; /* Provide some margin around the switch */
 }
 
