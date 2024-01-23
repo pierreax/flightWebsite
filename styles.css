@@ -88,6 +88,20 @@ input, select {
     flex-grow: 1;
 }
 
+.airplane-icon {
+    height: 24px; /* Adjust the size as needed */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Space between the icon and the select field */
+    vertical-align: middle; /* Align the icon with the middle of the select field */
+}
+
+.form-group.form-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+
 #select2-iataCodeFrom-container,
 #select2-iataCodeTo-container {
     background-color: #ffcc66;
