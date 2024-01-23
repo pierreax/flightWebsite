@@ -253,4 +253,9 @@ input:checked + .slider:before {
         width: 100%;
         box-sizing: border-box;
     }
+    .select2-container--default .select2-selection--single,
+    .select2-container--default .select2-selection--multiple .select2-selection__choice,
+    .select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
+        font-size: 0.7em; /* Adjust this value as needed */
+    }
 }
