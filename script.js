@@ -15,6 +15,22 @@ $(document).ready(function () {
         minDate: "today", // Set the minimum date to today
     });
 
+     document.addEventListener('DOMContentLoaded', function() {
+        var oneWayTripCheckbox = document.getElementById("oneWayTrip");
+        oneWayTripCheckbox.addEventListener('change', function() {
+            if(this.checked) {
+                // Handle one-way trip selected
+                console.log("One-way trip selected");
+                // e.g., hide return date fields
+            } else {
+                // Handle return trip selected (checkbox not checked)
+                console.log("Return trip selected");
+                // e.g., show return date fields
+            }
+        });
+    });
+
+
 
     // Set the 'min' attribute for date inputs to today's date to prevent past dates
     const today = new Date().toISOString().split('T')[0];

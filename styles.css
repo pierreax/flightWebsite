@@ -239,20 +239,20 @@ input[type="checkbox"] {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
   transition: .4s;
+  border-radius: 20px; /* Fully rounded corners for smaller slider */
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: 16px; /* Smaller circle */
+  width: 16px; /* Smaller circle */
+  left: 2px;
+  bottom: 2px;
   background-color: white;
-  -webkit-transition: .4s;
   transition: .4s;
+  border-radius: 50%; /* Circular shape */
 }
 
 input:checked + .slider {
@@ -264,9 +264,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  transform: translateX(20px); /* Match the new width of the switch */
 }
 
 /* Rounded sliders */
