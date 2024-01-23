@@ -193,7 +193,7 @@ input:focus, select:focus {
   content: "";
   height: 20px; /* Height of the circle inside the slider */
   width: 20px; /* Width of the circle inside the slider */
-  left: 2px;
+  left: 4px;
   bottom: 2px;
   background-color: white;
   transition: .4s;
