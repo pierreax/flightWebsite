@@ -164,7 +164,7 @@ input:focus, select:focus {
   position: relative;
   display: inline-block;
   width: 20px; /* Width of the switch */
-  height: 8px; /* Height of the switch */
+  height: 6px; /* Height of the switch */
   margin: 10px 0; /* Provide some margin around the switch */
 }
 
