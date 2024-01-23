@@ -190,8 +190,8 @@ input:focus, select:focus {
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px; /* Smaller circle */
-  width: 16px; /* Smaller circle */
+  height: 20px; /* Smaller circle */
+  width: 20px; /* Smaller circle */
   left: 2px;
   bottom: 2px;
   background-color: white;
