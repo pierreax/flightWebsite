@@ -6,29 +6,33 @@ $(document).ready(function () {
     let endDateReturn = '';
 
 
-    // Initialize Flatpickr
-    flatpickr("#dateField", {
-        altInput: true,
-        mode: "range",
-        altFormat: "F j, Y",
-        dateFormat: "Y-m-d",
-        minDate: "today", // Set the minimum date to today
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Flatpickr
+        const flatpickrInstance = flatpickr("#dateField", {
+            altInput: true,
+            mode: "range",
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            onChange: function(selectedDates, dateStr, instance) {
+                console.log(selectedDates, dateStr);
+            }
+        });
 
-     document.addEventListener('DOMContentLoaded', function() {
-        var oneWayTripCheckbox = document.getElementById("oneWayTrip");
-        oneWayTripCheckbox.addEventListener('change', function() {
+        var oneWayTripSwitch = document.getElementById("oneWayTrip");
+        oneWayTripSwitch.addEventListener('change', function() {
             if(this.checked) {
-                // Handle one-way trip selected
                 console.log("One-way trip selected");
-                // e.g., hide return date fields
+                // Change Flatpickr to single date selection mode
+                flatpickrInstance.set('mode', 'single');
             } else {
-                // Handle return trip selected (checkbox not checked)
                 console.log("Return trip selected");
-                // e.g., show return date fields
+                // Change Flatpickr back to range selection mode
+                flatpickrInstance.set('mode', 'range');
             }
         });
     });
+
 
 
 
