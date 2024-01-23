@@ -4,18 +4,18 @@ $(document).ready(function () {
     let selectedStartDate = ''; // Variable to store the selected start date
     let selectedEndDate = ''; // Variable to store the selected end date
 
-     // Function to format dates as needed
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) { // Check if the date is invalid
-            console.error('Invalid date:', dateString);
+    // Function to format dates as needed
+    function formatDate(dateObject) {
+        if (!(dateObject instanceof Date) || isNaN(dateObject.getTime())) { // Check if the date is invalid
+            console.error('Invalid date:', dateObject);
             return "NaN/NaN/NaN";
         }
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        const formattedDate = `${day}/${month}/${date.getFullYear()}`;
-        return formattedDate;
+        const day = dateObject.getDate().toString().padStart(2, '0');
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-based
+        const year = dateObject.getFullYear();
+        return `${day}/${month}/${year}`;
     }
+
 
     // Initialize Flatpickr
     const flatpickrInstance = flatpickr("#dateField", {
