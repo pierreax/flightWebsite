@@ -87,11 +87,6 @@ input, select {
     flex-grow: 1;
 }
 
-/* Override flex-grow for date inputs within .form-row */
-.form-row input[type="date"] {
-    flex-grow: 0; /* Do not allow date inputs to grow */
-    width: 150px; /* Fixed width for date inputs */
-}
 
 .airplane-icon {
     height: 24px; /* Adjust the size as needed */
@@ -119,17 +114,6 @@ input, select {
     font-family: 'Roboto', sans-serif;
 }
 
-input[type="date"] {
-    -webkit-appearance: none;
-    width: 150px;
-    padding: 10px;
-    box-sizing: border-box;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #ddd;
-    background: #ffcc66;
-    font-family: 'Roboto', sans-serif;
-}
 
 input[type="submit"] {
     background-color: #4CAF50;
@@ -154,21 +138,6 @@ input:focus, select:focus {
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
-.checkbox-row {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-}
-
-.checkbox-container {
-    display: flex;
-    align-items: center;
-}
-
-.checkbox-container label {
-    cursor: pointer;
-}
-
 #suggestPriceBtn {
     background-color: #4CAF50;
     color: white;
@@ -190,22 +159,6 @@ input:focus, select:focus {
     transform: translateY(-2px);
 }
 
-input[type="checkbox"] {
-    width: auto;
-    padding: 0;
-    vertical-align: middle;
-    cursor: pointer;
-}
-
-input[type="checkbox"] {
-    -webkit-appearance: checkbox;
-    -moz-appearance: checkbox;
-    appearance: checkbox;
-}
-
-::placeholder {
-    color: #aaa;
-}
 
 #submissionMessage {
     display: none;
