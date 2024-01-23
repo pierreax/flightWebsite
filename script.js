@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site!!");
+    console.log("Loaded Site");
 
     // Globally define return date variables within the document.ready scope
     let startDateReturn = '';
