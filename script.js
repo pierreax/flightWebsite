@@ -54,12 +54,12 @@ $(document).ready(function () {
         } else {
             console.log("Exact dates selected.");
             // Change labels for exact dates
-            $('#labelDepDateFrom').text('Departure Date:');
+            $('#labelDepDateFrom').text('Departure:');
             $('#labelDepDateTo').hide();
             $('#depDateTo').hide().removeAttr('required');
 
             if (!$('#oneWayTrip').is(':checked')) {
-                $('#labelReturnDateFrom').text('Return Date:').show();
+                $('#labelReturnDateFrom').text('Return:').show();
                 $('#returnDateTo').hide().removeAttr('required');
                 $('#labelReturnDateTo').hide();
             }
