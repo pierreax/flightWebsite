@@ -163,9 +163,9 @@ input:focus, select:focus {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px; /* Width of the switch */
-  height: 34px; /* Height of the switch */
-  margin: 10px; /* Provide some margin around the switch */
+  width: 40px; /* Width of the switch */
+  height: 24px; /* Height of the switch */
+  margin: 10px 0; /* Provide some margin around the switch */
 }
 
 /* Hide default HTML checkbox */
@@ -184,20 +184,18 @@ input:focus, select:focus {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
   transition: .4s;
-  border-radius: 34px; /* Fully rounded corners */
+  border-radius: 24px; /* Fully rounded corners for the slider */
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px; /* Height of the circle inside the slider */
-  width: 26px; /* Width of the circle inside the slider */
-  left: 4px;
-  bottom: 4px;
+  height: 20px; /* Height of the circle inside the slider */
+  width: 20px; /* Width of the circle inside the slider */
+  left: 2px;
+  bottom: 2px;
   background-color: white;
-  -webkit-transition: .4s;
   transition: .4s;
   border-radius: 50%; /* Circular shape for the slider */
 }
@@ -211,14 +209,12 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px); /* Slide the circle to the right on check */
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  transform: translateX(18px); /* Slide the circle to the right on check */
 }
 
 /* Rounded sliders */
 .slider.round {
-  border-radius: 34px;
+  border-radius: 24px;
 }
 
 .slider.round:before {
@@ -228,19 +224,17 @@ input:checked + .slider:before {
 /* Adjust the size of the switch on smaller screens */
 @media screen and (max-device-width: 600px) {
   .switch {
-    width: 40px; /* Smaller width for mobile */
-    height: 24px; /* Smaller height for mobile */
+    width: 30px; /* Smaller width for mobile */
+    height: 18px; /* Smaller height for mobile */
   }
 
   .slider:before {
-    height: 20px; /* Smaller circle for mobile */
-    width: 20px; /* Smaller circle for mobile */
+    height: 14px; /* Smaller circle for mobile */
+    width: 14px; /* Smaller circle for mobile */
   }
 
   input:checked + .slider:before {
-    -webkit-transform: translateX(16px); /* Slide the circle to the right on check for mobile */
-    -ms-transform: translateX(16px);
-    transform: translateX(16px);
+    transform: translateX(12px); /* Slide the circle to the right on check for mobile */
   }
 
     body {
