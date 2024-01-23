@@ -12,6 +12,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://pierreax.github.io/flightWebsite/script.js"></script>
+    <!-- Include Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Include Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
 
@@ -47,6 +51,9 @@
                 <input type="checkbox" id="oneWayTrip" name="flightType">
             </div>
         </div>
+
+        <input type="text" id="dateFrom" placeholder="Select Date From">
+        <input type="text" id="dateTo" placeholder="Select Date To">
 
         <div class="form-group form-row">
             <label id="labelDepDateFrom" for="depDateFrom">Departure From:</label>

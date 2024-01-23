@@ -5,6 +5,15 @@ $(document).ready(function () {
     let startDateReturn = '';
     let endDateReturn = '';
 
+
+    // Initialize Flatpickr
+    flatpickr("#dateFrom", {
+        altInput: true,
+        mode: "range",
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
+    });
+
     // Set the 'min' attribute for date inputs to today's date to prevent past dates
     const today = new Date().toISOString().split('T')[0];
     $('#depDateFrom').attr('min', today);
