@@ -11,7 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://pierreax.github.io/flightWebsite/script.js"></script><!-- Reference to the external JavaScript file -->
+    <script src="https://pierreax.github.io/flightWebsite/script.js"></script>
 </head>
 <body>
 
@@ -22,14 +22,12 @@
     <form id="sheetyForm">
 
         <div class="form-group form-row">
-            <!--<label for="iataCodeFrom">From: </label> Looks better when this is hidden should replace with airplane-Icon-->
             <select id="iataCodeFrom" name="iataCodeFrom" required>
                 <!-- Dropdown options will be populated dynamically using JavaScript -->
             </select>
         </div>
 
         <div class="form-group form-row">
-            <!-- <label for="iataCodeTo">To: Looks better when this is hidden should replace with airplane-Icon </label> -->
             <select id="iataCodeTo" name="iataCodeTo" required>
                 <!-- Dropdown options will be populated dynamically using JavaScript -->
             </select>
@@ -67,22 +65,25 @@
             <input type="date" id="returnDateTo" name="returnDateTo" required>
         </div>
 
-        <!-- Max number of layovers -->
-        <div class="form-group form-row">
+        <div class="form-group form-row small-input-row">
             <label for="maxStops">Layovers (max):</label>
-            <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="0" required>
+            <div class="small-input-container">
+                <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="0" required>
+            </div>
         </div>
 
-        <!-- Number of passengers -->
-        <div class="form-group form-row">
+        <div class="form-group form-row small-input-row">
             <label for="nbrPassengers">Passengers:</label>
-            <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
+            <div class="small-input-container">
+                <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
+            </div>
         </div>
 
-        <!-- Max flight duration -->
-        <div class="form-group form-row">
-            <label for="maxFlightDuration">Max flight duration: (optional)</label>
-            <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="9">
+        <div class="form-group form-row small-input-row">
+            <label for="maxFlightDuration">Max flight duration:</label>
+            <div class="small-input-container">
+                <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="9">
+            </div>
             <label for="maxFlightDuration">hours</label>
         </div>
 
@@ -91,10 +92,8 @@
          <div class="form-group form-row">
             <label class="price-limit-label" for="maxPricePerPerson">Max Price per person:</label>
             <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
-             <label class="price-limit-label" for="maxPricePerPerson">NOK</label>
-
+            <label class="price-limit-label" for="maxPricePerPerson">NOK</label>
         </div>
-
 
         <div class="form-group form-row">
             <label for="email">Email:</label>
