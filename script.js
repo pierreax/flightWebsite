@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site!!");
+    console.log("Loaded Site!");
 
     let selectedStartDate = ''; // Variable to store the selected start date
     let selectedEndDate = ''; // Variable to store the selected end date
@@ -29,8 +29,10 @@ $(document).ready(function () {
             // Update the selected start and end dates
             selectedStartDate = selectedDates[0];
             selectedStartDate = formatDate(selectedStartDate);
+            console.log('Formatted Start date: ',selectedStartDate);
             selectedEndDate = selectedDates.length === 2 ? selectedDates[1] : ''; // If one date is selected, selectedEndDate is null
             selectedEndDate = formatDate(selectedEndDate);
+            console.log('Formatted Return date: ',selectedEndDate);
         }
     });
 
