@@ -94,8 +94,8 @@ $(document).ready(function () {
 
         const origin = extractIATACode('iataCodeFrom');
         const destination = extractIATACode('iataCodeTo');
-        const startDate = formatDate(selectedStartDate);
-        const endDate = formatDate(selectedEndDate);
+        const startDate = selectedStartDate;
+        const endDate = selectedEndDate;
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
         const nbrPassengers = parseInputValue(parseInt(document.getElementById('nbrPassengers').value));
