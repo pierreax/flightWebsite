@@ -92,7 +92,7 @@ input, select {
 .form-row input[type="date"] {
     flex-grow: 0; /* Do not allow date inputs to grow */
     width: 150px; /* Fixed width for date inputs */
-    align: right;
+    align-items: right;
 }
 
 .airplane-icon {
@@ -131,7 +131,7 @@ input[type="date"] {
     border: 1px solid #ddd;
     background: #ffcc66;
     font-family: 'Roboto', sans-serif;
-    align: right;
+    align-items: right;
 }
 
 input[type="submit"] {
