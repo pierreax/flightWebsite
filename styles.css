@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'Avenir Light';
+    src: url('Avenir Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 body {
     font-family: 'Avenir Light', sans-serif;
     margin: 20px;
