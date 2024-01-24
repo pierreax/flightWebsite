@@ -54,7 +54,12 @@ input, select {
     -webkit-appearance: none;
 }
 
-
+.input-row-group {
+    display: flex;
+    justify-content: space-between; /* Distributes space between the items */
+    align-items: center; /* Aligns items vertically in the center */
+    flex-wrap: wrap; /* Allows items to wrap onto the next line */
+}
 
 .form-row.small-input-row label {
     flex-grow: 0;

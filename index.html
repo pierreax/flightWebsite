@@ -52,27 +52,34 @@
         </div>
 
 
-        <div class="form-group form-row small-input-row">
-            <label for="maxStops">Layovers (max):</label>
-            <div class="small-input-container">
-                <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="0" required>
+        <!-- Grouped input fields -->
+        <div class="input-row-group">
+            <!-- Layovers -->
+            <div class="form-group form-row small-input-row">
+                <label for="maxStops">Layovers (max):</label>
+                <div class="small-input-container">
+                    <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="0" required>
+                </div>
+            </div>
+
+            <!-- Passengers -->
+            <div class="form-group form-row small-input-row">
+                <label for="nbrPassengers">Passengers:</label>
+                <div class="small-input-container">
+                    <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
+                </div>
+            </div>
+
+            <!-- Max flight duration -->
+            <div class="form-group form-row small-input-row">
+                <label for="maxFlightDuration">Max flight duration:</label>
+                <div class="small-input-container">
+                    <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="9">
+                </div>
+                <label for="maxFlightDuration">hours</label>
             </div>
         </div>
 
-        <div class="form-group form-row small-input-row">
-            <label for="nbrPassengers">Passengers:</label>
-            <div class="small-input-container">
-                <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
-            </div>
-        </div>
-
-        <div class="form-group form-row small-input-row">
-            <label for="maxFlightDuration">Max flight duration:</label>
-            <div class="small-input-container">
-                <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="9">
-            </div>
-            <label for="maxFlightDuration">hours</label>
-        </div>
 
         <button type="button" id="suggestPriceBtn">Get Current Lowest Price</button>
 
