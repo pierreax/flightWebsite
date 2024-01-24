@@ -111,6 +111,7 @@ input, select {
 
 .small-label label {
     font-size: 6px;
+    text-align: left;
 }
 
 /* Existing style for form-row input and select */
