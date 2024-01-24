@@ -84,6 +84,10 @@ input, select {
     margin-bottom: 15px;
 }
 
+.date-field {
+    text-align: left;
+}
+
 .form-row {
     display: flex;
     align-items: center;
