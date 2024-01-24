@@ -202,14 +202,15 @@ input:focus, select:focus {
     text-align: left;
 }
 
-.optional-label::before {
-    content: "Travel time \A ";
-    white-space: pre; /* Preserves whitespace (like line breaks) */
+.optional-label .optional-text {
+    display: block; /* Moves the optional text to a new line */
 }
 
-.optional-label {
-    display: block; /* Makes the label a block-level element to respect the line break */
+/* Optional: Add any additional styling you want for the optional text */
+.optional-label .optional-text {
+    font-size: smaller; /* Example: making the font size smaller */
 }
+
 
 
 #suggestPriceBtn {
