@@ -82,10 +82,6 @@ input, select {
     white-space: nowrap;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
 .date-field {
     display: flex;
     align-items: center;
