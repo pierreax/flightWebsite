@@ -54,11 +54,24 @@ input, select {
     -webkit-appearance: none;
 }
 
-.input-row-group {
+/* Style for the input group */
+.input-group {
     display: flex;
-    justify-content: space-between; /* Distributes space between the items */
+    justify-content: space-between; /* Distribute space between the items */
     align-items: center; /* Aligns items vertically in the center */
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
+    margin-bottom: 15px; /* Space between this group and the next element */
+}
+
+/* Adjustments for individual input rows within the group */
+.input-group .form-row.small-input-row {
+    flex: 1; /* Allows each item to grow */
+    margin-right: 10px; /* Space between items */
+}
+
+/* Remove margin-right for the last item to align it properly */
+.input-group .form-row.small-input-row:last-child {
+    margin-right: 0;
 }
 
 .form-row.small-input-row label {
