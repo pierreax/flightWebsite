@@ -114,7 +114,7 @@ $(document).ready(function () {
                 return_to: selectedEndDate,
                 max_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
-                adults: nbrPassengers,
+                adults: 1,
                 curr: 'NOK',
                 limit: 1
             });
