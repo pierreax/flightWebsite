@@ -201,6 +201,16 @@ input:focus, select:focus {
     text-align: left;
 }
 
+.optional-label::before {
+    content: "Travel time \A ";
+    white-space: pre; /* Preserves whitespace (like line breaks) */
+}
+
+.optional-label {
+    display: block; /* Makes the label a block-level element to respect the line break */
+}
+
+
 #suggestPriceBtn {
     background-color: #4CAF50;
     color: white;
