@@ -44,7 +44,7 @@ label {
 
 input, select {
     width: 100%;
-    padding: 15px 10px 10px 10px; /* Adjust top padding */
+    padding: 10px; /* Adjust top padding */
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
