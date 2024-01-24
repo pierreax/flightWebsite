@@ -163,7 +163,7 @@ input, select {
 #select2-iataCodeTo-container {
     background-color: #ffcc66;
     font-family: 'Avenir Light', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .select2-selection__rendered {
