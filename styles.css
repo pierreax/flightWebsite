@@ -48,10 +48,9 @@ input, select {
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #ddd;
+    border: 1px solid black;
     background: #ffcc66;
     font-family: 'Avenir Light', sans-serif;
-    border-color: black;
     -webkit-appearance: none;
 }
 
