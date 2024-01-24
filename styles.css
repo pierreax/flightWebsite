@@ -167,11 +167,13 @@ input, select {
 #select2-iataCodeTo-container {
     background-color: #ffcc66;
     font-family: 'Avenir Light', sans-serif;
+    font-size: 12px;
 }
 
 .select2-selection__rendered {
     font-family: 'Avenir Light', sans-serif;
     background-color: #ffcc66;
+    font-size: 12px;
 }
 
 input[type="submit"] {
