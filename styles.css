@@ -87,6 +87,7 @@ input, select {
     align-items: center;
     justify-content: space-between; /* Align label to left and input to right */
     padding: 10px 0; /* Add some padding */
+    font-size: 12px;
 }
 
 
