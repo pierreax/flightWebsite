@@ -139,6 +139,8 @@ input, select {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    font-size: 8px;
+
 }
 
 #select2-iataCodeFrom-container,
