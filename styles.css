@@ -45,7 +45,7 @@ input, select {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border: 1px solid #ddd;
     background: #ffcc66;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Avenir Light', sans-serif;
     font-weight: bold;
     -webkit-appearance: none;
 }
@@ -98,12 +98,12 @@ input, select {
 #select2-iataCodeTo-container {
     background-color: #ffcc66;
     font-weight: bold;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Avenir Light', sans-serif;
 }
 
 .select2-selection__rendered {
     font-weight: bold;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Avenir Light', sans-serif;
 }
 
 
@@ -139,7 +139,7 @@ input:focus, select:focus {
     transition: background-color 0.3s, transform 0.2s;
     border-radius: 5px;
     font-weight: bold;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Avenir Light', sans-serif;
     width: 100%;
     margin-top: 10px;
     margin-bottom: 15px;
