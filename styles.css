@@ -109,6 +109,10 @@ input, select {
     flex: 0 0 auto; /* Do not grow or shrink */
 }
 
+.small-input-row label {
+    font-size: 6px;
+}
+
 /* Existing style for form-row input and select */
 .form-row input,
 .form-row select {
