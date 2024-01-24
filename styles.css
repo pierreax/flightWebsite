@@ -51,7 +51,6 @@ input, select {
     background: #ffcc66;
     font-family: 'Avenir Light', sans-serif;
     -webkit-appearance: none;
-    text-align: right;
 }
 
 /* Style for the input group */
@@ -61,6 +60,8 @@ input, select {
     align-items: center; /* Aligns items vertically in the center */
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
     margin-bottom: 15px; /* Space between this group and the next element */
+    text-align: right;
+
 }
 
 /* Adjustments for individual input rows within the group */
