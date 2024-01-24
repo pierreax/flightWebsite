@@ -164,6 +164,7 @@ input, select {
     background-color: #ffcc66;
     font-family: 'Avenir Light', sans-serif;
     font-size: 14px;
+    border-radius: 5px;
 }
 
 .select2-selection__rendered {
