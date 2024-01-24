@@ -140,7 +140,7 @@ input, select {
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
-    top: -5px; /* Adjust position */
+    top: 1px; /* Adjust position */
     font-size: 10px; /* Adjust font size when focused or filled */
     color: #5264AE;
 }
