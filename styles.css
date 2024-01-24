@@ -106,6 +106,7 @@ input, select {
 
 .select2-selection__rendered {
     font-family: 'Avenir Light', sans-serif;
+    background-color: #ffcc66;
 }
 
 
