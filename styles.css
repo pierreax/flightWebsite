@@ -51,6 +51,7 @@ input, select {
     background: #ffcc66;
     font-family: 'Avenir Light', sans-serif;
     -webkit-appearance: none;
+    text-align: right;
 }
 
 /* Style for the input group */
