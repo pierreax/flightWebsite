@@ -139,6 +139,8 @@ input, select {
     align-items: center;
     justify-content: flex-start;
     font-size: 10px;
+    vertical-align: middle; /* Align the icon with the middle of the select field */
+
 
 }
 
