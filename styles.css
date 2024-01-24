@@ -51,6 +51,7 @@ input, select {
     border: 1px solid #ddd;
     background: #ffcc66;
     font-family: 'Avenir Light', sans-serif;
+    border-color: black;
     -webkit-appearance: none;
 }
 
