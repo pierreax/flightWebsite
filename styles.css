@@ -97,12 +97,15 @@ input, select {
 
 .form-row label {
     white-space: nowrap;
+    text-align: left;
+    flex: 0 0 auto; /* Do not grow or shrink */
 }
 
 /* Existing style for form-row input and select */
 .form-row input,
 .form-row select {
-    flex-grow: 1;
+    flex: 1;
+    text-align: right;
 }
 
 .floating-label {
