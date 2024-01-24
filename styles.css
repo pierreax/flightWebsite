@@ -211,7 +211,7 @@ input:focus, select:focus {
   display: inline-block;
   width: 18px; /* Width of the switch */
   height: 4px; /* Height of the switch */
-  margin: 10px 0; /* Provide some margin around the switch */
+  margin: 5px 0; /* Provide some margin around the switch */
 }
 
 /* Hide default HTML checkbox */
