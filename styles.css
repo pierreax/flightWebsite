@@ -128,8 +128,6 @@ input, select {
     color: #5264AE;
 }
 
-
-
 .airplane-icon {
     height: 24px; /* Adjust the size as needed */
     width: auto; /* Maintain aspect ratio */
@@ -143,7 +141,6 @@ input, select {
     justify-content: flex-start;
 }
 
-
 #select2-iataCodeFrom-container,
 #select2-iataCodeTo-container {
     background-color: #ffcc66;
@@ -154,7 +151,6 @@ input, select {
     font-family: 'Avenir Light', sans-serif;
     background-color: #ffcc66;
 }
-
 
 input[type="submit"] {
     background-color: #4CAF50;
@@ -198,7 +194,6 @@ input:focus, select:focus {
     background-color: #45a049;
     transform: translateY(-2px);
 }
-
 
 #submissionMessage {
     display: none;
