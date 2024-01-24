@@ -93,7 +93,7 @@ input, select {
 }
 
 /* Style for the label inside date-field */
-.date-field label {
+.date-field placeholder {
     margin-right: 10px; /* Space between label and input */
     flex: 0 0 auto; /* Do not grow or shrink */
 }
