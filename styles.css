@@ -121,7 +121,7 @@ input, select {
 }
 
 .floating-label input {
-    border: 1px solid #ddd;
+    border: 1px solid black;
     padding: 10px;
     width: 100%;
     font-size: 12px; /* Adjust font size as per design */
