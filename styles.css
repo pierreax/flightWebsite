@@ -109,7 +109,7 @@ input, select {
     flex: 0 0 auto; /* Do not grow or shrink */
 }
 
-.small-input-row label {
+.small-label label {
     font-size: 6px;
 }
 
