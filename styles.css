@@ -197,7 +197,7 @@ input:focus, select:focus {
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
-.small-label label {
+.small-label {
     font-size: 6px;
     text-align: left;
 }
