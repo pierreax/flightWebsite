@@ -62,7 +62,7 @@ input, select {
 }
 
 .form-row.small-input-row label {
-    flex-grow: 0;
+    flex-grow: 1;
     margin-right: 10px;
     white-space: nowrap;
 }
