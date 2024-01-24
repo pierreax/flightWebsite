@@ -92,16 +92,11 @@ input, select {
     padding: 10px 0; /* Add some padding */
 }
 
-/* Style for the label inside date-field */
-.date-field placeholder {
-    margin-right: 10px; /* Space between label and input */
-    flex: 0 0 auto; /* Do not grow or shrink */
-}
 
 /* Style for the input inside date-field */
 .date-field input {
     flex: 1; /* Allow input to grow and fill the space */
-    text-align: right; /* Align text to the right */
+    text-align: center; /* Align text to the right */
 }
 
 .form-row {
