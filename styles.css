@@ -117,6 +117,7 @@ input, select {
     top: 10px;
     transition: 0.2s ease all;
     color: #999;
+    padding: 0px;
 }
 
 .floating-label input:focus ~ label,
