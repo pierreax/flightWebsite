@@ -109,11 +109,6 @@ input, select {
     flex: 0 0 auto; /* Do not grow or shrink */
 }
 
-.small-label label {
-    font-size: 6px;
-    text-align: left;
-}
-
 /* Existing style for form-row input and select */
 .form-row input,
 .form-row select {
@@ -200,6 +195,11 @@ input:focus, select:focus {
     outline: none;
     border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.small-label label {
+    font-size: 6px;
+    text-align: left;
 }
 
 #suggestPriceBtn {
