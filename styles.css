@@ -101,7 +101,6 @@ input, select {
 
 .floating-label {
     position: relative;
-    padding-top: 15px;
 }
 
 .floating-label input {
