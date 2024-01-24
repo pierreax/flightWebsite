@@ -43,7 +43,7 @@ label {
 
 input, select {
     width: 100%;
-    padding: 10px;
+    padding: 15px 10px 10px 10px; /* Adjust top padding */
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -107,23 +107,24 @@ input, select {
     border: 1px solid #ddd;
     padding: 10px;
     width: 100%;
-    font-size: 6px;
+    font-size: 16px; /* Adjust font size as per design */
 }
 
 .floating-label label {
     position: absolute;
     pointer-events: none;
     left: 10px;
-    top: 10px;
+    top: 10px; /* Adjust position */
     transition: 0.2s ease all;
     color: #999;
     padding: 0px;
+    font-size: 12px; /* Adjust font size for initial state */
 }
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
-    top: -5px;
-    font-size: 12px;
+    top: -5px; /* Adjust position */
+    font-size: 10px; /* Adjust font size when focused or filled */
     color: #5264AE;
 }
 
@@ -140,8 +141,6 @@ input, select {
     justify-content: flex-start;
     font-size: 10px;
     vertical-align: middle; /* Align the icon with the middle of the select field */
-
-
 }
 
 #select2-iataCodeFrom-container,
