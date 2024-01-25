@@ -56,18 +56,43 @@ $(document).ready(function () {
         }
     });
 
-        // Listener for Flexible dates switch changes
+
+    // Listener for Flexible dates switch changes
     $('#flexibleDates').change(function() {
         if ($(this).is(':checked')) {
             console.log("Flexible dates selected");
-            depDate_From = selectedStartDate -1;
-            depDate_To = selectedStartDate +1;
+
+            // Adjust the departure dates
+            if (selectedStartDate) {
+                let startDate = new Date(selectedStartDate);
+                depDate_From = new Date(startDate.setDate(startDate.getDate() - 1)).toISOString().split('T')[0];
+                startDate = new Date(selectedStartDate); // Reset the date
+                depDate_To = new Date(startDate.setDate(startDate.getDate() + 1)).toISOString().split('T')[0];
+            }
+
+            // Adjust the return dates
+            if (selectedEndDate) {
+                let endDate = new Date(selectedEndDate);
+                returnDate_From = new Date(endDate.setDate(endDate.getDate() - 1)).toISOString().split('T')[0];
+                endDate = new Date(selectedEndDate); // Reset the date
+                returnDate_To = new Date(endDate.setDate(endDate.getDate() + 1)).toISOString().split('T')[0];
+            }
         } else {
             console.log("Exact dates selected");
-            depDate_From = selectedEndDate -1;
-            depDate_To = selectedEndDate +1;
+            // Reset to exact dates
+            depDate_From = selectedStartDate;
+            depDate_To = selectedStartDate;
+            returnDate_From = selectedEndDate;
+            returnDate_To = selectedEndDate;
         }
+
+        // Log the results for debugging
+        console.log('DepDate From:', depDate_From);
+        console.log('DepDate To:', depDate_To);
+        console.log('ReturnDate From:', returnDate_From);
+        console.log('ReturnDate To:', returnDate_To);
     });
+
 
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
