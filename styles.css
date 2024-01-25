@@ -37,10 +37,6 @@ form {
     background: #FFDD95;
 }
 
-label {
-    display: block;
-    padding: 10px;
-}
 
 input, select {
     width: 100%;
@@ -107,6 +103,8 @@ input, select {
     white-space: nowrap;
     text-align: left;
     flex: 0 0 auto; /* Do not grow or shrink */
+    display: block;
+    padding: 10px;
 }
 
 /* Existing style for form-row input and select */
