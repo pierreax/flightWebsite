@@ -237,6 +237,50 @@ input:focus, select:focus {
     color: #4CAF50;
 }
 
+/* Style for the texts inside the slider */
+.slider .text {
+    position: absolute;
+    color: #fff;
+    font-size: 12px; /* Adjust as needed */
+    line-height: 20px; /* Adjust as needed, should match the height of the slider */
+    text-align: center;
+}
+
+.slider .return {
+    left: 4px; /* Adjust as needed */
+    width: 50%; /* Half of the slider */
+}
+
+.slider .one-way {
+    right: 4px; /* Adjust as needed */
+    width: 50%; /* Half of the slider */
+}
+
+/* Adjust the style for the slider handle to include space for the text */
+.slider:before {
+    /* Existing styles ... */
+    width: 50%; /* Make the handle half the width of the slider */
+    left: 0;
+}
+
+/* Change the position of the handle when checked */
+input:checked + .slider:before {
+    transform: translateX(calc(100% - 4px)); /* Move handle to the right, adjust the value as needed */
+}
+
+/* Optional: Add background color transition to the slider texts */
+.slider .text {
+    transition: color 0.4s;
+}
+
+input:checked + .slider .return {
+    color: transparent; /* Hide 'Return' when one-way is selected */
+}
+
+input:checked + .slider .one-way {
+    color: #fff; /* Ensure 'One-way' is visible when selected */
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;
