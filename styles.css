@@ -285,9 +285,9 @@ input:checked + .slider .one-way {
 .switch {
   position: relative;
   display: inline-block;
-  width: 18px; /* Width of the switch */
-  height: 4px; /* Height of the switch */
-  margin: 5px 0; /* Provide some margin around the switch */
+  width: 80px; /* Adjusted width for better visibility */
+  height: 34px; /* Adjusted height for better visibility */
+  margin: 10px 0; /* Provide some margin around the switch */
 }
 
 /* Hide default HTML checkbox */
@@ -307,19 +307,25 @@ input:checked + .slider .one-way {
   bottom: 0;
   background-color: #ccc;
   transition: .4s;
-  border-radius: 24px; /* Fully rounded corners for the slider */
+  border-radius: 34px; /* Rounded corners for the slider, adjusted for the new height */
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 20px; /* Height of the circle inside the slider */
-  width: 20px; /* Width of the circle inside the slider */
-  left: 0px;
+  height: 30px; /* Adjusted for the new height of the slider */
+  width: 40px; /* Half of the width of the slider to cover half the text */
+  left: 2px;
   bottom: 2px;
   background-color: white;
   transition: .4s;
-  border-radius: 50%; /* Circular shape for the slider */
+  border-radius: 50%; /* Circular shape for the slider handle */
+}
+
+/* Adjusting text size for visibility */
+.slider .text {
+  line-height: 34px; /* Adjusted for the new height of the slider */
+  font-size: 14px; /* Adjusted for better visibility */
 }
 
 input:checked + .slider {
