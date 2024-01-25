@@ -37,11 +37,6 @@ form {
     background: #FFDD95;
 }
 
-label {
-    display: block;
-    padding: 10px;
-}
-
 input, select {
     width: 100%;
     padding: 10px; /* Adjust top padding */
