@@ -72,7 +72,7 @@ input, select {
 }
 
 
-.form-row.small-input-row label {
+.small-input-row label {
     flex-grow: 1;
     margin-right: 10px;
     white-space: nowrap;
@@ -93,21 +93,16 @@ input, select {
     text-align: center; /* Align text to the right */
 }
 
-.form-row {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
 
-.form-row label {
+.form-group label {
     white-space: nowrap;
     text-align: left;
     flex: 0 0 auto; /* Do not grow or shrink */
 }
 
-/* Existing style for form-row input and select */
-.form-row input,
-.form-row select {
+/* Existing style for form-group input and select */
+.form-group input,
+.form-group select {
     flex: 1;
     text-align: right;
 }
@@ -153,6 +148,10 @@ input, select {
     justify-content: flex-start;
     font-size: 10px;
     vertical-align: middle; /* Align the icon with the middle of the select field */
+    flex-grow: 1;
+    margin-right: 10px;
+    text-align: left;
+    flex: 0 0 auto; /* Do not grow or shrink */
 }
 
 #select2-iataCodeFrom-container,
