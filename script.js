@@ -95,6 +95,7 @@ $(document).ready(function () {
 
     // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
+        adjustDatesForFlexibility(); // Adjust dates based on the current state of the 'Flexible Dates' switch
         suggestPriceLimit();
     });
 
@@ -107,8 +108,6 @@ $(document).ready(function () {
 
         const origin = extractIATACode('iataCodeFrom');
         const destination = extractIATACode('iataCodeTo');
-        const startDate = selectedStartDate;
-        const endDate = selectedEndDate;
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
         const nbrPassengers = parseInputValue(parseInt(document.getElementById('nbrPassengers').value));
@@ -121,10 +120,10 @@ $(document).ready(function () {
             const params = new URLSearchParams({
                 fly_from: origin,
                 fly_to: destination,
-                date_from: selectedStartDate,
-                date_to: selectedStartDate,
-                return_from: selectedEndDate,
-                return_to: selectedEndDate,
+                date_from: depDate_From,
+                date_to: depDate_To,
+                return_from: returnDate_From,
+                return_to: returnDate_To,
                 max_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
                 adults: 1,
@@ -157,6 +156,47 @@ $(document).ready(function () {
             console.error('Error fetching data from Tequila API:', error);
         }
     }
+
+    // Function to adjust dates based on flexible date switch and return them formatted
+    function adjustDatesForFlexibility() {
+        let adjustedDates = {
+            depDate_From: selectedStartDate,
+            depDate_To: selectedStartDate,
+            returnDate_From: selectedEndDate,
+            returnDate_To: selectedEndDate
+        };
+
+        if ($('#flexibleDates').is(':checked')) {
+            console.log("Adjusting for flexible dates");
+
+            // Adjust the departure dates
+            if (selectedStartDate) {
+                let startDate = new Date(selectedStartDate);
+                adjustedDates.depDate_From = formatDate(new Date(startDate.setDate(startDate.getDate() - 1)));
+                startDate = new Date(selectedStartDate); // Reset the date
+                adjustedDates.depDate_To = formatDate(new Date(startDate.setDate(startDate.getDate() + 1)));
+            }
+
+            // Adjust the return dates
+            if (selectedEndDate) {
+                let endDate = new Date(selectedEndDate);
+                adjustedDates.returnDate_From = formatDate(new Date(endDate.setDate(endDate.getDate() - 1)));
+                endDate = new Date(selectedEndDate); // Reset the date
+                adjustedDates.returnDate_To = formatDate(new Date(endDate.setDate(endDate.getDate() + 1)));
+            }
+        } else {
+            console.log("Using exact dates");
+            // Format the exact dates
+            adjustedDates.depDate_From = formatDate(new Date(selectedStartDate));
+            adjustedDates.depDate_To = formatDate(new Date(selectedStartDate));
+            adjustedDates.returnDate_From = formatDate(new Date(selectedEndDate));
+            adjustedDates.returnDate_To = formatDate(new Date(selectedEndDate));
+        }
+
+        // Return the object with adjusted dates
+        return adjustedDates;
+    }
+
 
     // Example function to calculate suggested price limit
     function calculateSuggestedPriceLimit(currentPriceData) {
@@ -231,6 +271,7 @@ $(document).ready(function () {
 
     // Form submission event listener
     document.getElementById('sheetyForm').addEventListener('submit', function (event) {
+        adjustDatesForFlexibility(); // Adjust dates based on the current state of the 'Flexible Dates' switch
         event.preventDefault();
 
 
