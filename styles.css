@@ -285,7 +285,7 @@ input:checked + .slider .one-way {
 .switch {
   position: relative;
   display: inline-block;
-  width: 80px; /* Adjusted width for better visibility */
+  width: 120px; /* Adjusted width for better visibility */
   height: 34px; /* Adjusted height for better visibility */
   margin: 10px 0; /* Provide some margin around the switch */
 }
