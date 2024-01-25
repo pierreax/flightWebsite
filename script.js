@@ -56,7 +56,7 @@ $(document).ready(function () {
         }
     });
 
-        // Listener for oneWayTrip switch changes
+        // Listener for Flexible dates switch changes
     $('#flexibleDates').change(function() {
         if ($(this).is(':checked')) {
             console.log("Flexible dates selected");
