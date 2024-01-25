@@ -18,44 +18,51 @@
 
     <header>
         <h1>Flight Price Robot</h1>
-        <h2>Enter your travel preferences and our robot will check daily for updated prices.</h2>
-        <h2>We will let you know as soon as we find a match.</h2>
+        <p>Enter your travel preferences and our robot will check daily for updated prices.</p>
+        <p>We will let you know as soon as we find a match.</p>
     </header>
 
     <main>
         <form id="sheetyForm">
+            <section class="flight-selection">
+                <fieldset class="form-group">
+                    <div class="form-row">
+                        <img src="airplaneLift.png" alt="Airplane Icon" class="airplane-icon">
+                        <label for="iataCodeFrom" class="visually-hidden">Departure Airport:</label>
+                        <select id="iataCodeFrom" name="iataCodeFrom" required></select>
+                    </div>
+                    <div class="form-row">
+                        <img src="airplaneLand.png" alt="Airplane Icon" class="airplane-icon">
+                        <label for="iataCodeTo" class="visually-hidden">Arrival Airport:</label>
+                        <select id="iataCodeTo" name="iataCodeTo" required></select>
+                    </div>
+                </fieldset>
+            </section>
 
-            <fieldset class="form-group">
-                <div class="form-row">
-                    <img src="airplaneLift.png" alt="Airplane Icon" class="airplane-icon">
-                    <select id="iataCodeFrom" name="iataCodeFrom" required></select>
+            <section class="date-selection">
+                <div class="date-field">
+                    <label for="dateField" class="visually-hidden">Select Dates:</label>
+                    <input type="text" id="dateField" placeholder="Select Dates">
                 </div>
+            </section>
 
-                <div class="form-row">
-                    <img src="airplaneLand.png" alt="Airplane Icon" class="airplane-icon">
-                    <select id="iataCodeTo" name="iataCodeTo" required></select>
-                </div>
-            </fieldset>
+            <section class="trip-preferences">
+                <fieldset class="form-group">
+                    <div class="form-row">
+                        <label for="oneWayTrip">One-Way Trip:</label>
+                        <div class="switch">
+                            <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
+                            <span class="slider round"></span>
+                        </div>
 
-            <div class="date-field">
-                <input type="text" id="dateField" placeholder="Select Dates">
-            </div>
-
-            <fieldset class="form-group">
-                <div class="form-row">
-                    <label>One-Way Trip:</label>
-                    <label class="switch">
-                        <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
-                        <span class="slider round"></span>
-                    </label>
-
-                    <label>+/- 1 day:</label>
-                    <label class="switch">
-                        <input type="checkbox" id="flexibleDates" name="flexibleDates">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </fieldset>
+                        <label for="flexibleDates">+/- 1 day:</label>
+                        <div class="switch">
+                            <input type="checkbox" id="flexibleDates" name="flexibleDates">
+                            <span class="slider round"></span>
+                        </div>
+                    </div>
+                </fieldset>
+            </section>
 
             <div class="input-group">
                 <!-- Grouped input fields remain unchanged -->
@@ -63,17 +70,18 @@
 
             <button type="button" id="suggestPriceBtn">Get Current Lowest Price</button>
 
-            <fieldset class="form-group">
-                <div class="form-row floating-label">
-                    <label for="maxPricePerPerson">Max NOK per person:</label>
-                    <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
-                </div>
-
-                <div class="form-row floating-label">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-            </fieldset>
+            <section class="contact-info">
+                <fieldset class="form-group">
+                    <div class="form-row floating-label">
+                        <label for="maxPricePerPerson">Max NOK per person:</label>
+                        <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
+                    </div>
+                    <div class="form-row floating-label">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </fieldset>
+            </section>
 
             <input type="submit" value="Submit">
         </form>

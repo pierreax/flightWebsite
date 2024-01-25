@@ -1,45 +1,44 @@
-/* Define CSS variables for recurrent values */
-:root {
-    --font-family-avenir: 'Avenir Light', sans-serif;
-    --light-beige: #ffcc66;
-    --dark-gray: #4d4d4d;
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --border-standard: 1px solid #ddd;
-    --button-green: #4CAF50;
-    --button-green-dark: #45a049;
-}
-
 @font-face {
-    font-family: var(--font-family-avenir);
+    font-family: 'Avenir Light';
     src: url('Avenir Light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
-body {
-    font-family: var(--font-family-avenir);
-    margin: 20px;
-    background-color: var(--light-beige);
+:root {
+    --font-avenir: 'Avenir Light', sans-serif;
+    --color-light-beige: #ffcc66;
+    --color-dark-gray: #4d4d4d;
+    --color-green: #4CAF50;
+    --color-green-dark: #45a049;
+    --color-light-gray: #ccc;
+    --color-white: white;
+    --color-border: #ddd;
+    --box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
-    color: var(--dark-gray);
-    margin: 0;
-    text-align: center;
-    padding: 20px 0;
-    background-color: var(--light-beige);
+body {
+    font-family: var(--font-avenir);
+    margin: 20px;
+    background-color: var(--color-light-beige);
+}
+
+h1, h2, .form-row label, .floating-label label {
+    color: var(--color-dark-gray);
     font-weight: normal;
 }
 
-h1 { font-size: 1.5em; }
-h2 { font-size: 1.2em; }
+h1 {
+    font-size: 1.5em;
+    margin: 0;
+    text-align: center;
+    padding: 20px 0;
+}
 
-/* Shared form styling */
-form, input, select, #suggestPriceBtn {
-    box-shadow: var(--shadow-light);
-    background: var(--light-beige);
-    border: var(--border-standard);
-    font-family: var(--font-family-avenir);
+h2, p {
+    font-size: 1.2em;
+    text-align: center;
+    padding: 10px 0;
 }
 
 form {
@@ -47,103 +46,115 @@ form {
     margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
+    box-shadow: var(--box-shadow);
     background: #FFDD95;
 }
 
-input, select {
+input, select, button {
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
     border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--color-border);
+    background: var(--color-light-beige);
+    font-family: var(--font-avenir);
     -webkit-appearance: none;
 }
 
-.input-group, .form-row, .date-field, .floating-label, .form-group.form-row {
+.input-group, .form-row, .date-field {
     display: flex;
     align-items: center;
-}
-
-.input-group {
     justify-content: space-between;
-    flex-wrap: wrap;
     margin-bottom: 15px;
-    text-align: right;
 }
 
-.input-group .form-row.small-input-row {
+.input-group .small-input-row {
     flex: 1;
     margin-right: 10px;
 }
 
-.input-group .form-row.small-input-row:last-child { margin-right: 0; }
-
-.date-field, .floating-label label, .form-row label, .floating-label input:focus ~ label,
-.floating-label input:not(:placeholder-shown) ~ label, .airplane-icon, .form-group.form-row {
-    justify-content: space-between;
-    font-size: 12px;
+.input-group .small-input-row:last-child {
+    margin-right: 0;
 }
 
-.date-field input, .form-row input, .form-row select { flex: 1; }
+.form-row.small-input-row label {
+    flex-grow: 1;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.date-field input {
+    flex: 1;
+    text-align: center;
+}
 
 .floating-label, .floating-label input {
     position: relative;
     width: 100%;
     padding: 10px;
+    font-size: 12px;
+}
+
+.floating-label label {
+    position: absolute;
+    pointer-events: none;
+    left: 10px;
+    top: 10px;
+    transition: 0.2s ease all;
+    color: var(--color-border);
+    padding: 0;
+}
+
+.floating-label input:focus ~ label,
+.floating-label input:not(:placeholder-shown) ~ label {
+    top: 1px;
+    font-size: 8px;
 }
 
 input[type="submit"], #suggestPriceBtn {
-    background-color: var(--button-green);
-    color: white;
-    padding: 10px;
-    border: none;
-    margin-top: 12px;
+    background-color: var(--color-green);
+    color: var(--color-white);
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
-    border-radius: 5px;
-    text-align: center;
 }
 
 input[type="submit"]:hover, input[type="submit"]:active,
 #suggestPriceBtn:hover, #suggestPriceBtn:active {
-    background-color: var(--button-green-dark);
+    background-color: var(--color-green-dark);
     transform: translateY(-2px);
 }
 
 input:focus, select:focus {
     outline: none;
-    border-color: var(--button-green);
+    border-color: var(--color-green);
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-.small-label { font-size: 6px; }
-
-.optional-label .optional-text {
-    display: block;
-    font-size: smaller;
 }
 
 #submissionMessage {
     display: none;
     margin-top: 30px;
     text-align: center;
-    color: var(--button-green);
+    color: var(--color-green);
 }
 
 /* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
-  width: 18px;
-  height: 4px;
-  margin: 5px 0;
+  width: 18px; /* Width of the switch */
+  height: 4px; /* Height of the switch */
+  margin: 5px 0; /* Provide some margin around the switch */
 }
 
+/* Hide default HTML checkbox */
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
+/* The slider */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -153,33 +164,34 @@ input:focus, select:focus {
   bottom: 0;
   background-color: #ccc;
   transition: .4s;
-  border-radius: 24px;
+  border-radius: 24px; /* Fully rounded corners for the slider */
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 20px;
-  width: 20px;
+  height: 20px; /* Height of the circle inside the slider */
+  width: 20px; /* Width of the circle inside the slider */
   left: 0px;
   bottom: 2px;
   background-color: white;
   transition: .4s;
-  border-radius: 50%;
+  border-radius: 50%; /* Circular shape for the slider */
 }
 
 input:checked + .slider {
-  background-color: var(--button-green);
+  background-color: #4CAF50; /* Color when the switch is active/checked */
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px var(--button-green);
+  box-shadow: 0 0 1px #4CAF50; /* Optional: add a box-shadow when the switch is focused */
 }
 
 input:checked + .slider:before {
-  transform: translateX(18px);
+  transform: translateX(18px); /* Slide the circle to the right on check */
 }
 
+/* Rounded sliders */
 .slider.round {
   border-radius: 24px;
 }
