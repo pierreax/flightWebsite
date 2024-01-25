@@ -5,40 +5,27 @@
     font-style: normal;
 }
 
-:root {
-    --font-avenir: 'Avenir Light', sans-serif;
-    --color-light-beige: #ffcc66;
-    --color-dark-gray: #4d4d4d;
-    --color-green: #4CAF50;
-    --color-green-dark: #45a049;
-    --color-light-gray: #ccc;
-    --color-white: white;
-    --color-border: #ddd;
-    --box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
 body {
-    font-family: var(--font-avenir);
+    font-family: 'Avenir Light', sans-serif;
     margin: 20px;
-    background-color: var(--color-light-beige);
+    background-color: #ffcc66; /* Light beige background */
 }
 
-h1, h2, .form-row label, .floating-label label {
-    color: var(--color-dark-gray);
+h1, h2 {
+    color: #4d4d4d;
+    margin: 0;
+    text-align: center;
+    padding: 20px 0;
+    background-color: #ffcc66;
     font-weight: normal;
 }
 
 h1 {
     font-size: 1.5em;
-    margin: 0;
-    text-align: center;
-    padding: 20px 0;
 }
 
-h2, p {
+h2 {
     font-size: 1.2em;
-    text-align: center;
-    padding: 10px 0;
 }
 
 form {
@@ -46,35 +33,42 @@ form {
     margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: #FFDD95;
 }
 
-input, select, button {
+
+input, select {
     width: 100%;
-    padding: 10px;
+    padding: 10px; /* Adjust top padding */
     box-sizing: border-box;
     border-radius: 5px;
-    box-shadow: var(--box-shadow);
-    border: 1px solid var(--color-border);
-    background: var(--color-light-beige);
-    font-family: var(--font-avenir);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+    background: #ffcc66;
+    font-family: 'Avenir Light', sans-serif;
     -webkit-appearance: none;
 }
 
-.input-group, .form-row, .date-field {
+/* Style for the input group */
+.input-group {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
+    justify-content: space-between; /* Distribute space between the items */
+    align-items: center; /* Aligns items vertically in the center */
+    flex-wrap: wrap; /* Allows items to wrap onto the next line */
+    margin-bottom: 15px; /* Space between this group and the next element */
+    text-align: right;
+
 }
 
-.input-group .small-input-row {
-    flex: 1;
-    margin-right: 10px;
+/* Adjustments for individual input rows within the group */
+.input-group .form-row.small-input-row {
+    flex: 1; /* Allows each item to grow */
+    margin-right: 10px; /* Space between items */
 }
 
-.input-group .small-input-row:last-child {
+/* Remove margin-right for the last item to align it properly */
+.input-group .form-row.small-input-row:last-child {
     margin-right: 0;
 }
 
@@ -84,58 +78,163 @@ input, select, button {
     white-space: nowrap;
 }
 
-.date-field input {
-    flex: 1;
-    text-align: center;
+.date-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Align label to left and input to right */
+    padding: 10px 0; /* Add some padding */
+    font-size: 12px;
 }
 
-.floating-label, .floating-label input {
-    position: relative;
-    width: 100%;
+
+/* Style for the input inside date-field */
+.date-field input {
+    flex: 1; /* Allow input to grow and fill the space */
+    text-align: center; /* Align text to the right */
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.form-row label {
+    white-space: nowrap;
+    text-align: left;
+    flex: 0 0 auto; /* Do not grow or shrink */
+    display: block;
     padding: 10px;
-    font-size: 12px;
+}
+
+/* Existing style for form-row input and select */
+.form-row input,
+.form-row select {
+    flex: 1;
+    text-align: right;
+}
+
+.floating-label {
+    position: relative;
+}
+
+.floating-label input {
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 100%;
+    font-size: 12px; /* Adjust font size as per design */
 }
 
 .floating-label label {
     position: absolute;
     pointer-events: none;
     left: 10px;
-    top: 10px;
+    top: 10px; /* Adjust position */
     transition: 0.2s ease all;
-    color: var(--color-border);
-    padding: 0;
+    color: #999;
+    padding: 0px;
+    font-size: 12px; /* Adjust font size for initial state */
 }
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
-    top: 1px;
-    font-size: 8px;
+    top: 1px; /* Adjust position */
+    font-size: 8px; /* Adjust font size when focused or filled */
 }
 
-input[type="submit"], #suggestPriceBtn {
-    background-color: var(--color-green);
-    color: var(--color-white);
+.airplane-icon {
+    height: 24px; /* Adjust the size as needed */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Space between the icon and the select field */
+    vertical-align: middle; /* Align the icon with the middle of the select field */
+}
+
+.form-group.form-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 10px;
+    vertical-align: middle; /* Align the icon with the middle of the select field */
+}
+
+#select2-iataCodeFrom-container,
+#select2-iataCodeTo-container {
+    background-color: #ffcc66;
+    font-family: 'Avenir Light', sans-serif;
+    font-size: 14px;
+}
+
+.select2-selection__rendered {
+    font-family: 'Avenir Light', sans-serif;
+    background-color: #ffcc66;
+    font-size: 12px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    margin-top: 12px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+    text-align: center;
 }
 
-input[type="submit"]:hover, input[type="submit"]:active,
-#suggestPriceBtn:hover, #suggestPriceBtn:active {
-    background-color: var(--color-green-dark);
+input[type="submit"]:hover,
+input[type="submit"]:active {
+    background-color: #45a049;
     transform: translateY(-2px);
 }
 
 input:focus, select:focus {
     outline: none;
-    border-color: var(--color-green);
+    border-color: #4CAF50;
     box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.small-label {
+    font-size: 6px;
+    text-align: left;
+}
+
+.optional-label .optional-text {
+    display: block; /* Moves the optional text to a new line */
+}
+
+/* Optional: Add any additional styling you want for the optional text */
+.optional-label .optional-text {
+    font-size: smaller; /* Example: making the font size smaller */
+}
+
+
+
+#suggestPriceBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+    font-family: 'Avenir Light', sans-serif;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#suggestPriceBtn:hover,
+#suggestPriceBtn:active {
+    background-color: #45a049;
+    transform: translateY(-2px);
 }
 
 #submissionMessage {
     display: none;
     margin-top: 30px;
     text-align: center;
-    color: var(--color-green);
+    color: #4CAF50;
 }
 
 /* The switch - the box around the slider */
