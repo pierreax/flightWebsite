@@ -71,10 +71,6 @@ input, select {
     margin-right: 10px; /* Space between items */
 }
 
-/* Remove margin-right for the last item to align it properly */
-.input-group .form-row.small-input-row:last-child {
-    margin-right: 0;
-}
 
 .form-row.small-input-row label {
     flex-grow: 1;
