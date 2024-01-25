@@ -101,7 +101,6 @@ input, select {
     font-size: 10px;
     vertical-align: middle; /* Align the icon with the middle of the select field */
     flex-grow: 1;
-    margin-right: 10px;
 }
 
 
