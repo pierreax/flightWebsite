@@ -1,8 +1,12 @@
 $(document).ready(function () {
     console.log("Loaded Site");
 
-    let selectedStartDate = ''; // Variable to store the selected start date
-    let selectedEndDate = ''; // Variable to store the selected end date
+    let selectedStartDate = ''; // Variable to store the selected date in flatpickr
+    let selectedEndDate = ''; // Variable to store the selected end date in flatpickr
+    let depDate_From = ''; // Variable to store the selected dep date from
+    let depDate_To = ''; // Variable to store the selected dep date to
+    let returnDate_From = ''; // Variable to store the selected return date from
+    let depDate_To = ''; // Variable to store the selected return date to
 
     // Function to format dates as needed
     function formatDate(dateObject) {
@@ -49,6 +53,19 @@ $(document).ready(function () {
             console.log("Return trip selected");
             // Change Flatpickr back to range selection mode
             flatpickrInstance.set('mode', 'range');
+        }
+    });
+
+        // Listener for oneWayTrip switch changes
+    $('#flexibleDates').change(function() {
+        if ($(this).is(':checked')) {
+            console.log("Flexible dates selected");
+            depDate_From = selectedStartDate -1;
+            depDate_To = selectedStartDate +1;
+        } else {
+            console.log("Exact dates selected");
+            depDate_From = selectedEndDate -1;
+            depDate_To = selectedEndDate +1;
         }
     });
 
