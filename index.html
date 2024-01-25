@@ -25,14 +25,14 @@
 
     <form id="sheetyForm">
 
-        <div class="form-group form-row">
+        <div class="form-group">
             <img src="airplaneLift.png" alt="Airplane Icon" class="airplane-icon">
             <select id="iataCodeFrom" name="iataCodeFrom" required>
                 <!-- Dropdown options will be populated dynamically using JavaScript -->
             </select>
         </div>
 
-        <div class="form-group form-row">
+        <div class="form-group">
             <img src="airplaneLand.png" alt="Airplane Icon" class="airplane-icon">
             <select id="iataCodeTo" name="iataCodeTo" required>
                 <!-- Dropdown options will be populated dynamically using JavaScript -->
@@ -44,7 +44,7 @@
         </div>
 
         <!-- One-Way Trip Toggle Switch -->
-        <div class="form-group form-row">
+        <div class="form-group">
             <label for="oneWayTrip">One-Way Trip:</label>
             <label class="switch">
                 <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
@@ -61,19 +61,19 @@
         <!-- Grouped input fields -->
         <div class="input-group">
             <!-- Layovers -->
-            <div class="form-group form-row small-input-row floating-label">
+            <div class="form-group small-input-row floating-label">
                 <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="0" required>
                 <label for="maxStops" class="small-label">Layovers (max)</label>
             </div>
 
             <!-- Passengers -->
-            <div class="form-group form-row small-input-row floating-label">
+            <div class="form-group small-input-row floating-label">
                 <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="0" max="9" value="1" required>
                 <label for="nbrPassengers" class="small-label">Passengers</label>
             </div>
 
             <!-- Travel time -->
-            <div class="form-group form-row small-input-row floating-label">
+            <div class="form-group small-input-row floating-label">
                 <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="9">
                 <label for="maxFlightDuration" class="small-label">Travel time<span class="optional-text"> (optional)</span></label>
             </div>
@@ -83,12 +83,12 @@
 
         <button type="button" id="suggestPriceBtn">Get Current Lowest Price</button>
 
-         <div class="form-group form-row floating-label">
+         <div class="form-group floating-label">
             <label class="price-limit-label" for="maxPricePerPerson">Max NOK per person:</label>
             <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
         </div>
 
-        <div class="form-group form-row floating-label">
+        <div class="form-group floating-label">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
         </div>
