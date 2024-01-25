@@ -37,6 +37,10 @@ form {
     background: #FFDD95;
 }
 
+label {
+    display: block;
+    padding: 10px;
+}
 
 input, select {
     width: 100%;
@@ -103,8 +107,6 @@ input, select {
     white-space: nowrap;
     text-align: left;
     flex: 0 0 auto; /* Do not grow or shrink */
-    display: block;
-    padding: 10px;
 }
 
 /* Existing style for form-row input and select */
@@ -237,57 +239,13 @@ input:focus, select:focus {
     color: #4CAF50;
 }
 
-/* Style for the texts inside the slider */
-.slider .text {
-    position: absolute;
-    color: #fff;
-    font-size: 12px; /* Adjust as needed */
-    line-height: 20px; /* Adjust as needed, should match the height of the slider */
-    text-align: center;
-}
-
-.slider .return {
-    left: 4px; /* Adjust as needed */
-    width: 50%; /* Half of the slider */
-}
-
-.slider .one-way {
-    right: 4px; /* Adjust as needed */
-    width: 50%; /* Half of the slider */
-}
-
-/* Adjust the style for the slider handle to include space for the text */
-.slider:before {
-    /* Existing styles ... */
-    width: 50%; /* Make the handle half the width of the slider */
-    left: 0;
-}
-
-/* Change the position of the handle when checked */
-input:checked + .slider:before {
-    transform: translateX(calc(100% - 4px)); /* Move handle to the right, adjust the value as needed */
-}
-
-/* Optional: Add background color transition to the slider texts */
-.slider .text {
-    transition: color 0.4s;
-}
-
-input:checked + .slider .return {
-    color: transparent; /* Hide 'Return' when one-way is selected */
-}
-
-input:checked + .slider .one-way {
-    color: #fff; /* Ensure 'One-way' is visible when selected */
-}
-
 /* The switch - the box around the slider */
 .switch {
   position: relative;
   display: inline-block;
-  width: 120px; /* Adjusted width for better visibility */
-  height: 34px; /* Adjusted height for better visibility */
-  margin: 10px 0; /* Provide some margin around the switch */
+  width: 18px; /* Width of the switch */
+  height: 4px; /* Height of the switch */
+  margin: 5px 0; /* Provide some margin around the switch */
 }
 
 /* Hide default HTML checkbox */
@@ -307,25 +265,19 @@ input:checked + .slider .one-way {
   bottom: 0;
   background-color: #ccc;
   transition: .4s;
-  border-radius: 34px; /* Rounded corners for the slider, adjusted for the new height */
+  border-radius: 24px; /* Fully rounded corners for the slider */
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 30px; /* Adjusted for the new height of the slider */
-  width: 40px; /* Half of the width of the slider to cover half the text */
-  left: 2px;
+  height: 20px; /* Height of the circle inside the slider */
+  width: 20px; /* Width of the circle inside the slider */
+  left: 0px;
   bottom: 2px;
   background-color: white;
   transition: .4s;
-  border-radius: 50%; /* Circular shape for the slider handle */
-}
-
-/* Adjusting text size for visibility */
-.slider .text {
-  line-height: 34px; /* Adjusted for the new height of the slider */
-  font-size: 14px; /* Adjusted for better visibility */
+  border-radius: 50%; /* Circular shape for the slider */
 }
 
 input:checked + .slider {
