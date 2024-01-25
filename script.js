@@ -6,7 +6,7 @@ $(document).ready(function () {
     let depDate_From = ''; // Variable to store the selected dep date from
     let depDate_To = ''; // Variable to store the selected dep date to
     let returnDate_From = ''; // Variable to store the selected return date from
-    let depDate_To = ''; // Variable to store the selected return date to
+    let returnDate_To = ''; // Variable to store the selected return date to
 
     // Function to format dates as needed
     function formatDate(dateObject) {
