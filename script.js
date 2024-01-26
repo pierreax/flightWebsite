@@ -109,7 +109,6 @@ $(document).ready(function () {
         const destination = extractIATACode('iataCodeTo');
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
         const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
-        const nbrPassengers = parseInputValue(parseInt(document.getElementById('nbrPassengers').value));
         const flightType = $('#oneWayTrip').is(':checked') ? 'one-way' : 'return';
         console.log(flightType);
 
