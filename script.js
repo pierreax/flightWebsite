@@ -156,13 +156,13 @@ $(document).ready(function () {
     }
 
 
-    // Function to adjust dates based on flexible date switch and return them formatted
+    // Function to adjust dates based on flexible date switch
     function adjustDatesForFlexibility() {
         // Clone the original dates to avoid modifying them directly
-        let adjustedDepFromDate = new Date(depDate_From);
-        let adjustedDepToDate = new Date(depDate_To);
-        let adjustedReturnFromDate = selectedEndDate ? new Date(returnDate_From) : null;
-        let adjustedReturnToDate = selectedEndDate ? new Date(returnDate_To) : null;
+        let adjustedDepFromDate = new Date(selectedStartDate);
+        let adjustedDepToDate = new Date(selectedStartDate);
+        let adjustedReturnFromDate = selectedEndDate ? new Date(selectedEndDate) : null;
+        let adjustedReturnToDate = selectedEndDate ? new Date(selectedEndDate) : null;
         console.log(adjustedDepFromDate, adjustedDepToDate, adjustedReturnFromDate, adjustedReturnToDate);
 
         if ($('#flexibleDates').is(':checked')) {
@@ -181,14 +181,13 @@ $(document).ready(function () {
             console.log("Using exact dates");
         }
 
-        // Return the adjusted dates in the desired format
-        return {
-            depDate_From: formatDate(adjustedDepFromDate),
-            depDate_To: formatDate(adjustedDepToDate),
-            returnDate_From: adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '',
-            returnDate_To: adjustedReturnToDate ? formatDate(adjustedReturnToDate) : ''
-        };
+        // Update global variables with the adjusted and formatted dates
+        depDate_From = formatDate(adjustedDepFromDate);
+        depDate_To = formatDate(adjustedDepToDate);
+        returnDate_From = adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '';
+        returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
     }
+
 
 
 
