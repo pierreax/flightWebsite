@@ -93,19 +93,19 @@ $(document).ready(function () {
         return value;
     }
 
-    // Event listener for the Suggest Price Limit button
     $('#suggestPriceBtn').on('click', function() {
-        adjustDatesForFlexibility(); // Adjust dates based on the current state of the 'Flexible Dates' switch
-        suggestPriceLimit();
+        let adjustedDates = adjustDatesForFlexibility(); // Adjust dates and get them formatted
+
+        // Use the adjusted dates for the API request
+        suggestPriceLimit(adjustedDates);
     });
 
     // Function to make an API request to Tequila API and suggest a price limit
-    async function suggestPriceLimit() {
+    async function suggestPriceLimit(adjustedDates) {
         console.log("Sending Current Price request");
 
         const tequilaApiUrl = 'https://tequila-api.kiwi.com/v2/search';
         const tequilaApiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
-
         const origin = extractIATACode('iataCodeFrom');
         const destination = extractIATACode('iataCodeTo');
         const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
@@ -172,28 +172,31 @@ $(document).ready(function () {
             // Adjust the departure dates
             if (selectedStartDate) {
                 let startDate = new Date(selectedStartDate);
-                adjustedDates.depDate_From = formatDate(new Date(startDate.setDate(startDate.getDate() - 1)));
+                console.log("Start Date string", startDate);
+                adjustedDates.depDate_From = new Date(startDate.setDate(startDate.getDate() - 1));
                 startDate = new Date(selectedStartDate); // Reset the date
-                adjustedDates.depDate_To = formatDate(new Date(startDate.setDate(startDate.getDate() + 1)));
+                adjustedDates.depDate_To = new Date(startDate.setDate(startDate.getDate() + 1));
             }
 
             // Adjust the return dates
             if (selectedEndDate) {
                 let endDate = new Date(selectedEndDate);
-                adjustedDates.returnDate_From = formatDate(new Date(endDate.setDate(endDate.getDate() - 1)));
+                adjustedDates.returnDate_From = new Date(endDate.setDate(endDate.getDate() - 1));
                 endDate = new Date(selectedEndDate); // Reset the date
-                adjustedDates.returnDate_To = formatDate(new Date(endDate.setDate(endDate.getDate() + 1)));
+                adjustedDates.returnDate_To = new Date(endDate.setDate(endDate.getDate() + 1));
             }
         } else {
             console.log("Using exact dates");
+            console.log(selectedStartDate, selectedEndDate);
             // Format the exact dates
-            adjustedDates.depDate_From = formatDate(new Date(selectedStartDate));
-            adjustedDates.depDate_To = formatDate(new Date(selectedStartDate));
-            adjustedDates.returnDate_From = formatDate(new Date(selectedEndDate));
-            adjustedDates.returnDate_To = formatDate(new Date(selectedEndDate));
+            adjustedDates.depDate_From = new Date(selectedStartDate);
+            adjustedDates.depDate_To = new Date(selectedStartDate);
+            adjustedDates.returnDate_From = new Date(selectedEndDate);
+            adjustedDates.returnDate_To = new Date(selectedEndDate);
         }
 
         // Return the object with adjusted dates
+        console.log(adjustedDates);
         return adjustedDates;
     }
 
