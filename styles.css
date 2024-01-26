@@ -125,7 +125,6 @@ input, select {
     border: 1px solid #ddd;
     padding: 10px;
     width: 100%;
-    font-size: 12px; /* Adjust font size as per design */
 }
 
 .floating-label label {
@@ -136,7 +135,7 @@ input, select {
     transition: 0.2s ease all;
     color: #999;
     padding: 0px;
-    font-size: 12px; /* Adjust font size for initial state */
+    font-size: 8px; /* Adjust font size for initial state */
 }
 
 .floating-label input:focus ~ label,
