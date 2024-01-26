@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site!");
+    console.log("Loaded Site");
 
     let selectedStartDate = ''; // Variable to store the selected date in flatpickr
     let selectedEndDate = ''; // Variable to store the selected end date in flatpickr
