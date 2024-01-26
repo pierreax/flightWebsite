@@ -97,6 +97,7 @@ $(document).ready(function () {
 
     $('#suggestPriceBtn').on('click', function() {
         adjustDatesForFlexibility(); // Adjust dates and get them formatted
+        suggestPriceLimit(); // Run the suggest price limit function
     });
 
     // Function to make an API request to Tequila API and suggest a price limit
@@ -187,6 +188,7 @@ $(document).ready(function () {
         returnDate_From = adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '';
         returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
     }
+
 
 
 
