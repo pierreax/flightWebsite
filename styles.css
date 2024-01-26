@@ -194,16 +194,6 @@ input:focus, select:focus {
     text-align: left;
 }
 
-.optional-label .optional-text {
-    display: block; /* Moves the optional text to a new line */
-}
-
-/* Optional: Add any additional styling you want for the optional text */
-.optional-label .optional-text {
-    font-size: smaller; /* Example: making the font size smaller */
-}
-
-
 
 #suggestPriceBtn {
     background-color: #4CAF50;
