@@ -172,7 +172,7 @@ $(document).ready(function () {
             // Adjust the departure dates
             if (selectedStartDate) {
                 let startDate = new Date(selectedStartDate);
-                console.log("Start Date string", startDate);
+                console.log("startDate as Date", startDate);
                 adjustedDates.depDate_From = new Date(startDate.setDate(startDate.getDate() - 1));
                 startDate = new Date(selectedStartDate); // Reset the date
                 adjustedDates.depDate_To = new Date(startDate.setDate(startDate.getDate() + 1));
