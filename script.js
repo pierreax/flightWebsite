@@ -96,7 +96,7 @@ $(document).ready(function () {
     }
 
     $('#suggestPriceBtn').on('click', function() {
-        let adjustedDates = adjustDatesForFlexibility(); // Adjust dates and get them formatted
+        adjustDatesForFlexibility(); // Adjust dates and get them formatted
     });
 
     // Function to make an API request to Tequila API and suggest a price limit
@@ -118,10 +118,10 @@ $(document).ready(function () {
             const params = new URLSearchParams({
                 fly_from: origin,
                 fly_to: destination,
-                date_from: adjustedDates.depDate_From,
-                date_to: adjustedDates.depDate_To,
-                return_from: adjustedDates.returnDate_From,
-                return_to: adjustedDates.returnDate_To,
+                date_from: depDate_From,
+                date_to: depDate_To,
+                return_from: returnDate_From,
+                return_to: returnDate_To,
                 max_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
                 adults: 1,
@@ -273,8 +273,7 @@ $(document).ready(function () {
 
     // Form submission event listener
     document.getElementById('sheetyForm').addEventListener('submit', function (event) {
-        let adjustedDates = adjustDatesForFlexibility(); // Adjust dates and get them formatted
-        console.log(adjustedDates);
+        adjustDatesForFlexibility(); // Adjust dates and get them formatted
         event.preventDefault();
 
 
@@ -297,10 +296,10 @@ $(document).ready(function () {
                 maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
                 maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
-                depDateFrom: adjustedDates.depDate_From,
-                depDateTo: adjustedDates.depDate_To,
-                returnDateFrom: adjustedDates.returnDate_From,
-                returnDateTo: adjustedDates.returnDate_To,
+                depDateFrom: depDate_From,
+                depDateTo: depDate_To,
+                returnDateFrom: returnDate_From,
+                returnDateTo: returnDate_To,
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),
