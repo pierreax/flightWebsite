@@ -26,19 +26,21 @@ $(document).ready(function () {
         altInput: true,
         mode: "range",
         altFormat: "F j, Y",
-        dateFormat: "Y-m-d",
+        dateFormat: "d-m-Y",
         minDate: "today",
         onChange: function(selectedDates, dateStr, instance) {
             console.log(selectedDates, dateStr);
             // Update the selected start and end dates
             selectedStartDate = selectedDates[0];
             console.log('Raw Start Date: ', selectedStartDate);
-            selectedStartDate = formatDate(selectedStartDate);
-            console.log('Formatted Start date: ',selectedStartDate);
+            depDate_From = formatDate(selectedStartDate);
+            depDate_To = formatDate(selectedStartDate);
+            console.log('Formatted Start dates: ',depDate_From, depDate_To);
             selectedEndDate = selectedDates.length === 2 ? selectedDates[1] : ''; // If one date is selected, selectedEndDate is null
             console.log('Raw Return Date: ',selectedEndDate);
-            selectedEndDate = formatDate(selectedEndDate);
-            console.log('Formatted Return date: ',selectedEndDate);
+            returnDate_From = formatDate(selectedEndDate);
+            returnDate_From = formatDate(selectedEndDate);
+            console.log('Formatted Return dates: ',returnDate_From, returnDate_To);
         }
     });
 
