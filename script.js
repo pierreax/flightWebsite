@@ -100,7 +100,7 @@ $(document).ready(function () {
     });
 
     // Function to make an API request to Tequila API and suggest a price limit
-    async function suggestPriceLimit(adjustedDates) {
+    async function suggestPriceLimit() {
         console.log("Sending Current Price request");
 
         const tequilaApiUrl = 'https://tequila-api.kiwi.com/v2/search';
@@ -155,14 +155,6 @@ $(document).ready(function () {
         }
     }
 
-    // Function to adjust dates based on flexible date switch and return them formatted
-    function adjustDatesForFlexibility() {
-        let adjustedDates = {
-            depDate_From: selectedStartDate,
-            depDate_To: selectedStartDate,
-            returnDate_From: selectedEndDate,
-            returnDate_To: selectedEndDate
-        };
 
     // Function to adjust dates based on flexible date switch and return them formatted
     function adjustDatesForFlexibility() {
