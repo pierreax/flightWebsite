@@ -141,7 +141,7 @@ input, select {
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
     top: 1px; /* Adjust position */
-    left: 2px;
+    left: 3px;
     font-size: 6px; /* Adjust font size when focused or filled */
 }
 
