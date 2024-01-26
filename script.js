@@ -39,7 +39,7 @@ $(document).ready(function () {
             selectedEndDate = selectedDates.length === 2 ? selectedDates[1] : ''; // If one date is selected, selectedEndDate is null
             console.log('Raw Return Date: ',selectedEndDate);
             returnDate_From = formatDate(selectedEndDate);
-            returnDate_From = formatDate(selectedEndDate);
+            returnDate_To = formatDate(selectedEndDate);
             console.log('Formatted Return dates: ',returnDate_From, returnDate_To);
         }
     });
@@ -97,9 +97,6 @@ $(document).ready(function () {
 
     $('#suggestPriceBtn').on('click', function() {
         let adjustedDates = adjustDatesForFlexibility(); // Adjust dates and get them formatted
-
-        // Use the adjusted dates for the API request
-        suggestPriceLimit(adjustedDates);
     });
 
     // Function to make an API request to Tequila API and suggest a price limit
@@ -168,39 +165,40 @@ $(document).ready(function () {
             returnDate_To: selectedEndDate
         };
 
+    // Function to adjust dates based on flexible date switch and return them formatted
+    function adjustDatesForFlexibility() {
+        // Clone the original dates to avoid modifying them directly
+        let adjustedDepFromDate = new Date(depDate_From);
+        let adjustedDepToDate = new Date(depDate_To);
+        let adjustedReturnFromDate = selectedEndDate ? new Date(returnDate_From) : null;
+        let adjustedReturnToDate = selectedEndDate ? new Date(returnDate_To) : null;
+        console.log(adjustedDepFromDate, adjustedDepToDate, adjustedReturnFromDate, adjustedReturnToDate);
+
         if ($('#flexibleDates').is(':checked')) {
             console.log("Adjusting for flexible dates");
 
-            // Adjust the departure dates
-            if (selectedStartDate) {
-                let startDate = new Date(selectedStartDate);
-                console.log("startDate as Date", startDate);
-                adjustedDates.depDate_From = new Date(startDate.setDate(startDate.getDate() - 1));
-                startDate = new Date(selectedStartDate); // Reset the date
-                adjustedDates.depDate_To = new Date(startDate.setDate(startDate.getDate() + 1));
-            }
+            // Adjust departure dates by subtracting and adding one day
+            adjustedDepFromDate.setDate(adjustedDepFromDate.getDate() - 1);
+            adjustedDepToDate.setDate(adjustedDepToDate.getDate() + 1);
 
-            // Adjust the return dates
-            if (selectedEndDate) {
-                let endDate = new Date(selectedEndDate);
-                adjustedDates.returnDate_From = new Date(endDate.setDate(endDate.getDate() - 1));
-                endDate = new Date(selectedEndDate); // Reset the date
-                adjustedDates.returnDate_To = new Date(endDate.setDate(endDate.getDate() + 1));
+            // Adjust return dates by subtracting and adding one day if return date is not null
+            if (adjustedReturnFromDate && adjustedReturnToDate) {
+                adjustedReturnFromDate.setDate(adjustedReturnFromDate.getDate() - 1);
+                adjustedReturnToDate.setDate(adjustedReturnToDate.getDate() + 1);
             }
         } else {
             console.log("Using exact dates");
-            console.log(selectedStartDate, selectedEndDate);
-            // Format the exact dates
-            adjustedDates.depDate_From = new Date(selectedStartDate);
-            adjustedDates.depDate_To = new Date(selectedStartDate);
-            adjustedDates.returnDate_From = new Date(selectedEndDate);
-            adjustedDates.returnDate_To = new Date(selectedEndDate);
         }
 
-        // Return the object with adjusted dates
-        console.log(adjustedDates);
-        return adjustedDates;
+        // Return the adjusted dates in the desired format
+        return {
+            depDate_From: formatDate(adjustedDepFromDate),
+            depDate_To: formatDate(adjustedDepToDate),
+            returnDate_From: adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '',
+            returnDate_To: adjustedReturnToDate ? formatDate(adjustedReturnToDate) : ''
+        };
     }
+
 
 
     // Example function to calculate suggested price limit
@@ -276,7 +274,8 @@ $(document).ready(function () {
 
     // Form submission event listener
     document.getElementById('sheetyForm').addEventListener('submit', function (event) {
-        adjustDatesForFlexibility(); // Adjust dates based on the current state of the 'Flexible Dates' switch
+        let adjustedDates = adjustDatesForFlexibility(); // Adjust dates and get them formatted
+        console.log(adjustedDates);
         event.preventDefault();
 
 
@@ -299,10 +298,10 @@ $(document).ready(function () {
                 maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
                 maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
-                depDateFrom: depDate_From,
-                depDateTo: depDate_To,
-                returnDateFrom: returnDate_From,
-                returnDateTo: returnDate_To,
+                depDateFrom: adjustedDates.depDate_From,
+                depDateTo: adjustedDates.depDate_To,
+                returnDateFrom: adjustedDates.returnDate_From,
+                returnDateTo: adjustedDates.returnDate_To,
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),
