@@ -278,7 +278,7 @@ input:checked + .slider:before {
     color: #4CAF50;
     font-size: 14px;
     cursor: pointer;
-    margin-left: 10px; /* Adjust as needed */
+    margin-left: 90px; /* Adjust as needed */
     vertical-align: middle; /* Align with the suggestPriceBtn */
 }
 
