@@ -207,31 +207,29 @@ input:focus, select:focus {
     text-align: center;
 }
 
-.tooltip {
+/* Tooltip */
+#tooltip {
+    position: absolute;
     display: none;
-    width: 200px; /* Adjust as needed */
     background-color: #4CAF50;
     color: white;
     text-align: center;
     border-radius: 6px;
     padding: 5px;
-    position: absolute;
     z-index: 1;
-    bottom: 100%; /* Adjust as needed */
-    left: 50%; /* Adjust as needed */
-    margin-left: -60px; /* Adjust as needed */
 }
 
-.tooltip::after {
+#tooltip::after {
     content: " ";
     position: absolute;
-    top: 100%; /* Adjust as needed */
-    left: 50%; /* Adjust as needed */
-    margin-left: -5px; /* Adjust as needed */
-    border-width: 5px; /* Adjust as needed */
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
     border-style: solid;
-    border-color: #4CAF50 transparent transparent transparent; /* Adjust as needed */
+    border-color: #4CAF50 transparent transparent transparent;
 }
+
 
 #suggestPriceBtn {
     background-color: #4CAF50;
