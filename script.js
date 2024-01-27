@@ -96,19 +96,34 @@ $(document).ready(function () {
     }
 
     $('#suggestPriceBtn').on('click', function() {
-        // Check if the required fields are filled
-        var maxStops = $('#maxStops').val();
-        var nbrPassengers = $('#nbrPassengers').val();
+        // Check if the travel dates are selected
+        var travelDatesSelected = selectedStartDate && (selectedEndDate || $('#oneWayTrip').is(':checked'));
+        if (!travelDatesSelected) {
+            alert('Please select your travel dates.');
+            flatpickrInstance.open(); // Open Flatpickr calendar
+            return;
+        }
 
-        if(maxStops === '' || nbrPassengers === '') {
-            // If any of the fields are empty, show an alert and stop the function execution
-            alert('Please fill in the required fields: Maximum Layovers and Number of Passengers.');
+        // Check if the maximum number of stops is filled
+        var maxStops = $('#maxStops').val();
+        if (maxStops === '') {
+            alert('Please fill in the maximum number of layovers.');
+            $('#maxStops').focus();
+            return;
+        }
+
+        // Check if the number of passengers is filled
+        var nbrPassengers = $('#nbrPassengers').val();
+        if (nbrPassengers === '') {
+            alert('Please fill in the number of passengers.');
+            $('#nbrPassengers').focus();
             return;
         }
 
         adjustDatesForFlexibility(); // Adjust dates and get them formatted
         suggestPriceLimit(); // Run the suggest price limit function
     });
+
 
 
     // Function to make an API request to Tequila API and suggest a price limit
