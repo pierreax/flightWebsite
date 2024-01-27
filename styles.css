@@ -62,7 +62,6 @@ input, select {
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
     margin-bottom: 15px; /* Space between this group and the next element */
     text-align: right;
-
 }
 
 /* Adjustments for individual input rows within the group */
@@ -70,7 +69,6 @@ input, select {
     flex: 1; /* Allows each item to grow */
     margin-right: 10px; /* Space between items */
 }
-
 
 .small-input-row label {
     flex-grow: 1;
@@ -86,13 +84,11 @@ input, select {
     font-size: 12px;
 }
 
-
 /* Style for the input inside date-field */
 .date-field input {
     flex: 1; /* Allow input to grow and fill the space */
     text-align: center; /* Align text to the right */
 }
-
 
 .form-group {
     display: flex;
@@ -102,7 +98,6 @@ input, select {
     vertical-align: middle; /* Align the icon with the middle of the select field */
     flex-grow: 1;
 }
-
 
 .form-group label {
     white-space: nowrap;
@@ -118,31 +113,40 @@ input, select {
 }
 
 .floating-label {
+    display: flex;
+    align-items: center; /* Vertically center the content */
     position: relative;
 }
 
 .floating-label input {
+    flex-grow: 1; /* Let input fill the space */
     border: 1px solid #ddd;
     padding: 10px;
     width: 100%;
 }
 
 .floating-label label {
-    position: absolute;
-    pointer-events: none;
-    left: 10px;
-    top: 15px; /* Adjust position */
+    margin-left: 10px; /* Adjust based on preference */
     transition: 0.2s ease all;
     color: #999;
-    padding: 0px;
     font-size: 9px; /* Adjust font size for initial state */
+    background-color: #ffcc66; /* Same as input background-color */
+    padding: 0 5px; /* Add some padding on the left and right */
+    transform: translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    pointer-events: none; /* Allows click to pass through to input */
 }
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
-    top: 1px; /* Adjust position */
-    left: 3px;
+    top: 0; /* Adjust position when input is focused or filled */
+    left: 5px;
     font-size: 6px; /* Adjust font size when focused or filled */
+    color: #333; /* Change label color when focused or filled */
+    padding: 0 5px; /* Maintain padding */
+    background-color: #ffcc66; /* Maintain background color */
 }
 
 .airplane-icon {
@@ -193,7 +197,6 @@ input:focus, select:focus {
     font-size: 6px;
     text-align: left;
 }
-
 
 #suggestPriceBtn {
     background-color: #4CAF50;
