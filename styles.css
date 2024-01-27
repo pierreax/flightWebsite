@@ -232,3 +232,30 @@ input:focus, select:focus {
     border-style: solid;
     border-color: #4CAF50 transparent transparent transparent; /* Adjust as needed */
 }
+
+#suggestPriceBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+    font-family: 'Avenir Light', sans-serif;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#suggestPriceBtn:hover,
+#suggestPriceBtn:active {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+#submissionMessage {
+    display: none;
+    margin-top: 30px;
+    text-align: center;
+    color: #4CAF50;
+}
