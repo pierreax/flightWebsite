@@ -15,17 +15,17 @@ h1, h2 {
     color: #4d4d4d;
     margin: 0;
     text-align: center;
-    padding: 20px 0;
+    padding: 10px;
     background-color: #ffcc66;
     font-weight: normal;
 }
 
 h1 {
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 h2 {
-    font-size: 1.2em;
+    font-size: 1.0em;
 }
 
 form {
