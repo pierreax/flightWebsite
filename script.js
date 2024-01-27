@@ -126,12 +126,15 @@ $(document).ready(function () {
 
     function toggleTooltip() {
         $('#tooltip').fadeToggle();
+        console.log("Tool-tip selected.");
+
     }
 
     $(document).click(function(event) {
         // Close the tooltip if the user clicks outside of it
         if (!$(event.target).closest('#tooltip, .help-icon').length) {
             $('#tooltip').fadeOut();
+            console.log("Tool-tip de-selected.");
         }
     });
 
