@@ -169,6 +169,7 @@ $(document).ready(function () {
     // Function to make an API request to Tequila API and suggest a price limit
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
+        $('.loader').show(); // Show the loading icon
 
         const tequilaApiUrl = 'https://tequila-api.kiwi.com/v2/search';
         const tequilaApiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
@@ -219,6 +220,8 @@ $(document).ready(function () {
 
         } catch (error) {
             console.error('Error fetching data from Tequila API:', error);
+        } finally {
+            $('.loader').hide(); // Hide the loading icon regardless of the result
         }
     }
 
