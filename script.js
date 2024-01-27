@@ -22,35 +22,29 @@ $(document).ready(function () {
 
     // Show tool tip when the ?-button is clicked
     $('.help-icon').on('click', function() {
-        // Create a tooltip element
-        const tooltip = $('<div>', {
-            class: 'tooltip',
-            text: "When the below button is clicked, it fetches the current cheapest price based on your travel requirements."
-        });
+        // Set the text for the tooltip
+        $('#tooltip').text("When the below button is clicked, it fetches the current cheapest price based on your travel requirements.");
 
-        // Position the tooltip next to the help icon
-        const iconPosition = $(this).offset();
+        // Position the tooltip next to the question mark icon
+        const tooltip = $('#tooltip');
+        const icon = $(this);
+
+        const iconOffset = icon.offset();
+        const iconWidth = icon.outerWidth();
+        const iconHeight = icon.outerHeight();
+
         tooltip.css({
-            top: iconPosition.top,
-            left: iconPosition.left + $(this).outerWidth() + 10 // Adjust the position as needed
+            display: 'block',
+            top: iconOffset.top + iconHeight + 'px',
+            left: iconOffset.left + iconWidth + 'px'
         });
 
-        // Append the tooltip to the body
-        $('body').append(tooltip);
-
-        // Show the tooltip
-        tooltip.fadeIn();
-
-        // Set a timer to hide the tooltip after a few seconds (adjust the time as needed)
-        setTimeout(function() {
-            tooltip.fadeOut(function() {
-                // Remove the tooltip element after fading out
-                $(this).remove();
-            });
-        }, 3000); // Adjust the time in milliseconds (e.g., 3000 ms = 3 seconds)
-
-        console.log("Tool-tip selected.");
+        // Hide the tooltip after a few seconds (adjust the delay as needed)
+        setTimeout(function () {
+            tooltip.fadeOut();
+        }, 3000); // Tooltip will disappear after 3 seconds
     });
+
 
 
 
