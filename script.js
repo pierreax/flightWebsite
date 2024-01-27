@@ -331,11 +331,10 @@ $(document).ready(function () {
     });
 
     // Form submission event listener
-    document.getElementById('sheetyForm').addEventListener('submit', function (event) {
-        adjustDatesForFlexibility(); // Adjust dates and get them formatted
+    document.getElementById('sheetyForm').addEventListener('submit', async function (event) {
         event.preventDefault();
-
-
+        adjustDatesForFlexibility(); // Adjust dates and get them formatted
+        $('.loader').show(); // Show the loader
 
         // Function to generate a unique token for each submission
         function generateToken() {
@@ -347,37 +346,21 @@ $(document).ready(function () {
         }
 
         const sheetyApiUrl = 'https://api.sheety.co/f3a65c5d3619ab6b57dcfe118df98456/flightDeals/prices';
-
         let formData = {
-            price: {
-                iataCodeFrom: extractIATACode('iataCodeFrom'),
-                iataCodeTo: extractIATACode('iataCodeTo'),
-                flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
-                maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
-                maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
-                nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
-                depDateFrom: depDate_From,
-                depDateTo: depDate_To,
-                returnDateFrom: returnDate_From,
-                returnDateTo: returnDate_To,
-                maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
-                email: document.getElementById('email').value,
-                token: generateToken(),
-                lastFetchedPrice: 0
-            }
+            // ... your form data
         };
 
         console.log('Sending data to Sheety:', formData);
 
-        fetch(sheetyApiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(json => {
+        try {
+            const response = await fetch(sheetyApiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            const json = await response.json();
             console.log('Sheety API response:', json.price);
 
             // Show submission message
@@ -393,13 +376,15 @@ $(document).ready(function () {
 
             // Show browser alert
             alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
-            // Reset default values for "From" and "To" fields
-            $('#iataCodeFrom').val('OSL').trigger('change');
-            $('#iataCodeTo').val('PMI').trigger('change');
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error:', error);
-        });
+        } finally {
+            $('.loader').hide(); // Hide the loader
+        }
+
+        // Reset default values for "From" and "To" fields
+        $('#iataCodeFrom').val('OSL').trigger('change');
+        $('#iataCodeTo').val('PMI').trigger('change');
     });
 });
 
