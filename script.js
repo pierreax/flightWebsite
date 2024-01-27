@@ -8,6 +8,33 @@ $(document).ready(function () {
     let returnDate_From = ''; // Variable to store the selected return date from
     let returnDate_To = ''; // Variable to store the selected return date to
 
+
+
+    // Tool tip function
+    document.addEventListener('DOMContentLoaded', function() {
+        const helpBtn = document.getElementById('helpBtn');
+        const tooltip = document.getElementById('tooltip');
+
+        helpBtn.addEventListener('click', function() {
+        console.log("Tool-tip button clicked.");
+            // Toggle display of the tooltip on click
+            if(tooltip.style.display === 'block') {
+                tooltip.style.display = 'none';
+            } else {
+                tooltip.style.display = 'block';
+            }
+        });
+
+        // Optional: Hide the tooltip when clicking anywhere else on the page
+        document.addEventListener('click', function(e) {
+        console.log("Tool-tip button hided.");
+
+            if (e.target !== helpBtn) {
+                tooltip.style.display = 'none';
+            }
+        }, true);
+    });
+
     // Function to format dates as needed
     function formatDate(dateObject) {
         if (!(dateObject instanceof Date) || isNaN(dateObject.getTime())) { // Check if the date is invalid
@@ -219,32 +246,6 @@ $(document).ready(function () {
         returnDate_From = adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '';
         returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
     }
-
-
-    // Tool tip function
-    document.addEventListener('DOMContentLoaded', function() {
-        const helpBtn = document.getElementById('helpBtn');
-        const tooltip = document.getElementById('tooltip');
-
-        helpBtn.addEventListener('click', function() {
-        console.log("Tool-tip button clicked.");
-            // Toggle display of the tooltip on click
-            if(tooltip.style.display === 'block') {
-                tooltip.style.display = 'none';
-            } else {
-                tooltip.style.display = 'block';
-            }
-        });
-
-        // Optional: Hide the tooltip when clicking anywhere else on the page
-        document.addEventListener('click', function(e) {
-        console.log("Tool-tip button hided.");
-
-            if (e.target !== helpBtn) {
-                tooltip.style.display = 'none';
-            }
-        }, true);
-    });
 
 
     // Example function to calculate suggested price limit
