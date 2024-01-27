@@ -48,6 +48,7 @@ $(document).ready(function () {
 
 
 
+
     // Initialize Flatpickr
     const flatpickrInstance = flatpickr("#dateField", {
         altInput: true,
