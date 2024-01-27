@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.log("Loaded Site");
+    console.log("Loaded Site!");
 
     let selectedStartDate = ''; // Variable to store the selected date in flatpickr
     let selectedEndDate = ''; // Variable to store the selected end date in flatpickr
@@ -11,29 +11,26 @@ $(document).ready(function () {
 
 
     // Tool tip function
-    document.addEventListener('DOMContentLoaded', function() {
+    $('#helpBtn').on('click', function() {
+        const tooltip = document.getElementById('tooltip');
+        console.log("Tool-tip button clicked.");
+        // Toggle display of the tooltip on click
+        if (tooltip.style.display === 'block') {
+            tooltip.style.display = 'none';
+        } else {
+            tooltip.style.display = 'block';
+        }
+    });
+
+    // Optional: Hide the tooltip when clicking anywhere else on the page
+    $(document).on('click', function(e) {
         const helpBtn = document.getElementById('helpBtn');
         const tooltip = document.getElementById('tooltip');
-
-        helpBtn.addEventListener('click', function() {
-        console.log("Tool-tip button clicked.");
-            // Toggle display of the tooltip on click
-            if(tooltip.style.display === 'block') {
-                tooltip.style.display = 'none';
-            } else {
-                tooltip.style.display = 'block';
-            }
-        });
-
-        // Optional: Hide the tooltip when clicking anywhere else on the page
-        document.addEventListener('click', function(e) {
-        console.log("Tool-tip button hided.");
-
-            if (e.target !== helpBtn) {
-                tooltip.style.display = 'none';
-            }
-        }, true);
+        if (!helpBtn.contains(e.target) && !tooltip.contains(e.target)) {
+            tooltip.style.display = 'none';
+        }
     });
+
 
     // Function to format dates as needed
     function formatDate(dateObject) {
