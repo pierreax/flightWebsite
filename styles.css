@@ -283,3 +283,40 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/* Tool tip question mark */
+
+.help-icon {
+    display: inline-block;
+    margin-left: 5px;
+    cursor: pointer;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.tooltip {
+    display: none;
+    width: 200px; /* Adjust as needed */
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%; /* Adjust as needed */
+    left: 50%; /* Adjust as needed */
+    margin-left: -60px; /* Adjust as needed */
+}
+
+.tooltip::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* Adjust as needed */
+    left: 50%; /* Adjust as needed */
+    margin-left: -5px; /* Adjust as needed */
+    border-width: 5px; /* Adjust as needed */
+    border-style: solid;
+    border-color: #4CAF50 transparent transparent transparent; /* Adjust as needed */
+}
+

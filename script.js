@@ -124,6 +124,18 @@ $(document).ready(function () {
         suggestPriceLimit(); // Run the suggest price limit function
     });
 
+    function toggleTooltip() {
+        $('#tooltip').fadeToggle();
+    }
+
+    $(document).click(function(event) {
+        // Close the tooltip if the user clicks outside of it
+        if (!$(event.target).closest('#tooltip, .help-icon').length) {
+            $('#tooltip').fadeOut();
+        }
+    });
+
+
 
 
     // Function to make an API request to Tequila API and suggest a price limit
