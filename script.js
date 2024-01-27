@@ -96,9 +96,20 @@ $(document).ready(function () {
     }
 
     $('#suggestPriceBtn').on('click', function() {
+        // Check if the required fields are filled
+        var maxStops = $('#maxStops').val();
+        var nbrPassengers = $('#nbrPassengers').val();
+
+        if(maxStops === '' || nbrPassengers === '') {
+            // If any of the fields are empty, show an alert and stop the function execution
+            alert('Please fill in the required fields: Maximum Layovers and Number of Passengers.');
+            return;
+        }
+
         adjustDatesForFlexibility(); // Adjust dates and get them formatted
         suggestPriceLimit(); // Run the suggest price limit function
     });
+
 
     // Function to make an API request to Tequila API and suggest a price limit
     async function suggestPriceLimit() {
