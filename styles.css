@@ -267,10 +267,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.btn-group {
-    display: flex;
-    justify-content: flex-end; /* Aligns button to the right */
-}
+
 
 #helpBtn {
     display: inline-block;
@@ -283,7 +280,7 @@ input:checked + .slider:before {
     color: #4CAF50;
     font-size: 14px;
     cursor: pointer;
-    margin-left: 10px; /* Space between buttons */
+    margin-left: 290px; /* Space between buttons */
 }
 
 #tooltip {
