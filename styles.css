@@ -307,10 +307,6 @@ input:checked + .slider:before {
     text-align: center;
 }
 
-#suggestPriceBtn {
-    padding-right: 30px; /* Add padding to avoid text overlap with the help icon */
-    /* ... rest of your button styles ... */
-}
 
 
 
