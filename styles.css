@@ -267,6 +267,12 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+.btn-group {
+    display: flex;
+    justify-content: flex-end; /* Aligns button to the right */
+    margin-top: 10px; /* Add some space above the button */
+}
+
 #helpBtn {
     display: inline-block;
     width: 20px;
@@ -274,12 +280,11 @@ input:checked + .slider:before {
     line-height: 20px;
     text-align: center;
     border-radius: 50%;
-    background-color: #FFDD95;
-    color: #4CAF50;
+    background-color: #ffcc66;
+    color: #4d4d4d;
     font-size: 14px;
     cursor: pointer;
-    margin-left: 90px; /* Adjust as needed */
-    vertical-align: middle; /* Align with the suggestPriceBtn */
+    margin-left: 10px; /* Space between buttons */
 }
 
 #tooltip {
