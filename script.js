@@ -28,22 +28,29 @@ $(document).ready(function () {
             text: "When the below button is clicked, it fetches the current cheapest price based on your travel requirements."
         });
 
-        // Append the tooltip to the body
-        $('body').append(tooltip);
-
         // Position the tooltip next to the help icon
         const iconPosition = $(this).offset();
         tooltip.css({
-            top: iconPosition.top + $(this).outerHeight(),
-            left: iconPosition.left
+            top: iconPosition.top,
+            left: iconPosition.left + $(this).outerWidth() + 10 // Adjust the position as needed
         });
+
+        // Append the tooltip to the body
+        $('body').append(tooltip);
 
         // Show the tooltip
         tooltip.fadeIn();
 
+        // Set a timer to hide the tooltip after a few seconds (adjust the time as needed)
+        setTimeout(function() {
+            tooltip.fadeOut(function() {
+                // Remove the tooltip element after fading out
+                $(this).remove();
+            });
+        }, 3000); // Adjust the time in milliseconds (e.g., 3000 ms = 3 seconds)
+
         console.log("Tool-tip selected.");
     });
-
 
 
 
