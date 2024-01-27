@@ -347,7 +347,22 @@ $(document).ready(function () {
 
         const sheetyApiUrl = 'https://api.sheety.co/f3a65c5d3619ab6b57dcfe118df98456/flightDeals/prices';
         let formData = {
-            // ... your form data
+            price: {
+                iataCodeFrom: extractIATACode('iataCodeFrom'),
+                iataCodeTo: extractIATACode('iataCodeTo'),
+                flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
+                maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
+                maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
+                nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
+                depDateFrom: depDate_From,
+                depDateTo: depDate_To,
+                returnDateFrom: returnDate_From,
+                returnDateTo: returnDate_To,
+                maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
+                email: document.getElementById('email').value,
+                token: generateToken(),
+                lastFetchedPrice: 0
+            }
         };
 
         console.log('Sending data to Sheety:', formData);
