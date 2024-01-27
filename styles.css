@@ -190,7 +190,7 @@ input[type="submit"]:active {
     font-family: 'Avenir Light', sans-serif;
     width: 100%;
     margin-top: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 #suggestPriceBtn:hover,
