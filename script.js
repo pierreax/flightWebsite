@@ -22,20 +22,28 @@ $(document).ready(function () {
 
     // Show tool tip when the ?-button is clicked
     $('.help-icon').on('click', function() {
-        // Toggle the visibility of the tooltip
-        $('#tooltip').fadeToggle();
+        // Create a tooltip element
+        const tooltip = $('<div>', {
+            class: 'tooltip',
+            text: "When the below button is clicked, it fetches the current cheapest price based on your travel requirements."
+        });
 
-        // Check if the tooltip is currently visible
-        if ($('#tooltip').is(':visible')) {
-            // Tooltip is visible, so set its text
-            $('#tooltip').text("Click this button to suggest a price limit based on your criteria.");
-        } else {
-            // Tooltip is hidden, so clear its text
-            $('#tooltip').text("");
-        }
+        // Append the tooltip to the body
+        $('body').append(tooltip);
+
+        // Position the tooltip next to the help icon
+        const iconPosition = $(this).offset();
+        tooltip.css({
+            top: iconPosition.top + $(this).outerHeight(),
+            left: iconPosition.left
+        });
+
+        // Show the tooltip
+        tooltip.fadeIn();
 
         console.log("Tool-tip selected.");
     });
+
 
 
 
