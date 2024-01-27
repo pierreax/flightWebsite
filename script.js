@@ -78,10 +78,18 @@ $(document).ready(function () {
             // Change Flatpickr to single date selection mode
             flatpickrInstance.set('mode', 'single');
             selectedEndDate = null; // Clear the end date since it's a one-way trip
+            returnDate_From = ''; // Clear the formatted return date
+            returnDate_To = ''; // Clear the formatted return date
+            // You might need to update the Flatpickr UI to reflect the absence of a return date
+            flatpickrInstance.clear(); // This clears the selection, you may want to re-select the start date after this
+            if (selectedStartDate) {
+                flatpickrInstance.setDate(selectedStartDate, true); // Set the date to the previously selected start date
+            }
         } else {
             console.log("Return trip selected");
             // Change Flatpickr back to range selection mode
             flatpickrInstance.set('mode', 'range');
+            // Note: You might need to handle re-selecting the dates if necessary
         }
     });
 
