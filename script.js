@@ -1,17 +1,3 @@
-function toggleTooltip() {
-    $('#tooltip').fadeToggle();
-    console.log("Tool-tip selected.");
-
-}
-
-$(document).click(function(event) {
-    // Close the tooltip if the user clicks outside of it
-    if (!$(event.target).closest('#tooltip, .help-icon').length) {
-        $('#tooltip').fadeOut();
-        console.log("Tool-tip de-selected.");
-    }
-});
-
 $(document).ready(function () {
     console.log("Loaded Site!");
 
@@ -33,6 +19,11 @@ $(document).ready(function () {
         const year = dateObject.getFullYear();
         return `${day}/${month}/${year}`;
     }
+
+    $('.help-icon').on('click', function() {
+        $('#tooltip').fadeToggle();
+        console.log("Tool-tip selected.");
+    });
 
 
     // Initialize Flatpickr
@@ -80,6 +71,8 @@ $(document).ready(function () {
             console.log("Exact dates selected");
         }
     });
+
+
 
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
