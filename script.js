@@ -20,22 +20,6 @@ $(document).ready(function () {
         return `${day}/${month}/${year}`;
     }
 
-    // Show tool tip when the ?-button is clicked
-    $('.help-icon').on('click', function() {
-        // Toggle the visibility of the tooltip
-        $('#tooltip').fadeToggle();
-
-        // Set the text of the tooltip
-        $('#tooltip').text("When the below button is clicked, it fetches the current cheapest price based on your travel requirements.");
-
-        // Hide the tooltip after a few seconds (adjust the delay as needed)
-        setTimeout(function() {
-            $('#tooltip').fadeOut();
-        }, 3000); // Tooltip will disappear after 3 seconds (3000 milliseconds)
-    });
-
-
-
 
     // Initialize Flatpickr
     const flatpickrInstance = flatpickr("#dateField", {
