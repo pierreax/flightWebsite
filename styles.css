@@ -129,7 +129,7 @@ input, select {
     margin-left: 10px; /* Adjust based on preference */
     transition: 0.2s ease all;
     color: #999;
-    font-size: 9px; /* Adjust font size for initial state */
+    font-size: 8px; /* Adjust font size for initial state */
     background-color: #ffcc66; /* Same as input background-color */
     padding: 0 5px; /* Add some padding on the left and right */
     transform: translateY(-50%);
