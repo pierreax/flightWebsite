@@ -20,10 +20,23 @@ $(document).ready(function () {
         return `${day}/${month}/${year}`;
     }
 
+    // Show tool tip when the ?-button is clicked
     $('.help-icon').on('click', function() {
+        // Toggle the visibility of the tooltip
         $('#tooltip').fadeToggle();
+
+        // Check if the tooltip is currently visible
+        if ($('#tooltip').is(':visible')) {
+            // Tooltip is visible, so set its text
+            $('#tooltip').text("Click this button to suggest a price limit based on your criteria.");
+        } else {
+            // Tooltip is hidden, so clear its text
+            $('#tooltip').text("");
+        }
+
         console.log("Tool-tip selected.");
     });
+
 
 
     // Initialize Flatpickr
