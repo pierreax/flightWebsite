@@ -107,7 +107,7 @@ $(document).ready(function () {
         // Check if the maximum number of stops is filled
         var maxStops = $('#maxStops').val();
         if (maxStops === '') {
-            alert('Please fill in the maximum number of layovers. For direct flights, use 0');
+            alert('Please fill in the maximum number of layovers. For direct flights, use 0.');
             $('#maxStops').focus();
             return;
         }
