@@ -286,13 +286,33 @@ input:checked + .slider:before {
 
 /* Tool tip question mark */
 
-.help-icon {
-    display: inline-block;
-    margin-left: 5px;
-    cursor: pointer;
-    color: #4CAF50;
-    font-weight: bold;
+.price-button-container {
+    position: relative;
+    display: inline-block; /* or block, depending on your layout */
 }
+
+.help-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    background: #4CAF50; /* Same as button color */
+    color: white;
+    border-radius: 50%;
+    padding: 0 5px;
+    font-size: 12px; /* Adjust as needed */
+    height: 20px; /* Adjust as needed */
+    width: 20px; /* Adjust as needed */
+    line-height: 20px; /* Adjust as needed */
+    text-align: center;
+}
+
+#suggestPriceBtn {
+    padding-right: 30px; /* Add padding to avoid text overlap with the help icon */
+    /* ... rest of your button styles ... */
+}
+
+
 
 .tooltip {
     display: none;
