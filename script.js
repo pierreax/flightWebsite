@@ -301,6 +301,21 @@ $(document).ready(function () {
         event.preventDefault();
 
 
+    // Tool tip function
+    document.addEventListener('DOMContentLoaded', function() {
+        const helpBtn = document.getElementById('helpBtn');
+        const tooltip = document.getElementById('tooltip');
+
+        helpBtn.addEventListener('mouseover', function() {
+            tooltip.style.display = 'block';
+        });
+
+        helpBtn.addEventListener('mouseout', function() {
+            tooltip.style.display = 'none';
+        });
+    });
+
+
         // Function to generate a unique token for each submission
         function generateToken() {
             if (window.crypto && window.crypto.randomUUID) {
@@ -366,3 +381,7 @@ $(document).ready(function () {
         });
     });
 });
+
+
+
+
