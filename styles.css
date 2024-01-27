@@ -29,6 +29,7 @@ h2 {
 }
 
 form {
+    position: relative;
     max-width: 300px;
     margin: 20px auto;
     padding: 20px;
