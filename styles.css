@@ -129,7 +129,7 @@ input, select {
     margin-left: 10px; /* Adjust based on preference */
     transition: 0.2s ease all;
     color: #999;
-    font-size: 9px; /* Adjust font size for initial state */
+    font-size: 7px; /* Adjust font size for initial state */
     background-color: #ffcc66; /* Same as input background-color */
     padding: 0 5px; /* Add some padding on the left and right */
     transform: translateY(-50%);
@@ -141,9 +141,9 @@ input, select {
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
-    top: 0; /* Adjust position when input is focused or filled */
+    top: 2; /* Adjust position when input is focused or filled */
     left: 5px;
-    font-size: 6px; /* Adjust font size when focused or filled */
+    font-size: 5px; /* Adjust font size when focused or filled */
     color: #333; /* Change label color when focused or filled */
     padding: 0 5px; /* Maintain padding */
     background-color: #ffcc66; /* Maintain background color */
