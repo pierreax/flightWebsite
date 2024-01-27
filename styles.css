@@ -131,7 +131,7 @@ input, select {
     position: absolute;
     pointer-events: none;
     left: 10px;
-    top: 15px; /* Adjust position */
+    top: 12px; /* Adjust position */
     transition: 0.2s ease all;
     color: #999;
     padding: 0px;
