@@ -60,7 +60,7 @@ input, select {
     justify-content: space-between; /* Distribute space between the items */
     align-items: center; /* Aligns items vertically in the center */
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
-    margin-bottom: 15px; /* Space between this group and the next element */
+    margin-bottom: 5px; /* Space between this group and the next element */
     text-align: right;
 }
 
