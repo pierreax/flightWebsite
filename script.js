@@ -306,14 +306,23 @@ $(document).ready(function () {
         const helpBtn = document.getElementById('helpBtn');
         const tooltip = document.getElementById('tooltip');
 
-        helpBtn.addEventListener('mouseover', function() {
-            tooltip.style.display = 'block';
+        helpBtn.addEventListener('click', function() {
+            // Toggle display of the tooltip on click
+            if(tooltip.style.display === 'block') {
+                tooltip.style.display = 'none';
+            } else {
+                tooltip.style.display = 'block';
+            }
         });
 
-        helpBtn.addEventListener('mouseout', function() {
-            tooltip.style.display = 'none';
-        });
+        // Optional: Hide the tooltip when clicking anywhere else on the page
+        document.addEventListener('click', function(e) {
+            if (e.target !== helpBtn) {
+                tooltip.style.display = 'none';
+            }
+        }, true);
     });
+
 
 
         // Function to generate a unique token for each submission
