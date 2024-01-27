@@ -11,7 +11,7 @@ $(document).ready(function () {
 
 
     // Tool tip function
-    $('#helpBtn').on('click', function() {
+    $('#helpBtn').on('click', function(event) {
         const tooltip = document.getElementById('tooltip');
         console.log("Tool-tip button clicked.");
         // Toggle display of the tooltip on click
@@ -20,6 +20,8 @@ $(document).ready(function () {
         } else {
             tooltip.style.display = 'block';
         }
+        // Stop the event from propagating to the parent button
+        event.stopPropagation();
     });
 
     // Optional: Hide the tooltip when clicking anywhere else on the page
@@ -30,6 +32,7 @@ $(document).ready(function () {
             tooltip.style.display = 'none';
         }
     });
+
 
 
     // Function to format dates as needed
