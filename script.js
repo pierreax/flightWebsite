@@ -221,7 +221,30 @@ $(document).ready(function () {
     }
 
 
+    // Tool tip function
+    document.addEventListener('DOMContentLoaded', function() {
+        const helpBtn = document.getElementById('helpBtn');
+        const tooltip = document.getElementById('tooltip');
 
+        helpBtn.addEventListener('click', function() {
+        console.log("Tool-tip button clicked.");
+            // Toggle display of the tooltip on click
+            if(tooltip.style.display === 'block') {
+                tooltip.style.display = 'none';
+            } else {
+                tooltip.style.display = 'block';
+            }
+        });
+
+        // Optional: Hide the tooltip when clicking anywhere else on the page
+        document.addEventListener('click', function(e) {
+        console.log("Tool-tip button hided.");
+
+            if (e.target !== helpBtn) {
+                tooltip.style.display = 'none';
+            }
+        }, true);
+    });
 
 
     // Example function to calculate suggested price limit
@@ -299,32 +322,6 @@ $(document).ready(function () {
     document.getElementById('sheetyForm').addEventListener('submit', function (event) {
         adjustDatesForFlexibility(); // Adjust dates and get them formatted
         event.preventDefault();
-
-
-    // Tool tip function
-    document.addEventListener('DOMContentLoaded', function() {
-        const helpBtn = document.getElementById('helpBtn');
-        const tooltip = document.getElementById('tooltip');
-
-        helpBtn.addEventListener('click', function() {
-        console.log("Tool-tip button clicked.");
-            // Toggle display of the tooltip on click
-            if(tooltip.style.display === 'block') {
-                tooltip.style.display = 'none';
-            } else {
-                tooltip.style.display = 'block';
-            }
-        });
-
-        // Optional: Hide the tooltip when clicking anywhere else on the page
-        document.addEventListener('click', function(e) {
-        console.log("Tool-tip button hided.");
-
-            if (e.target !== helpBtn) {
-                tooltip.style.display = 'none';
-            }
-        }, true);
-    });
 
 
 
