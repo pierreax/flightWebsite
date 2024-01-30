@@ -1,7 +1,7 @@
 /* Define color variables */
 :root {
   --background-color: #ffcc66; /* Light beige background */
-  --text-color: #4d4d4d;
+  --text-color: black;
   --input-background: #FFDD95;
   --button-bg: #4CAF50;
   --button-hover-bg: #45a049;
