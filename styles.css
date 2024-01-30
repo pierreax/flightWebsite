@@ -85,6 +85,7 @@ input, select {
 .input-group .form-group .small-input-row {
     flex: 1; /* Allows each item to grow */
     margin-right: 10px; /* Space between items */
+    margin-top: 5px;
 }
 
 .small-input-row label {
