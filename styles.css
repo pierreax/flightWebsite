@@ -147,7 +147,7 @@ input, select {
     left: 10px;
     top: 12px; /* Adjust position */
     transition: 0.2s ease all;
-    color: #999;
+    color: var(--text-color);
     padding: 0px;
     font-size: 8px; /* Adjust font size for initial state */
 }
