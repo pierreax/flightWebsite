@@ -79,6 +79,7 @@ input, select {
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
     margin-bottom: 5px; /* Space between this group and the next element */
     text-align: right;
+    padding: 5px;
 }
 
 /* Adjustments for individual input rows within the group */
