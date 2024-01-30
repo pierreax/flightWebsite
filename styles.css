@@ -196,6 +196,8 @@ input[type="submit"] {
     transition: background-color 0.3s, transform 0.2s;
     border-radius: 5px;
     text-align: center;
+    font-family: 'Avenir Light', sans-serif;
+
 }
 
 input[type="submit"]:hover,
