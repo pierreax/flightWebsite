@@ -79,14 +79,12 @@ input, select {
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
     margin-bottom: 5px; /* Space between this group and the next element */
     text-align: right;
-    padding: 5px;
 }
 
 /* Adjustments for individual input rows within the group */
 .input-group .form-group .small-input-row {
     flex: 1; /* Allows each item to grow */
     margin-right: 10px; /* Space between items */
-    margin-top: 5px;
 }
 
 .small-input-row label {
@@ -124,6 +122,7 @@ input, select {
     font-size: 10px;
     vertical-align: middle; /* Align the icon with the middle of the select field */
     flex-grow: 1;
+    padding: 5px;
 }
 
 .form-group label {
