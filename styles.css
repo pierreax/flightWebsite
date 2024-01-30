@@ -351,3 +351,9 @@ input:checked + .slider:before {
    0% { transform: rotate(0deg); }
    100% { transform: rotate(360deg); }
 }
+
+/* Reset default mobile browser styles */
+input:-webkit-autofill {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
