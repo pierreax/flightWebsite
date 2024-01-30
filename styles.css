@@ -152,7 +152,7 @@ input, select {
     position: absolute;
     pointer-events: none;
     left: 10px;
-    top: 12px; /* Adjust position */
+    top: 18px; /* Adjust position for unfocused state */
     transition: 0.2s ease all;
     color: var(--text-color);
     padding: 0px;
@@ -161,7 +161,7 @@ input, select {
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
-    top: 1px; /* Adjust position */
+    top: 1px; /* Adjust position for focused or filled state */
     left: 3px;
     font-size: 6px; /* Adjust font size when focused or filled */
 }
