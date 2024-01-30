@@ -1,3 +1,18 @@
+/* Define color variables */
+:root {
+  --background-color: #ffcc66; /* Light beige background */
+  --text-color: #4d4d4d;
+  --input-background: #FFDD95;
+  --button-bg: #4CAF50;
+  --button-hover-bg: #45a049;
+  --accent-color: #ffcc66;
+  --border-color: #ddd;
+  --loader-border: #f3f3f3;
+  --loader-bg: #3498db;
+  --slider-bg: #ccc;
+  --slider-active-bg: #4CAF50;
+}
+
 @font-face {
     font-family: 'Avenir Light';
     src: url('Avenir Light.ttf') format('truetype');
@@ -8,15 +23,15 @@
 body {
     font-family: 'Avenir Light', sans-serif;
     margin: 20px;
-    background-color: #ffcc66; /* Light beige background */
+    background-color: var(--background-color);
 }
 
 h1, h2 {
-    color: #4d4d4d;
+    color: var(--text-color);
     margin: 0;
     text-align: center;
     padding: 10px;
-    background-color: #ffcc66;
+    background-color: var(--accent-color);
     font-weight: normal;
 }
 
@@ -35,7 +50,7 @@ form {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background: #FFDD95;
+    background: var(--input-background);
 }
 
 label {
@@ -49,8 +64,8 @@ input, select {
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid #ddd;
-    background: #ffcc66;
+    border: 1px solid var(--border-color);
+    background: var(--background-color);
     font-family: 'Avenir Light', sans-serif;
     -webkit-appearance: none;
 }
@@ -118,7 +133,7 @@ input, select {
 }
 
 .floating-label input {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     padding: 10px;
     width: 100%;
 }
@@ -150,19 +165,19 @@ input, select {
 
 #select2-iataCodeFrom-container,
 #select2-iataCodeTo-container {
-    background-color: #ffcc66;
+    background-color: var(--background-color);
     font-family: 'Avenir Light', sans-serif;
     font-size: 14px;
 }
 
 .select2-selection__rendered {
     font-family: 'Avenir Light', sans-serif;
-    background-color: #ffcc66;
+    background-color: var(--background-color);
     font-size: 12px;
 }
 
 input[type="submit"] {
-    background-color: #4CAF50;
+    background-color: var(--button-bg);
     color: white;
     padding: 10px;
     border: none;
@@ -175,13 +190,13 @@ input[type="submit"] {
 
 input[type="submit"]:hover,
 input[type="submit"]:active {
-    background-color: #45a049;
+    background-color: var(--button-hover-bg);
     transform: translateY(-2px);
 }
 
 #suggestPriceBtn {
     position: relative; /* Make this a relative container for absolute positioning inside */
-    background-color: #4CAF50;
+    background-color: var(--button-bg);
     color: white;
     padding: 10px;
     border: none;
@@ -196,7 +211,7 @@ input[type="submit"]:active {
 
 #suggestPriceBtn:hover,
 #suggestPriceBtn:active {
-    background-color: #45a049;
+    background-color: var(--button-hover-bg);
     transform: translateY(-2px);
 }
 
@@ -204,7 +219,7 @@ input[type="submit"]:active {
     display: none;
     margin-top: 30px;
     text-align: center;
-    color: #4CAF50;
+    color: var(--button-bg);
 }
 
 /* The switch - the box around the slider */
@@ -231,7 +246,7 @@ input[type="submit"]:active {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--slider-bg);
   transition: .4s;
   border-radius: 24px; /* Fully rounded corners for the slider */
 }
@@ -249,11 +264,11 @@ input[type="submit"]:active {
 }
 
 input:checked + .slider {
-  background-color: #4CAF50; /* Color when the switch is active/checked */
+  background-color: var(--slider-active-bg); /* Color when the switch is active/checked */
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #4CAF50; /* Optional: add a box-shadow when the switch is focused */
+  box-shadow: 0 0 1px var(--slider-active-bg); /* Optional: add a box-shadow when the switch is focused */
 }
 
 input:checked + .slider:before {
@@ -269,8 +284,6 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-
-
 #helpBtn {
     position: absolute;
     top: 5px; /* Adjust as needed */
@@ -280,7 +293,7 @@ input:checked + .slider:before {
     line-height: 20px;
     text-align: center;
     border-radius: 50%;
-    background-color: #4CAF50;
+    background-color: var(--button-bg);
     color: white;
     font-size: 14px;
     cursor: pointer;
@@ -307,9 +320,9 @@ input:checked + .slider:before {
     left: calc(50% - 15px); /* 15px is half the width of the loader */
     transform: translate(-50%, -50%); /* Adjust the positioning correctly */
     z-index: 1000; /* Make sure it's above other elements */
-    border: 4px solid #f3f3f3;
+    border: 4px solid var(--loader-border);
     border-radius: 50%;
-    border-top: 4px solid #3498db;
+    border-top: 4px solid var(--loader-bg);
     width: 30px;
     height: 30px;
     -webkit-animation: spin 2s linear infinite; /* Safari */
