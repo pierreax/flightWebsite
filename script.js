@@ -190,7 +190,7 @@ $(document).ready(function () {
                 date_to: depDate_To,
                 return_from: returnDate_From,
                 return_to: returnDate_To,
-                max_stopovers: maxStops,
+                max_sector_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
                 adults: 1,
                 curr: 'NOK',
