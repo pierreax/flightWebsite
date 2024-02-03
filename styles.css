@@ -180,6 +180,11 @@ input, select {
     font-size: 14px;
 }
 
+
+#select2-iataCodeTo-container {
+    padding-bottom: 0px;
+}
+
 .select2-selection__rendered {
     font-family: 'Avenir Light', sans-serif;
     background-color: var(--background-color);
