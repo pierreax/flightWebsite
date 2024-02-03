@@ -180,9 +180,8 @@ input, select {
     font-size: 14px;
 }
 
-/* Add some padding below the airport fields */
-#select2-iataCodeTo-container {
-    padding-bottom: 5px;
+.switches {
+    padding-top: 10px;
 }
 
 .select2-selection__rendered {
