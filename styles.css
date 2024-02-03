@@ -180,6 +180,7 @@ input, select {
     font-size: 14px;
 }
 
+/* Extra padding above the switches */
 .switches {
     padding-top: 10px;
 }
