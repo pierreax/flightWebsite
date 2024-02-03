@@ -35,6 +35,8 @@ $(document).ready(function () {
 
 
 
+
+
     // Function to format dates as needed
     function formatDate(dateObject) {
         if (!(dateObject instanceof Date) || isNaN(dateObject.getTime())) { // Check if the date is invalid
@@ -193,7 +195,7 @@ $(document).ready(function () {
                 max_sector_stopovers: maxStops,
                 max_fly_duration: maxFlyDuration,
                 adults: 1,
-                curr: 'NOK',
+                curr: document.getElementById('currency').value,
                 limit: 1
             });
 
@@ -315,6 +317,7 @@ $(document).ready(function () {
     });
 
 
+
     // Additional code to focus on the search field when Select2 is opened
     $(document).on('select2:open', () => {
         document.querySelector('.select2-search__field').focus();
@@ -329,6 +332,7 @@ $(document).ready(function () {
         $('#iataCodeFrom').val('OSL').trigger('change');
         $('#iataCodeTo').val('PMI').trigger('change');
     });
+
 
     // Form submission event listener
     document.getElementById('sheetyForm').addEventListener('submit', async function (event) {
@@ -352,6 +356,7 @@ $(document).ready(function () {
                 iataCodeTo: extractIATACode('iataCodeTo'),
                 flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
                 maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
+                currency: document.getElementById('currency').value,
                 maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
                 nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
                 depDateFrom: depDate_From,

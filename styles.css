@@ -147,10 +147,13 @@ input, select {
     color: var(--text-color);
 }
 
-.floating-label input {
+.floating-label input,
+.floating-label select {
     border: 1px solid var(--border-color);
     padding: 10px;
     width: 100%;
+    background: var(--background-color);
+    -webkit-appearance: none;
 }
 
 .floating-label label {
@@ -165,11 +168,13 @@ input, select {
 }
 
 .floating-label input:focus ~ label,
-.floating-label input:not(:placeholder-shown) ~ label {
+.floating-label input:not(:placeholder-shown) ~ label,
+#currency ~ label { /* This targets the label for the currency field specifically */
     top: 1px; /* Adjust position for focused or filled state */
     left: 3px;
     font-size: 6px; /* Adjust font size when focused or filled */
 }
+
 
 /* Airplane icon styles */
 .airplane-icon {
