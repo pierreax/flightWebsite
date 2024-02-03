@@ -259,7 +259,7 @@ $(document).ready(function () {
     }
 
 
-    // Example function to calculate suggested price limit
+    // Function to calculate suggested price limit
     function calculateSuggestedPriceLimit(currentPriceData) {
         if (currentPriceData && currentPriceData.data && currentPriceData.data.length > 0) {
             const firstItem = currentPriceData.data[0];
