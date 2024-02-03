@@ -182,7 +182,7 @@ input, select {
 
 
 #select2-iataCodeTo-container {
-    padding-bottom: 0px;
+    padding-bottom: 5px;
 }
 
 .select2-selection__rendered {
