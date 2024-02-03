@@ -13,6 +13,7 @@
   --slider-active-bg: #4CAF50;
 }
 
+/* Fonts */
 @font-face {
     font-family: 'Avenir Light';
     src: url('Avenir Light.ttf') format('truetype');
@@ -20,6 +21,7 @@
     font-style: normal;
 }
 
+/* Global styles */
 body {
     font-family: 'Avenir Light', sans-serif;
     margin: 20px;
@@ -43,6 +45,7 @@ h2 {
     font-size: 1.0em;
 }
 
+/* Form styles */
 form {
     position: relative;
     max-width: 300px;
@@ -71,7 +74,7 @@ input, select {
     -webkit-appearance: none;
 }
 
-/* Style for the input group */
+/* Input group styles */
 .input-group {
     display: flex;
     justify-content: space-between; /* Distribute space between the items */
@@ -81,7 +84,7 @@ input, select {
     text-align: right;
 }
 
-/* Adjustments for individual input rows within the group */
+/* Small input row within the input group */
 .input-group .form-group .small-input-row {
     flex: 1; /* Allows each item to grow */
     margin-right: 10px; /* Space between items */
@@ -94,6 +97,7 @@ input, select {
     color: var(--text-color);
 }
 
+/* Date field styles */
 .date-field {
     display: flex;
     align-items: center;
@@ -103,7 +107,7 @@ input, select {
     color: var(--text-color);
 }
 
-/* Style for the input inside date-field */
+/* Styles for input inside date-field */
 .date-field input {
     flex: 1; /* Allow input to grow and fill the space */
     text-align: center; /* Align text to the right */
@@ -114,7 +118,7 @@ input, select {
     color: var(--text-color); /* Text color for the placeholder */
 }
 
-
+/* Form group styles */
 .form-group {
     display: flex;
     align-items: center;
@@ -130,13 +134,14 @@ input, select {
     flex: 0 0 auto; /* Do not grow or shrink */
 }
 
-/* Existing style for form-group input and select */
+/* Styles for form-group input and select */
 .form-group input,
 .form-group select {
     flex: 1;
     text-align: right;
 }
 
+/* Floating label styles */
 .floating-label {
     position: relative;
     color: var(--text-color);
@@ -166,6 +171,7 @@ input, select {
     font-size: 6px; /* Adjust font size when focused or filled */
 }
 
+/* Airplane icon styles */
 .airplane-icon {
     height: 24px; /* Adjust the size as needed */
     width: auto; /* Maintain aspect ratio */
@@ -173,6 +179,7 @@ input, select {
     vertical-align: middle; /* Align the icon with the middle of the select field */
 }
 
+/* Select2 styles */
 #select2-iataCodeFrom-container,
 #select2-iataCodeTo-container {
     background-color: var(--background-color);
@@ -185,12 +192,14 @@ input, select {
     padding-top: 10px;
 }
 
+/* Select2 selection rendered styles */
 .select2-selection__rendered {
     font-family: 'Avenir Light', sans-serif;
     background-color: var(--background-color);
     font-size: 12px;
 }
 
+/* Submit button styles */
 input[type="submit"] {
     background-color: var(--button-bg);
     color: white;
@@ -202,7 +211,6 @@ input[type="submit"] {
     border-radius: 5px;
     text-align: center;
     font-family: 'Avenir Light', sans-serif;
-
 }
 
 input[type="submit"]:hover,
@@ -211,6 +219,7 @@ input[type="submit"]:active {
     transform: translateY(-2px);
 }
 
+/* Suggest price button styles */
 #suggestPriceBtn {
     position: relative; /* Make this a relative container for absolute positioning inside */
     background-color: var(--button-bg);
@@ -232,6 +241,7 @@ input[type="submit"]:active {
     transform: translateY(-2px);
 }
 
+/* Toggle switch styles */
 /* The switch - the box around the slider */
 .switch {
   position: relative;
@@ -294,6 +304,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+/* Help button and tooltip styles */
 #helpBtn {
     position: absolute;
     top: 5px; /* Adjust as needed */
@@ -322,12 +333,12 @@ input:checked + .slider:before {
     margin-top: -5px; /* Position aligned with the help button */
 }
 
+/* Loader animation styles */
 .loader {
     display: none; /* Hide loader initially */
     position: absolute; /* Position absolute relative to the form */
     top: 50%; /* Center vertically in the form */
-    /* Adjust left position with calc, considering loader width */
-    left: calc(50% - 15px); /* 15px is half the width of the loader */
+    left: calc(50% - 15px); /* Adjust left position with calc, considering loader width */
     transform: translate(-50%, -50%); /* Adjust the positioning correctly */
     z-index: 1000; /* Make sure it's above other elements */
     border: 4px solid var(--loader-border);
@@ -354,4 +365,3 @@ input:checked + .slider:before {
 input:-webkit-autofill {
     transition: background-color 5000s ease-in-out 0s;
 }
-
