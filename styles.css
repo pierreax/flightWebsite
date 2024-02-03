@@ -227,13 +227,6 @@ input[type="submit"]:active {
     transform: translateY(-2px);
 }
 
-#submissionMessage {
-    display: none;
-    margin-top: 30px;
-    text-align: center;
-    color: var(--button-bg);
-}
-
 /* The switch - the box around the slider */
 .switch {
   position: relative;

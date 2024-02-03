@@ -378,16 +378,10 @@ $(document).ready(function () {
             const json = await response.json();
             console.log('Sheety API response:', json.price);
 
-            // Show submission message
-            document.getElementById('submissionMessage').style.display = 'block';
 
             // Clear form fields
             document.getElementById('sheetyForm').reset();
 
-            // Hide message after a few seconds (adjust as needed)
-            setTimeout(function () {
-                document.getElementById('submissionMessage').style.display = 'none';
-            }, 6000);
 
             // Show browser alert
             alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
