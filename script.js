@@ -9,6 +9,25 @@ $(document).ready(function () {
     let returnDate_To = ''; // Variable to store the selected return date to
 
 
+    // Assuming you have a select element with id='currency'
+    const defaultCurrencies = {
+        'SE': 'SEK',
+        'US': 'USD',
+        'GB': 'GBP',
+        'NO': 'NOK',
+        'DK': 'DKK'
+        // ... other countries and their default currencies
+    };
+
+    $.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
+        const countryCode = response.country_code2;
+        const defaultCurrency = defaultCurrencies[countryCode];
+
+        if (defaultCurrency) {
+            $('#currency').val(defaultCurrency);
+        }
+    });
+
 
     // Tool tip function
     $('#helpBtn').on('click', function(event) {
