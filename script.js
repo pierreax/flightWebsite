@@ -394,7 +394,8 @@ $(document).ready(function () {
                 maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
                 email: document.getElementById('email').value,
                 token: generateToken(),
-                lastFetchedPrice: 0
+                lastFetchedPrice: 0,
+                lowestFetchedPrice: 'null'
             }
         };
 
