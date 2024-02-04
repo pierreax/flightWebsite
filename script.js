@@ -9,7 +9,7 @@ $(document).ready(function () {
     let returnDate_To = ''; // Variable to store the selected return date to
 
 
-    // Assuming you have a select element with id='currency'
+    // Currencies based on IP-location
     const defaultCurrencies = {
         'SE': 'SEK',
         'US': 'USD',
@@ -19,6 +19,7 @@ $(document).ready(function () {
         // ... other countries and their default currencies
     };
 
+    // Currencies based on IP-location
     $.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
         const countryCode = response.country_code2;
         const defaultCurrency = defaultCurrencies[countryCode];
@@ -175,6 +176,14 @@ $(document).ready(function () {
         if (nbrPassengers === '') {
             alert('Please fill in the number of passengers.');
             $('#nbrPassengers').focus();
+            return;
+        }
+
+        // Check if the duration field is filled
+        var nbrPassengers = $('#maxFlightDuration').val();
+        if (nbrPassengers === '') {
+            alert('Please fill in Travel duration (max).');
+            $('#maxFlightDuration').focus();
             return;
         }
 
