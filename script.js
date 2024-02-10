@@ -195,65 +195,64 @@ $(document).ready(function () {
 
 
 
-
-    // Function to make an API request to Tequila API and suggest a price limit
+    // Function to Suggest Price Limit to the user via Tequila API, with Azure Function Proxy
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
         $('.loader').show(); // Show the loading icon
 
-        const tequilaApiUrl = 'https://tequila-api.kiwi.com/v2/search';
-        const tequilaApiKey = '-MP6Bhp2klZefnaDsuhlENip9FX5-0Kc';
-        const origin = extractIATACode('iataCodeFrom');
-        const destination = extractIATACode('iataCodeTo');
-        const maxStops = parseInputValue(parseInt(document.getElementById('maxStops').value));
-        const maxFlyDuration = parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value));
-        const flightType = $('#oneWayTrip').is(':checked') ? 'one-way' : 'return';
-        console.log(flightType);
+        // Use your Azure Function URL for the Tequila API request
+        const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/TequilaProxy?code=GhYsupW4LCOGgGU3la2TWS88HV3_O34Z7CpZvQAWx1UVAzFugvTJJA==';
 
-
+        // Prepare the data to send to your Azure Function
+        const requestData = {
+            origin: extractIATACode('iataCodeFrom'),
+            destination: extractIATACode('iataCodeTo'),
+            dateFrom: depDate_From,
+            dateTo: depDate_To,
+            returnFrom: returnDate_From,
+            returnTo: returnDate_To,
+            maxStops: parseInt(document.getElementById('maxStops').value),
+            maxFlyDuration: parseFloat(document.getElementById('maxFlightDuration').value),
+            flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
+            currency: document.getElementById('currency').value
+        };
 
         try {
-            const params = new URLSearchParams({
-                fly_from: origin,
-                fly_to: destination,
-                date_from: depDate_From,
-                date_to: depDate_To,
-                return_from: returnDate_From,
-                return_to: returnDate_To,
-                max_sector_stopovers: maxStops,
-                max_fly_duration: maxFlyDuration,
-                adults: 1,
-                curr: document.getElementById('currency').value,
-                limit: 1
-            });
-
-            console.log('Tequila Search Params: ',params.toString());
-
-            const response = await fetch(`${tequilaApiUrl}?${params.toString()}`, {
-                method: 'GET',
+            const response = await fetch(azureFunctionUrl, {
+                method: 'POST',
                 headers: {
-                    'apikey': tequilaApiKey
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData) // Convert your request data into a JSON string
             });
 
-            const currentPriceData = await response.json();
-            console.log('Tequila API response:', currentPriceData);
-            const suggestedPriceLimit = calculateSuggestedPriceLimit(currentPriceData);
-
-            if (suggestedPriceLimit === 0) {
+            if (response.status === 404) {
+                // Handle no flights found
                 alert("No flight available for the given parameters. Please consider increasing the maximum number of stops, flight duration or changing the dates.");
                 document.getElementById('maxStops').focus();
                 document.getElementById('maxStops').style.borderColor = 'red';
-            } else {
-                document.getElementById('maxPricePerPerson').value = suggestedPriceLimit;
-            }
+            } else if (response.ok) {
+                const currentPriceData = await response.json();
+                console.log('Response from Azure Function:', currentPriceData);
 
+                if (!currentPriceData.price) {
+                    alert("No flight available for the given parameters. Please consider other options.");
+                } else {
+                    document.getElementById('maxPricePerPerson').value = currentPriceData.price;
+                }
+            } else {
+                // Handle other errors
+                throw new Error('An error occurred while fetching flight data.');
+            }
         } catch (error) {
-            console.error('Error fetching data from Tequila API:', error);
+            console.error('Error fetching data from Azure Function:', error);
+            alert('There was an error processing your request. Please try again later.');
         } finally {
-            $('.loader').hide(); // Hide the loading icon regardless of the result
+            $('.loader').hide(); // Hide the loading icon once processing is complete
         }
     }
+
+
 
 
     // Function to adjust dates based on flexible date switch
@@ -362,71 +361,79 @@ $(document).ready(function () {
     });
 
 
-    // Form submission event listener
     document.getElementById('sheetyForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        adjustDatesForFlexibility(); // Adjust dates and get them formatted
-        $('.loader').show(); // Show the loader
+    event.preventDefault();
+    adjustDatesForFlexibility(); // Adjust dates and get them formatted
+    $('.loader').show(); // Show the loader
 
-        // Function to generate a unique token for each submission
-        function generateToken() {
-            if (window.crypto && window.crypto.randomUUID) {
-                return window.crypto.randomUUID();
-            } else {
-                return new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
-            }
+    // Generate a unique token for each submission
+    function generateToken() {
+        if (window.crypto && window.crypto.randomUUID) {
+            return window.crypto.randomUUID();
+        } else {
+            return new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
+        }
+    }
+
+    // Azure Function URL for the SheetyProxy
+    const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/SheetyProxy?code=yt4tWIWvuAOyUAXGb51D3loGGNcVNFrODYJaroWnBGGxAzFuxfFYvA==';
+
+    let formData = {
+        price: {
+            iataCodeFrom: extractIATACode('iataCodeFrom'),
+            iataCodeTo: extractIATACode('iataCodeTo'),
+            flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
+            maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
+            currency: document.getElementById('currency').value,
+            maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
+            nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
+            depDateFrom: depDate_From,
+            depDateTo: depDate_To,
+            returnDateFrom: returnDate_From,
+            returnDateTo: returnDate_To,
+            maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
+            email: document.getElementById('email').value,
+            token: generateToken(),
+            lastFetchedPrice: 0,
+            lowestFetchedPrice: 'null'
+        }
+    };
+
+    console.log('Sending data to SheetyProxy:', formData);
+
+    try {
+        const response = await fetch(azureFunctionUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
 
-        const sheetyApiUrl = 'https://api.sheety.co/f3a65c5d3619ab6b57dcfe118df98456/flightDeals/prices';
-        let formData = {
-            price: {
-                iataCodeFrom: extractIATACode('iataCodeFrom'),
-                iataCodeTo: extractIATACode('iataCodeTo'),
-                flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
-                maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
-                currency: document.getElementById('currency').value,
-                maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
-                nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
-                depDateFrom: depDate_From,
-                depDateTo: depDate_To,
-                returnDateFrom: returnDate_From,
-                returnDateTo: returnDate_To,
-                maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
-                email: document.getElementById('email').value,
-                token: generateToken(),
-                lastFetchedPrice: 0,
-                lowestFetchedPrice: 'null'
-            }
-        };
+        const json = await response.json();
+        console.log('SheetyProxy response:', json);
 
-        console.log('Sending data to Sheety:', formData);
+        // Clear form fields
+        document.getElementById('sheetyForm').reset();
 
-        try {
-            const response = await fetch(sheetyApiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            const json = await response.json();
-            console.log('Sheety API response:', json.price);
+        // Show browser alert
+        alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('There was an error processing your request. Please try again later.');
+    } finally {
+        $('.loader').hide(); // Hide the loader
+    }
 
-            // Clear form fields
-            document.getElementById('sheetyForm').reset();
+    // Reset default values for "From" and "To" fields
+    $('#iataCodeFrom').val('OSL').trigger('change');
+    $('#iataCodeTo').val('PMI').trigger('change');
+});
 
-            // Show browser alert
-            alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            $('.loader').hide(); // Hide the loader
-        }
-
-        // Reset default values for "From" and "To" fields
-        $('#iataCodeFrom').val('OSL').trigger('change');
-        $('#iataCodeTo').val('PMI').trigger('change');
-    });
 });
 
 
