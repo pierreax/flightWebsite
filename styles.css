@@ -80,7 +80,7 @@ input, select {
     justify-content: space-between; /* Distribute space between the items */
     align-items: center; /* Aligns items vertically in the center */
     flex-wrap: wrap; /* Allows items to wrap onto the next line */
-    margin-bottom: 5px; /* Space between this group and the next element */
+    margin-bottom: 10px; /* Space between this group and the next element */
     text-align: right;
 }
 
@@ -210,6 +210,78 @@ input, select {
     background-color: var(--background-color);
     font-size: 12px;
 }
+
+#inbound-timeRangeDisplay,
+#outbound-timeRangeDisplay {
+    font-size: 12px;
+    font-family: 'Avenir Light', sans-serif;
+    text-align: center; /* Center the text */
+    width: 100%; /* Ensure the divs take up the full width */
+    margin: 10px 0; /* Add some margin for better spacing */
+}
+
+
+/* Make sure the sliders are full width within the form */
+.time-slider {
+    margin: 0 0 20px 0; /* Add some margin below the slider */
+    padding: 0 10px; /* Padding to prevent the handles from being cut off on the sides */
+}
+
+
+/* Handle styles with !important to ensure override */
+.noUi-handle {
+    border-radius: 50% !important; /* Makes the handle circular */
+    background-color: var(--button-bg) !important; /* Use the button background color for consistency */
+    border: none !important; /* Adds a white border for better visibility */
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) !important; /* Adds a shadow for a more lifted look */
+    cursor: pointer !important; /* Changes cursor to pointer to indicate it's draggable */
+}
+
+.noUi-handle:after, .noUi-handle:before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 14px;
+    width: 1px;
+    left: 14px;
+    background-color: var(--button-bg) !important; /* Use the button background color for consistency */
+    top: 6px;
+}
+
+.noUi-horizontal .noUi-handle-lower {
+    width: 25px !important;
+    height: 21px !important;
+    right: -10px !important;
+    top: -3px !important;
+}
+
+.noUi-horizontal .noUi-handle-upper {
+    width: 25px !important;
+    height: 21px !important;
+    right: -16px !important;
+    top: -3px !important;
+}
+
+/* Touch area styles */
+.noUi-touch-area {
+    cursor: pointer !important; /* Ensures the cursor changes to pointer in the touch area */
+}
+
+/* Slider background */
+.noUi-base {
+    background-color: var(--slider-bg) !important; /* Background color of the slider */
+}
+
+/* Connect bar styles */
+.noUi-connect {
+    background-color: var(--background-color) !important; /* Color of the active (selected) range */
+}
+
+.noUi-target {
+    background: none !important;
+}
+
+
 
 /* Submit button styles */
 input[type="submit"] {

@@ -29,6 +29,47 @@ $(document).ready(function () {
         }
     });
 
+    // Initialize Outbound Time Range Slider
+    var outboundSlider = document.getElementById('outbound-timeRangeSlider');
+    noUiSlider.create(outboundSlider, {
+        start: [0, 24], // Example initial range
+        connect: true,
+        range: {
+            'min': 0,
+            'max': 24
+        },
+        step: 1,
+        format: wNumb({
+            decimals: 0,
+            postfix: ':00'
+        }),
+        tooltips: false,
+    });
+    outboundSlider.noUiSlider.on('update', function(values, handle) {
+        document.getElementById('outboundTimeStartDisplay').innerHTML = values[0];
+        document.getElementById('outboundTimeEndDisplay').innerHTML = values[1];
+    });
+
+    // Initialize Inbound Time Range Slider
+    var inboundSlider = document.getElementById('inbound-timeRangeSlider');
+    noUiSlider.create(inboundSlider, {
+        start: [0, 24], // Example initial range
+        connect: true,
+        range: {
+            'min': 0,
+            'max': 24
+        },
+        step: 1,
+        format: wNumb({
+            decimals: 0,
+            postfix: ':00'
+        }),
+        tooltips: false,
+    });
+    inboundSlider.noUiSlider.on('update', function(values, handle) {
+        document.getElementById('inboundTimeStartDisplay').innerHTML = values[0];
+        document.getElementById('inboundTimeEndDisplay').innerHTML = values[1];
+    });
 
     // Tool tip function
     $('#helpBtn').on('click', function(event) {
@@ -52,9 +93,6 @@ $(document).ready(function () {
             tooltip.style.display = 'none';
         }
     });
-
-
-
 
 
     // Function to format dates as needed
@@ -93,27 +131,44 @@ $(document).ready(function () {
         }
     });
 
-    // Listener for oneWayTrip switch changes
     $('#oneWayTrip').change(function() {
         if ($(this).is(':checked')) {
             console.log("One-way trip selected");
+            // Hide the inbound slider
+            $('#inbound-timeRangeSlider').hide();
+            $('#inbound-timeRangeDisplay').hide();
+            // Change the text for the outbound time display to "Departure time" but keep the current time display
+            $('#outbound-timeRangeDisplay').html('Departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
+            // Update the time display spans with the current values
+            var outboundStart = outboundSlider.noUiSlider.get()[0];
+            var outboundEnd = outboundSlider.noUiSlider.get()[1];
+            $('#outboundTimeStartDisplay').text(outboundStart);
+            $('#outboundTimeEndDisplay').text(outboundEnd);
             // Change Flatpickr to single date selection mode
             flatpickrInstance.set('mode', 'single');
             selectedEndDate = null; // Clear the end date since it's a one-way trip
             returnDate_From = ''; // Clear the formatted return date
             returnDate_To = ''; // Clear the formatted return date
-            // You might need to update the Flatpickr UI to reflect the absence of a return date
             flatpickrInstance.clear(); // This clears the selection, you may want to re-select the start date after this
             if (selectedStartDate) {
                 flatpickrInstance.setDate(selectedStartDate, true); // Set the date to the previously selected start date
             }
         } else {
             console.log("Return trip selected");
+            // Show the inbound slider and revert the text
+            $('#inbound-timeRangeSlider').show();
+            $('#inbound-timeRangeDisplay').show();
+            $('#outbound-timeRangeDisplay').html('Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
+            // Update the time display spans with the current values to ensure they remain accurate
+            var outboundStart = outboundSlider.noUiSlider.get()[0];
+            var outboundEnd = outboundSlider.noUiSlider.get()[1];
+            $('#outboundTimeStartDisplay').text(outboundStart);
+            $('#outboundTimeEndDisplay').text(outboundEnd);
             // Change Flatpickr back to range selection mode
             flatpickrInstance.set('mode', 'range');
-            // Note: You might need to handle re-selecting the dates if necessary
         }
     });
+
 
         // Listener for Flexible dates switch changes
     $('#flexibleDates').change(function() {
@@ -123,9 +178,6 @@ $(document).ready(function () {
             console.log("Exact dates selected");
         }
     });
-
-
-
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -191,19 +243,18 @@ $(document).ready(function () {
         suggestPriceLimit(); // Run the suggest price limit function
     });
 
-
-
-
-
-    // Function to Suggest Price Limit to the user via Tequila API, with Azure Function Proxy
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
         $('.loader').show(); // Show the loading icon
 
-        // Use your Azure Function URL for the Tequila API request
-        const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/TequilaProxy?code=GhYsupW4LCOGgGU3la2TWS88HV3_O34Z7CpZvQAWx1UVAzFugvTJJA==';
+        const outboundTimes = outboundSlider.noUiSlider.get(); // ["11:00", "23:00"] for example
+        let inboundTimes = ['', '']; // Default to empty strings
 
-        // Prepare the data to send to your Azure Function
+        // Only get inbound times if it's not a one-way trip
+        if (!$('#oneWayTrip').is(':checked')) {
+            inboundTimes = inboundSlider.noUiSlider.get();
+        }
+
         const requestData = {
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
@@ -214,11 +265,18 @@ $(document).ready(function () {
             maxStops: parseInt(document.getElementById('maxStops').value),
             maxFlyDuration: parseFloat(document.getElementById('maxFlightDuration').value),
             flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
-            currency: document.getElementById('currency').value
+            currency: document.getElementById('currency').value,
+            dtime_from: outboundTimes[0], // Use as is, e.g., "11:00"
+            dtime_to: outboundTimes[1], // Use as is, e.g., "23:00"
+            ret_dtime_from: inboundTimes[0], // Use as is, e.g., "09:00"
+            ret_dtime_to: inboundTimes[1] // Use as is, e.g., "19:00"
         };
 
+        console.log('Sending data to TequilaProxy:', requestData);
+
+
         try {
-            const response = await fetch(azureFunctionUrl, {
+            const response = await fetch('https://flightwebsiteapp.azurewebsites.net/api/TequilaProxy?code=GhYsupW4LCOGgGU3la2TWS88HV3_O34Z7CpZvQAWx1UVAzFugvTJJA==', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -250,6 +308,7 @@ $(document).ready(function () {
         } finally {
             $('.loader').hide(); // Hide the loading icon once processing is complete
         }
+
     }
 
 
@@ -377,6 +436,16 @@ $(document).ready(function () {
 
     // Azure Function URL for the SheetyProxy
     const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/SheetyProxy?code=yt4tWIWvuAOyUAXGb51D3loGGNcVNFrODYJaroWnBGGxAzFuxfFYvA==';
+    // Extract the times from the noUiSlider
+
+    const outboundTimes = outboundSlider.noUiSlider.get();
+
+    let inboundTimes = ['', '']; // Default to empty strings
+
+    // Only get inbound times if it's not a one-way trip
+    if (!$('#oneWayTrip').is(':checked')) {
+        inboundTimes = inboundSlider.noUiSlider.get();
+    }
 
     let formData = {
         price: {
@@ -391,6 +460,10 @@ $(document).ready(function () {
             depDateTo: depDate_To,
             returnDateFrom: returnDate_From,
             returnDateTo: returnDate_To,
+            dtimeFrom: outboundTimes[0],
+            dtimeTo: outboundTimes[1],
+            retDtimeFrom: inboundTimes[0],
+            retDtimeTo: inboundTimes[1],
             maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
             email: document.getElementById('email').value,
             token: generateToken(),
