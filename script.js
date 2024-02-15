@@ -505,6 +505,16 @@ $(document).ready(function () {
     // Reset default values for "From" and "To" fields
     $('#iataCodeFrom').val('OSL').trigger('change');
     $('#iataCodeTo').val('PMI').trigger('change');
+    // Reset the outbound and inbound time range sliders to default values
+    outboundSlider.noUiSlider.set([0, 24]);
+    inboundSlider.noUiSlider.set([0, 24]);
+
+    // Optionally, if you're changing the text dynamically based on the slider values,
+    // reset those texts here as well
+    document.getElementById('outboundTimeStartDisplay').innerHTML = '0:00';
+    document.getElementById('outboundTimeEndDisplay').innerHTML = '24:00';
+    document.getElementById('inboundTimeStartDisplay').innerHTML = '0:00';
+    document.getElementById('inboundTimeEndDisplay').innerHTML = '24:00';
 });
 
 });
