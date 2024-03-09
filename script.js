@@ -243,6 +243,20 @@ $(document).ready(function () {
         suggestPriceLimit(); // Run the suggest price limit function
     });
 
+    $('#directFlight').change(function() {
+        if ($(this).is(':checked')) {
+            console.log("Direct flights only enabled");
+            $('#maxStops').prop('disabled', true).val('0').addClass('disabled-input'); // Set value to 0 when direct flights is checked
+            console.log("Max stops input disabled, set to 0, and styled as disabled");
+        } else {
+            console.log("Direct flights only disabled");
+            $('#maxStops').prop('disabled', false).removeClass('disabled-input');
+            console.log("Max stops input enabled and styled as normal");
+        }
+    });
+    
+    
+
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
         $('.loader').show(); // Show the loading icon

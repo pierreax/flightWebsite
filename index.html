@@ -47,19 +47,36 @@
             </select>
         </div>
 
-        <!-- One-Way Trip and Flexible Dates Toggle Switch Group -->
+        <!-- One-Way Trip, Flexible Dates and Direct flight Toggle Switch Group -->
         <div class="form-group switches">
-            <label for="oneWayTrip">One-Way Trip:</label>
-            <label class="switch">
-                <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
-                <span class="slider round"></span>
-            </label>
-            <label for="flexibleDates">+/- 1 day:</label>
-            <label class="switch">
-                <input type="checkbox" id="flexibleDates" name="flexibleDates">
-                <span class="slider round"></span>
-            </label>
+            <!-- One-Way Trip Switch -->
+            <div>
+                <label for="oneWayTrip">One-Way Trip:</label>
+                <label class="switch">
+                    <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            
+            <!-- Flexible Dates Switch -->
+            <div>
+                <label for="flexibleDates">+/- 1 day:</label>
+                <label class="switch">
+                    <input type="checkbox" id="flexibleDates" name="flexibleDates">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            
+            <!-- Direct Flight Switch -->
+            <div>
+                <label for="directFlight">Direct flights only:</label>
+                <label class="switch">
+                    <input type="checkbox" id="directFlight" name="directFlight">
+                    <span class="slider round"></span>
+                </label>
+            </div>
         </div>
+
 
         <!-- Date Field using Flatpickr -->
         <div class="date-field">

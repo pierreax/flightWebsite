@@ -74,6 +74,7 @@ input, select {
     -webkit-appearance: none;
 }
 
+
 /* Input group styles */
 .input-group {
     display: flex;
@@ -166,6 +167,31 @@ input, select {
     padding: 0px;
     font-size: 8px; /* Adjust font size for initial state */
 }
+
+/* Centering switch labels and switches */
+.form-group.switches {
+    display: flex;
+    align-items: center; /* Centers items horizontally in the container */
+    justify-content: center; /* Centers items vertically if necessary */
+    gap: 10px; /* Adds some space between each switch */
+}
+
+.form-group.switches > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the content (both label and switch) vertically */
+    width: 100%; /* Ensures the div takes up the full width of its parent */
+}
+
+.switch {
+    margin: 0 auto; /* Centers the switch within its div container */
+}
+
+/* Adjusts label to be centered above switch */
+.form-group.switches label {
+    display: block; /* Ensures label takes its own line */
+}
+
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label,
@@ -433,6 +459,13 @@ input:checked + .slider:before {
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
 }
+
+/* Increased specificity for disabled input fields */
+form .form-group .disabled-input {
+    background-color: var(--slider-bg); /* Light gray for background */
+    color: #9e9e9e; /* Dimmed text color */
+}
+
 
 /* Safari */
 @-webkit-keyframes spin {
