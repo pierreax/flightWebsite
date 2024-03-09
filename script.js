@@ -246,14 +246,15 @@ $(document).ready(function () {
     $('#directFlight').change(function() {
         if ($(this).is(':checked')) {
             console.log("Direct flights only enabled");
-            $('#maxStops').prop('disabled', true).val('0').addClass('disabled-input'); // Set value to 0 when direct flights is checked
+            $('#maxStops').prop('disabled', true).val('0').addClass('disabled-input');
             console.log("Max stops input disabled, set to 0, and styled as disabled");
         } else {
             console.log("Direct flights only disabled");
-            $('#maxStops').prop('disabled', false).removeClass('disabled-input');
-            console.log("Max stops input enabled and styled as normal");
+            $('#maxStops').prop('disabled', false).val('').removeClass('disabled-input'); // Clear value when direct flights is unchecked
+            console.log("Max stops input enabled, cleared, and styled as normal");
         }
     });
+    
     
     
 
