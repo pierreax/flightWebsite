@@ -45,6 +45,10 @@ h2 {
     font-size: 1.0em;
 }
 
+#maxPricePerPerson {
+    margin-top: 5px;
+}
+
 /* Form styles */
 form {
     position: relative;
@@ -225,6 +229,41 @@ input, select {
     font-size: 14px;
 }
 
+.select2-container {
+    min-width: 200px; /* Adjust as needed */
+}
+
+/* Select2 container and selections styles */
+.select2-container--default .select2-selection--multiple {
+    background-color: var(--background-color) !important; /* Match with your form's background color */
+    border: 1px solid var(--border-color); /* Match with your form's border color */
+    border-radius: 4px; /* Optional: match with your form's border-radius */
+}
+
+/* Adjust the height of the selection container to eliminate white space */
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 4px 8px; /* Adjust padding to ensure content fits nicely */
+    line-height: 1.5; /* Adjust line height for better visual */
+}
+
+/* Style for the search input within the selection */
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
+    background-color: var(--background-color); /* Ensure background matches */
+    border: none; /* Remove any default border */
+}
+
+/* Placeholder color adjustment for consistency */
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field::placeholder {
+    color: var(--text-color); /* Optional: adjust placeholder text color */
+}
+
+/* When focusing on the search field, remove the outline or adjust as necessary */
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field:focus {
+    outline: none; /* Remove outline */
+    border: none; /* Ensure no border appears */
+}
+
+
 /* Extra padding above the switches */
 .switches {
     padding-top: 10px;
@@ -309,6 +348,7 @@ input, select {
 
 
 
+
 /* Submit button styles */
 input[type="submit"] {
     background-color: var(--button-bg);
@@ -322,6 +362,14 @@ input[type="submit"] {
     text-align: center;
     font-family: 'Avenir Light', sans-serif;
 }
+
+/* Disabled button styles */
+#submitFormButton:disabled {
+    background-color: #ccc; /* Gray background */
+    color: #666; /* Darker text to indicate it's disabled */
+    cursor: not-allowed; /* Cursor to indicate the button is not clickable */
+}
+
 
 input[type="submit"]:hover,
 input[type="submit"]:active {
@@ -342,8 +390,36 @@ input[type="submit"]:active {
     font-family: 'Avenir Light', sans-serif;
     width: 100%;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }
+
+
+/* Label for advanced settings toggle */
+#advancedSettingsToggle {
+    background-color: transparent; /* Remove background color for a label-like appearance */
+    color: var(--text-color);
+    cursor: pointer;
+    font-family: 'Avenir Light', sans-serif;
+    font-size: 8px; /* Adjust font size for visibility */
+    display: inline-flex; /* Use inline-flex to keep label and symbol in the same line */
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+/* Icon before the text */
+#advancedSettingsToggle::before {
+    content: "+"; /* "+" icon by default */
+    margin-right: 5px; /* Space between icon and text */
+    font-size: 8px; /* Icon size to match the text */
+    transition: transform 0.2s; /* Smooth transition for rotation */
+}
+
+/* Rotate icon when expanded */
+#advancedSettingsToggle.expanded::before {
+    content: "\2212"; /* "−" icon for expanded state */
+}
+
 
 #suggestPriceBtn:hover,
 #suggestPriceBtn:active {

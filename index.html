@@ -120,25 +120,39 @@
         </div>
 
 
+
         <!-- Outbound Slider Options -->
         <div id="outbound-timeRangeDisplay">Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span></div>
         <div id="outbound-timeRangeSlider" class="time-slider"></div>
 
         <!-- Inbound Slider Options -->
         <div id="inbound-timeRangeDisplay">Inbound departure time: <span id="inboundTimeStartDisplay"></span> - <span id="inboundTimeEndDisplay"></span></div>
-        <div id="inbound-timeRangeSlider" class="time-slider"></div>
-
-
+        <div id="inbound-timeRangeSlider" class="time-slider"></div>       
 
 
         <!-- Suggest Price Button and Help Button -->
         <button type="button" id="suggestPriceBtn">
-            Get Current Lowest Price
+            1. Check availability
             <!-- Help Button -->
             <div id="helpBtn">?</div>
         </button>
         <!-- Tooltip -->
-        <div id="tooltip" style="display:none;">Click this button to get the current lowest price (per person), based on your preferences.</div>
+        <div id="tooltip" style="display:none;">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
+
+
+        <!-- Advanced Settings Section -->
+        <div id="advancedSettingsToggle" role="button" tabindex="0">Advanced Settings</div>
+        <div id="advancedSettings" style="display:none;">
+
+            <!-- Airline Exclusion -->
+            <div class="form-group">
+                <label for="excludeAirlines">Exclude Airlines:</label>
+                <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple">
+                    <!-- Airline options will be populated dynamically -->
+                    <!-- Example: <option value="UA">United Airlines</option> -->
+                </select>
+            </div>
+        </div>
 
 
         <!-- Price Limit Field and Label -->
@@ -154,7 +168,7 @@
         </div>
 
         <!-- Submit Button -->
-        <input type="submit" value="Submit">
+        <input type="submit" id="submitFormButton" value="2. Submit" disabled>
     </form>
 
 </body>

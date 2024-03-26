@@ -71,6 +71,22 @@ $(document).ready(function () {
         document.getElementById('inboundTimeEndDisplay').innerHTML = values[1];
     });
 
+    // Advanced settings section
+    document.getElementById('advancedSettingsToggle').addEventListener('click', function() {
+        var advancedSettings = document.getElementById('advancedSettings');
+        var toggleButton = document.getElementById('advancedSettingsToggle');
+        
+        if (advancedSettings.style.display === 'none' || !advancedSettings.style.display) {
+            advancedSettings.style.display = 'block';
+            toggleButton.classList.add('expanded'); // Add the 'expanded' class
+        } else {
+            advancedSettings.style.display = 'none';
+            toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
+        }
+    });
+    
+    
+
     // Tool tip function
     $('#helpBtn').on('click', function(event) {
         const tooltip = document.getElementById('tooltip');
@@ -95,17 +111,17 @@ $(document).ready(function () {
     });
 
 
-    // Function to format dates as needed
     function formatDate(dateObject) {
-        if (!(dateObject instanceof Date) || isNaN(dateObject.getTime())) { // Check if the date is invalid
+        if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
             console.error('Invalid date:', dateObject);
-            return "NaN/NaN/NaN";
+            return ""; // Return an empty string or some placeholder text as appropriate
         }
         const day = dateObject.getDate().toString().padStart(2, '0');
         const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); // +1 because months are 0-based
         const year = dateObject.getFullYear();
         return `${day}/${month}/${year}`;
     }
+    
 
 
     // Initialize Flatpickr
@@ -170,7 +186,7 @@ $(document).ready(function () {
     });
 
 
-        // Listener for Flexible dates switch changes
+    // Listener for Flexible dates switch changes
     $('#flexibleDates').change(function() {
         if ($(this).is(':checked')) {
             console.log("Flexible dates selected");
@@ -178,6 +194,30 @@ $(document).ready(function () {
             console.log("Exact dates selected");
         }
     });
+
+    // When the value of origin (iataCodeFrom) changes
+    $('#iataCodeFrom').on('change', function() {
+        // Clear selections in the "Exclude Airlines" dropdown
+        $('#excludeAirlines').val(null).trigger('change');
+
+        // Optionally: Remove all options from the dropdown if you want to start fresh
+        $('#excludeAirlines').empty().trigger('change');
+
+        // Note: You can reinitialize or update the dropdown with any default options here if needed
+    });
+
+    // When the value of destination (iataCodeTo) changes
+    $('#iataCodeTo').on('change', function() {
+        // Clear selections in the "Exclude Airlines" dropdown
+        $('#excludeAirlines').val(null).trigger('change');
+
+        // Optionally: Remove all options from the dropdown if you want to start fresh
+        $('#excludeAirlines').empty().trigger('change');
+
+        // Note: You can reinitialize or update the dropdown with any default options here if needed
+    });
+
+
 
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
@@ -243,6 +283,7 @@ $(document).ready(function () {
         suggestPriceLimit(); // Run the suggest price limit function
     });
 
+    // Direct-flight only button toggle function
     $('#directFlight').change(function() {
         if ($(this).is(':checked')) {
             console.log("Direct flights only enabled");
@@ -257,19 +298,19 @@ $(document).ready(function () {
     
     
     
-
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
         $('.loader').show(); // Show the loading icon
-
-        const outboundTimes = outboundSlider.noUiSlider.get(); // ["11:00", "23:00"] for example
-        let inboundTimes = ['', '']; // Default to empty strings
-
-        // Only get inbound times if it's not a one-way trip
+    
+        const outboundTimes = outboundSlider.noUiSlider.get();
+        let inboundTimes = ['', ''];
         if (!$('#oneWayTrip').is(':checked')) {
             inboundTimes = inboundSlider.noUiSlider.get();
         }
-
+    
+        const airlinesDict = await readAirlinesData(); // Fetch airline information locally
+        const excludedAirlines = $('#excludeAirlines').val().join(','); // Gather excluded airlines from the dropdown
+    
         const requestData = {
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
@@ -277,56 +318,81 @@ $(document).ready(function () {
             dateTo: depDate_To,
             returnFrom: returnDate_From,
             returnTo: returnDate_To,
-            maxStops: parseInt(document.getElementById('maxStops').value),
-            maxFlyDuration: parseFloat(document.getElementById('maxFlightDuration').value),
+            maxStops: parseInt($('#maxStops').val()),
+            maxFlyDuration: parseFloat($('#maxFlightDuration').val()),
             flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
-            currency: document.getElementById('currency').value,
-            dtime_from: outboundTimes[0], // Use as is, e.g., "11:00"
-            dtime_to: outboundTimes[1], // Use as is, e.g., "23:00"
-            ret_dtime_from: inboundTimes[0], // Use as is, e.g., "09:00"
-            ret_dtime_to: inboundTimes[1] // Use as is, e.g., "19:00"
+            currency: $('#currency').val(),
+            dtime_from: outboundTimes[0],
+            dtime_to: outboundTimes[1],
+            ret_dtime_from: inboundTimes[0],
+            ret_dtime_to: inboundTimes[1],
+            select_airlines: excludedAirlines, // Include excluded airlines in the request
+            select_airlines_exclude: 'true'
         };
-
-        console.log('Sending data to TequilaProxy:', requestData);
-
-
+    
         try {
-            const response = await fetch('https://flightwebsiteapp.azurewebsites.net/api/TequilaProxy?code=GhYsupW4LCOGgGU3la2TWS88HV3_O34Z7CpZvQAWx1UVAzFugvTJJA==', {
+            const response = await fetch('https://flightwebsiteapp.azurewebsites.net/api/TequilaProxyTest?code=p-KsHrrINYtUf9N2Zm2cZ_ljf_QMmnZgVCl2rHxUKImWAzFueM8APQ==', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestData) // Convert your request data into a JSON string
+                body: JSON.stringify(requestData)
             });
-
-            if (response.status === 404) {
+    
+            if (!response.ok && response.status === 404) {
                 // Handle no flights found
                 alert("No flight available for the given parameters. Please consider increasing the maximum number of stops, flight duration or changing the dates.");
-                document.getElementById('maxStops').focus();
-                document.getElementById('maxStops').style.borderColor = 'red';
+                $('#maxStops').focus();
+                $('#maxStops').css('borderColor', 'red'); // Highlight the maxStops input
+                // Enable the Submit button and revert styles if needed
+                $('#submitFormButton').prop('disabled', true);
+                return; // Early return to prevent further execution
             } else if (response.ok) {
                 const currentPriceData = await response.json();
-                console.log('Response from Azure Function:', currentPriceData);
-
+                console.log('Response from API:', currentPriceData);
+    
                 if (!currentPriceData.price) {
                     alert("No flight available for the given parameters. Please consider other options.");
-                } else {
-                    document.getElementById('maxPricePerPerson').value = currentPriceData.price;
+                    return; // Early return to prevent further execution
                 }
+    
+                $('#maxPricePerPerson').val(currentPriceData.price); // Update the "Price limit per person" field
+    
+                // Update excluded airlines dropdown
+                updateExcludedAirlinesDropdown(currentPriceData.airlines, airlinesDict);
+
+                // After the suggest price logic, enable the Submit button
+                $('#submitFormButton').prop('disabled', false);
             } else {
-                // Handle other errors
                 throw new Error('An error occurred while fetching flight data.');
             }
         } catch (error) {
-            console.error('Error fetching data from Azure Function:', error);
+            console.error('Error fetching data:', error);
             alert('There was an error processing your request. Please try again later.');
         } finally {
             $('.loader').hide(); // Hide the loading icon once processing is complete
         }
-
     }
+    
+    function updateExcludedAirlinesDropdown(airlines, airlinesDict) {
+        // Ensure only unique values are added to the dropdown to prevent duplicates
+        let currentOptions = new Set($('#excludeAirlines option').map(function() { return this.value }).get());
+        airlines.forEach(code => {
+            if (!currentOptions.has(code)) {
+                const airlineName = airlinesDict[code] || code; // Use code as fallback if name isn't found
+                $('#excludeAirlines').append(new Option(airlineName, code));
+            }
+        });
+        $('#excludeAirlines').select2({
+            placeholder: 'Select airlines to exclude',
+            allowClear: true
+        });
+    }
+    
+    
+    
 
-
+    
 
 
     // Function to adjust dates based on flexible date switch
@@ -410,11 +476,39 @@ $(document).ready(function () {
         }
     }
 
+    // Function to read data from the "airlines.json" file
+    async function readAirlinesData() {
+        try {
+            const response = await fetch('airlines.json');
+            const data = await response.json();
+
+            // Convert array to a dictionary for easy lookup
+            const airlinesDict = {};
+            data.forEach(airline => {
+                // Assuming each airline object has 'iata' and 'name' keys
+                airlinesDict[airline.iata] = airline.name;
+            });
+
+            return airlinesDict;
+
+        } catch (error) {
+            console.error('Error reading airlines data:', error);
+            return {};
+        }
+    }
+
     // Initialize Select2 for the "IATA Code From" and "IATA Code To" fields
     $('#iataCodeFrom, #iataCodeTo').select2({
         placeholder: 'Start typing to search...',
         allowClear: true,
         width: '100%'
+    });
+
+    // Initialize Select2 for the "Exclude Airlines" dropdown
+    $('#excludeAirlines').select2({
+        width: '100%', // Ensures the dropdown matches the width of its container
+        placeholder: 'Select airlines to exclude', // Placeholder text when nothing is selected
+        allowClear: true // Allows users to clear their selection
     });
 
 
@@ -451,12 +545,10 @@ $(document).ready(function () {
 
     // Azure Function URL for the SheetyProxy
     const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/SheetyProxy?code=yt4tWIWvuAOyUAXGb51D3loGGNcVNFrODYJaroWnBGGxAzFuxfFYvA==';
+
     // Extract the times from the noUiSlider
-
     const outboundTimes = outboundSlider.noUiSlider.get();
-
     let inboundTimes = ['', '']; // Default to empty strings
-
     // Only get inbound times if it's not a one-way trip
     if (!$('#oneWayTrip').is(':checked')) {
         inboundTimes = inboundSlider.noUiSlider.get();
@@ -480,6 +572,7 @@ $(document).ready(function () {
             retDtimeFrom: inboundTimes[0],
             retDtimeTo: inboundTimes[1],
             maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
+            excludedAirlines: $('#excludeAirlines').val() ? $('#excludeAirlines').val().join(',') : '',
             email: document.getElementById('email').value,
             token: generateToken(),
             lastFetchedPrice: 0,
