@@ -230,7 +230,7 @@ input, select {
 }
 
 .select2-container {
-    min-width: 200px; /* Adjust as needed */
+    width: 100% !important; /* Force the Select2 dropdown to match the parent width */
 }
 
 /* Select2 container and selections styles */
