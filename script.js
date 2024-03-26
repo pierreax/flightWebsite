@@ -331,7 +331,7 @@ $(document).ready(function () {
         };
     
         try {
-            const response = await fetch('', {
+            const response = await fetch('https://flightwebsiteapp.azurewebsites.net/api/TequilaProxy?code=GhYsupW4LCOGgGU3la2TWS88HV3_O34Z7CpZvQAWx1UVAzFugvTJJA==', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
