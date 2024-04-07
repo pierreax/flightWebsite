@@ -11,9 +11,6 @@ $(document).ready(function () {
     let airlinesDict = {};     // Global variable to store airline data for lookup
 
 
-
-
-
     // Async function to fetch and store airline names at the start
     async function fetchData() {
         airlinesDict = await readAirlinesData();
@@ -109,6 +106,11 @@ $(document).ready(function () {
         if (advancedSettings.style.display === 'none' || !advancedSettings.style.display) {
             advancedSettings.style.display = 'block';
             toggleButton.classList.add('expanded'); // Add the 'expanded' class
+            $('#excludeAirlines').select2({
+                placeholder: 'Select airlines to exclude',
+                allowClear: true
+            });
+
         } else {
             advancedSettings.style.display = 'none';
             toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
@@ -228,9 +230,17 @@ $(document).ready(function () {
     $('#iataCodeFrom').on('change', function() {
         // Clear selections in the "Exclude Airlines" dropdown
         $('#excludeAirlines').val(null).trigger('change');
+        $('#excludeAirlines').select2({
+            placeholder: 'Select airlines to exclude',
+            allowClear: true
+        });
 
         // Optionally: Remove all options from the dropdown if you want to start fresh
         $('#excludeAirlines').empty().trigger('change');
+        $('#excludeAirlines').select2({
+            placeholder: 'Select airlines to exclude',
+            allowClear: true
+        });
 
         // Note: You can reinitialize or update the dropdown with any default options here if needed
     });
@@ -384,12 +394,6 @@ $(document).ready(function () {
                 $('#submitFormButton').prop('disabled', false);
                 // Show the Advanced Settings label after suggestPriceLimit is executed
                 $('#advancedSettingsToggle').show();
-
-                // Reinitialize the Select2 component to update its options
-                $('#excludeAirlines').select2({
-                    placeholder: 'Select airlines to exclude',
-                    allowClear: true
-                });
             } else {
                 alert("No flights available for the given parameters. Please adjust your search criteria.");
             }
