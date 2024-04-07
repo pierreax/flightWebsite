@@ -310,12 +310,14 @@ $(document).ready(function () {
             return;
         }
 
-        // Check if the duration field is filled
-        var nbrPassengers = $('#maxFlightDuration').val();
-        if (nbrPassengers === '') {
-            alert('Please fill in Travel duration (max).');
-            $('#maxFlightDuration').focus();
-            return;
+        // Check if the duration field is filled, only if direct flights only is not enabled
+        if (!$('#directFlight').is(':checked')) {
+            var maxTravelDuration = $('#maxFlightDuration').val();
+            if (maxTravelDuration === '') {
+                alert('Please fill in Travel duration (max).');
+                $('#maxFlightDuration').focus();
+                return;
+            }
         }
 
         adjustDatesForFlexibility(); // Adjust dates and get them formatted
@@ -327,10 +329,12 @@ $(document).ready(function () {
         if ($(this).is(':checked')) {
             console.log("Direct flights only enabled");
             $('#maxStops').prop('disabled', true).val('0').addClass('disabled-input');
+            $('#maxFlightDuration').prop('disabled', true).val('').addClass('disabled-input');
             console.log("Max stops input disabled, set to 0, and styled as disabled");
         } else {
             console.log("Direct flights only disabled");
             $('#maxStops').prop('disabled', false).val('').removeClass('disabled-input'); // Clear value when direct flights is unchecked
+            $('#maxFlightDuration').prop('disabled', false).val('').removeClass('disabled-input');
             console.log("Max stops input enabled, cleared, and styled as normal");
         }
     });
