@@ -143,15 +143,31 @@
         <div id="advancedSettingsToggle" role="button" tabindex="0">Advanced Settings</div>
         <div id="advancedSettings" style="display:none;">
 
-            <!-- Airline Exclusion -->
-            <div class="form-group">
-                <label for="excludeAirlines">Exclude Airlines:</label>
+            <div class="airline-selection-container">
+                <div class="switch-row">
+                    <div class="switch-label">Exclude Airlines</div>
+                    
+                    <div class="switch-container">
+                    <label class="switch">
+                        <input type="checkbox" id="airlineModeSwitch">
+                        <span class="slider round"></span>
+                    </label>
+                    </div>
+                
+                    <div class="switch-label">Include only Airlines</div>
+                </div>
+                
+                <!-- Airline Exclusion -->
+                <div class="form-group">
                 <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple">
                     <!-- Airline options will be populated dynamically -->
                     <!-- Example: <option value="UA">United Airlines</option> -->
                 </select>
+                </div>
             </div>
         </div>
+
+              
 
 
         <!-- Price Limit Field and Label -->

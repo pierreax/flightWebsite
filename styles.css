@@ -346,6 +346,26 @@ input, select {
     background: none !important;
 }
 
+.airline-selection-container {
+    padding: 10px;
+}
+  
+  .switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 10px; /* Add space between the switch row and the dropdown */
+}
+  
+  .switch-label {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 10px;
+}
+  
+  .form-group {
+    text-align: center; /* Center the select dropdown if desired */
+}
 
 
 

@@ -314,6 +314,9 @@ $(document).ready(function () {
         console.log("Sending Current Price request");
         $('.loader').show(); // Show the loading icon
     
+        // Check the state of the switch to determine the mode for airlines inclusion or exclusion
+        let airlineModeSwitchState = $('#airlineModeSwitch').is(':checked');
+    
         const requestData = {
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
@@ -330,7 +333,7 @@ $(document).ready(function () {
             ret_dtime_from: $('#oneWayTrip').is(':checked') ? '' : inboundSlider.noUiSlider.get()[0],
             ret_dtime_to: $('#oneWayTrip').is(':checked') ? '' : inboundSlider.noUiSlider.get()[1],
             select_airlines: $('#excludeAirlines').val().join(','),
-            select_airlines_exclude: 'true'
+            select_airlines_exclude: !airlineModeSwitchState // Set based on the switch state
         };
     
         try {
@@ -339,14 +342,14 @@ $(document).ready(function () {
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(requestData)
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const tequilaResponse = await response.json();
             console.log('Raw response from Tequila API:', tequilaResponse);
-
+    
             // Store the raw response globally for later use
             globalTequilaResponse = tequilaResponse;
             console.log('Raw response from Tequila API:', tequilaResponse);
@@ -359,7 +362,7 @@ $(document).ready(function () {
                 // Extract unique airlines from the response to update the dropdown
                 const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
                 updateExcludedAirlinesDropdown(uniqueAirlines);
-
+    
                 // Enable the Submit button since a matching flight was found
                 $('#submitFormButton').prop('disabled', false);
             } else {
@@ -373,6 +376,7 @@ $(document).ready(function () {
             $('.loader').hide(); // Hide the loading icon once processing is complete
         }
     }
+    
     
     // This revised version uses the airlinesDict to display names but stores codes as values.
     async function updateExcludedAirlinesDropdown(airlines) {
@@ -392,39 +396,79 @@ $(document).ready(function () {
         });
     }
 
-    
+
+    // Track the mode based on the switch's position
+    let airlineSelectionMode = false; // False for exclude mode, true for include mode
+
+    // Initialize airlines dropdown as "Exclude Airlines"
+    $('#excludeAirlines').select2({
+        placeholder: 'Select airlines to exclude',
+        allowClear: true
+    });
+
+    // Assuming airlineSelectionMode is tracked by the switch's checked state
+    $('#airlineModeSwitch').change(function() {
+        airlineSelectionMode = this.checked;
+        
+        // Update the placeholder text based on the switch's state
+        if (airlineSelectionMode) {
+            $('#excludeAirlines').select2('destroy').select2({
+                placeholder: 'Select airlines to include',
+                allowClear: true
+            });
+        } else {
+            $('#excludeAirlines').select2('destroy').select2({
+                placeholder: 'Select airlines to exclude',
+                allowClear: true
+            });
+        }
+
+        // Reset the dropdown selection if needed
+        // $('#excludeAirlines').val(null).trigger('change');
+        // Optionally, you might want to keep the selection and just update the price based on the new mode.
+
+        // Call updatePriceBasedOnSelection to adjust the price field according to the new mode and selected airlines
+        updatePriceBasedOnSelection();
+    });
 
 
     // Add an event listener to the "excludeAirlines" dropdown
     $('#excludeAirlines').on('change', function() {
-        updatePriceBasedOnExclusions();
+        updatePriceBasedOnSelection();
     });
 
-    // This function updates the price based on excluded airlines.
-    function updatePriceBasedOnExclusions() {
-        // Directly use the codes from the dropdown for exclusion
-        const excludedAirlines = $('#excludeAirlines').val();
+    function updatePriceBasedOnSelection() {
+        const selectedAirlines = $('#excludeAirlines').val();
         
         if (!globalTequilaResponse || !globalTequilaResponse.data) {
             console.log('No flight data available to filter.');
             return;
         }
-
-        // Filter out flights that include any of the excluded airlines
-        const filteredFlights = globalTequilaResponse.data.filter(flight =>
-            !flight.airlines.some(airline => excludedAirlines.includes(airline))
-        );
-
+    
+        let filteredFlights;
+        if (airlineSelectionMode) {
+            // Include mode: keep flights operated exclusively by the selected airlines
+            // Every airline in the flight must be in the selectedAirlines list.
+            filteredFlights = globalTequilaResponse.data.filter(flight => 
+                flight.airlines.every(airline => selectedAirlines.includes(airline))
+            );
+        } else {
+            // Exclude mode: remove flights that include any of the selected airlines
+            filteredFlights = globalTequilaResponse.data.filter(flight =>
+                !flight.airlines.some(airline => selectedAirlines.includes(airline))
+            );
+        }
+    
         if (filteredFlights.length > 0) {
-            // Update the price with the lowest price from the filtered list
             const lowestPrice = filteredFlights[0].price;
             $('#maxPricePerPerson').val(lowestPrice);
         } else {
-            // No flights available after exclusions, handle accordingly
-            alert('No flights available after applying exclusions.');
+            alert('No flights available after applying your selection.');
             $('#maxPricePerPerson').val(''); // Clear the price field
         }
     }
+    
+    
 
 
     // Function to adjust dates based on flexible date switch
@@ -578,6 +622,9 @@ $(document).ready(function () {
     // Azure Function URL for the SheetyProxy
     const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/SheetyProxy?code=yt4tWIWvuAOyUAXGb51D3loGGNcVNFrODYJaroWnBGGxAzFuxfFYvA==';
 
+    // Check the state of the switch to determine the mode for airlines inclusion or exclusion
+    let airlineModeSwitchState = $('#airlineModeSwitch').is(':checked');
+
     // Extract the times from the noUiSlider
     const outboundTimes = outboundSlider.noUiSlider.get();
     let inboundTimes = ['', '']; // Default to empty strings
@@ -605,6 +652,7 @@ $(document).ready(function () {
             retDtimeTo: inboundTimes[1],
             maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
             excludedAirlines: $('#excludeAirlines').val() ? $('#excludeAirlines').val().join(',') : '',
+            exclude: !airlineModeSwitchState, // Set based on the switch state
             email: document.getElementById('email').value,
             token: generateToken(),
             lastFetchedPrice: 0,
