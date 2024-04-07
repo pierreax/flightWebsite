@@ -11,6 +11,9 @@ $(document).ready(function () {
     let airlinesDict = {};     // Global variable to store airline data for lookup
 
 
+
+
+
     // Async function to fetch and store airline names at the start
     async function fetchData() {
         airlinesDict = await readAirlinesData();
@@ -41,6 +44,18 @@ $(document).ready(function () {
         }
     });
 
+    // Attach the click event handler to the switch icon
+    $('.switch-icon-container').on('click', function() {
+        switchIATACodes();
+    });
+
+    function switchIATACodes() {
+        let fromCode = $('#iataCodeFrom').val();
+        let toCode = $('#iataCodeTo').val();
+        $('#iataCodeFrom').val(toCode).trigger('change');
+        $('#iataCodeTo').val(fromCode).trigger('change');
+    }
+    
     // Initialize Outbound Time Range Slider
     var outboundSlider = document.getElementById('outbound-timeRangeSlider');
     noUiSlider.create(outboundSlider, {
@@ -82,6 +97,9 @@ $(document).ready(function () {
         document.getElementById('inboundTimeStartDisplay').innerHTML = values[0];
         document.getElementById('inboundTimeEndDisplay').innerHTML = values[1];
     });
+
+    // Hide the Advanced Settings toggle initially
+    $('#advancedSettingsToggle').hide();
 
     // Advanced settings section
     document.getElementById('advancedSettingsToggle').addEventListener('click', function() {
@@ -133,7 +151,6 @@ $(document).ready(function () {
         const year = dateObject.getFullYear();
         return `${day}/${month}/${year}`;
     }
-    
 
 
     // Initialize Flatpickr
@@ -365,6 +382,14 @@ $(document).ready(function () {
     
                 // Enable the Submit button since a matching flight was found
                 $('#submitFormButton').prop('disabled', false);
+                // Show the Advanced Settings label after suggestPriceLimit is executed
+                $('#advancedSettingsToggle').show();
+
+                // Reinitialize the Select2 component to update its options
+                $('#excludeAirlines').select2({
+                    placeholder: 'Select airlines to exclude',
+                    allowClear: true
+                });
             } else {
                 alert("No flights available for the given parameters. Please adjust your search criteria.");
             }

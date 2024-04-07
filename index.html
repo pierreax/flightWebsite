@@ -32,20 +32,26 @@
         <div class="loader"></div>
 
         <!-- From Field with Icon -->
-        <div class="form-group">
-            <img src="airplaneLift.png" alt="Airplane Icon" class="airplane-icon">
+        <div class="form-group iata-field">
+            <img src="airplaneLift.png" alt="From" class="airplane-icon">
             <select id="iataCodeFrom" name="iataCodeFrom" required>
                 <!-- Dropdown options will be populated dynamically using JavaScript -->
             </select>
         </div>
 
+        <!-- Switch Icon, positioned without taking additional space -->
+        <div class="switch-icon-container">
+            <img src="up-down.png" alt="Switch" class="switch-icon">
+        </div>
+
         <!-- To Field with Icon -->
-        <div class="form-group">
-            <img src="airplaneLand.png" alt="Airplane Icon" class="airplane-icon">
+        <div class="form-group iata-field">
+            <img src="airplaneLand.png" alt="To" class="airplane-icon">
             <select id="iataCodeTo" name="iataCodeTo" required>
                 <!-- Dropdown options will be populated dynamically using JavaScript -->
             </select>
         </div>
+
 
         <!-- One-Way Trip, Flexible Dates and Direct flight Toggle Switch Group -->
         <div class="form-group switches">
