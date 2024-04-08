@@ -388,7 +388,8 @@ $(document).ready(function () {
             if (tequilaResponse.data && tequilaResponse.data.length > 0) {
                 // Since the response is sorted, the first flight has the lowest price
                 const lowestPriceFlight = tequilaResponse.data[0];
-                $('#maxPricePerPerson').val(lowestPriceFlight.price);
+                const roundedPrice = Math.ceil(lowestPriceFlight.price); // Round up the price
+                $('#maxPricePerPerson').val(roundedPrice);
     
                 // Extract unique airlines from the response to update the dropdown
                 const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
@@ -494,7 +495,8 @@ $(document).ready(function () {
     
         if (filteredFlights.length > 0) {
             const lowestPrice = filteredFlights[0].price;
-            $('#maxPricePerPerson').val(lowestPrice);
+            const roundedPrice = Math.ceil(lowestPrice); // Round up the price
+            $('#maxPricePerPerson').val(roundedPrice);
         } else {
             $('#maxPricePerPerson').val(''); // Clear the price field
         }
