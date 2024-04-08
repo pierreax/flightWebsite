@@ -444,25 +444,25 @@ $(document).ready(function () {
         airlineSelectionMode = this.checked;
         
         // Update the placeholder text based on the switch's state
-        if (airlineSelectionMode) {
-            $('#excludeAirlines').select2('destroy').select2({
-                placeholder: 'Select airlines to include',
-                allowClear: true
-            });
-        } else {
-            $('#excludeAirlines').select2('destroy').select2({
-                placeholder: 'Select airlines to exclude',
-                allowClear: true
-            });
-        }
+        var newPlaceholder = airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude';
+        $('#excludeAirlines').select2('destroy').select2({
+            placeholder: newPlaceholder,
+            allowClear: true
+        });
 
-        // Reset the dropdown selection if needed
-        // $('#excludeAirlines').val(null).trigger('change');
-        // Optionally, you might want to keep the selection and just update the price based on the new mode.
+        if (airlineSelectionMode) {
+            // Select all airlines when in include mode
+            var allAirlineIds = $('#excludeAirlines option').map(function() { return this.value }).get();
+            $('#excludeAirlines').val(allAirlineIds).trigger('change');
+        } else {
+            // Clear the selection when switching back to exclude mode
+            $('#excludeAirlines').val(null).trigger('change');
+        }
 
         // Call updatePriceBasedOnSelection to adjust the price field according to the new mode and selected airlines
         updatePriceBasedOnSelection();
     });
+
 
 
     // Add an event listener to the "excludeAirlines" dropdown
