@@ -496,7 +496,6 @@ $(document).ready(function () {
             const lowestPrice = filteredFlights[0].price;
             $('#maxPricePerPerson').val(lowestPrice);
         } else {
-            alert('No flights available after applying your selection.');
             $('#maxPricePerPerson').val(''); // Clear the price field
         }
     }
@@ -657,6 +656,14 @@ $(document).ready(function () {
 
     // Check the state of the switch to determine the mode for airlines inclusion or exclusion
     let airlineModeSwitchState = $('#airlineModeSwitch').is(':checked');
+    let selectedAirlines = $('#excludeAirlines').val();
+
+    if (airlineModeSwitchState && (!selectedAirlines || selectedAirlines.length === 0)) {
+        alert('Please include at least one airline in your search.');
+        $('#excludeAirlines').select2('open'); // Focus on the airline selection
+        $('.loader').hide(); // Hide the loader if validation fails
+        return; // Exit the function to prevent submission
+    }
 
     // Extract the times from the noUiSlider
     const outboundTimes = outboundSlider.noUiSlider.get();
