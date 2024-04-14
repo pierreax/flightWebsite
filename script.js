@@ -586,26 +586,27 @@ $(document).ready(function () {
         }
     }
 
-    // Function to read data from the "airlines.json" file
+    // Function to read data from the "airline_data.txt" file
     async function readAirlinesData() {
         try {
-            const response = await fetch('airlines.json');
+            const response = await fetch('airline_data.txt');
             const data = await response.json();
-
-            // Convert array to a dictionary for easy lookup
+    
+            // Convert array to a dictionary for easy lookup, adjusted for the provided data structure
             const airlinesDict = {};
             data.forEach(airline => {
-                // Assuming each airline object has 'iata' and 'name' keys
-                airlinesDict[airline.iata] = airline.name;
+                // Use 'code' as the key since the data structure has 'code' instead of 'iata'
+                airlinesDict[airline.code] = airline.name;
             });
-
+    
             return airlinesDict;
-
+    
         } catch (error) {
             console.error('Error reading airlines data:', error);
             return {};
         }
     }
+    
 
     // Initialize Select2 for the "IATA Code From" and "IATA Code To" fields
     $('#iataCodeFrom, #iataCodeTo').select2({
