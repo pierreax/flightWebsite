@@ -4077,7 +4077,7 @@
 ,
 {"id":"2040","name":"Dixie Airways","alias":"\\N","iata":"","icao":"DEE","callsign":"TACAIR","country":"United States","active":"N"}
 ,
-{"id":"2041","name":"Norwegian Air Shuttle","alias":"\\N","iata":"D8","icao":"DJB","callsign":"DJIBOUTI AIR","country":"Djibouti","active":"Y"}
+{"id":"2041","name":"Norwegian Air International","alias":"\\N","iata":"D8","icao":"NOZ","callsign":"Norwegian","country":"Norway","active":"Y"}
 ,
 {"id":"2042","name":"Dniproavia","alias":"\\N","iata":"","icao":"UDN","callsign":"DNIEPRO","country":"Ukraine","active":"Y"}
 ,
