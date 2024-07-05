@@ -1,6 +1,18 @@
 $(document).ready(function () {
     console.log("Loaded Site");
 
+
+    // Function to parse query parameters
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const queryParams = {};
+        for (const [key, value] of params.entries()) {
+            queryParams[key] = value;
+        }
+        return queryParams;
+    }
+
+
     let selectedStartDate = ''; // Variable to store the selected date in flatpickr
     let selectedEndDate = ''; // Variable to store the selected end date in flatpickr
     let depDate_From = ''; // Variable to store the selected dep date from
@@ -561,6 +573,7 @@ $(document).ready(function () {
         });
     }
 
+
     // Function to read data from the "airports.txt" file
     async function readAirportsData() {
         try {
@@ -615,6 +628,7 @@ $(document).ready(function () {
         width: '100%'
     });
 
+
     // Initialize Select2 for the "Exclude Airlines" dropdown
     $('#excludeAirlines').select2({
         width: '100%', // Ensures the dropdown matches the width of its container
@@ -637,7 +651,17 @@ $(document).ready(function () {
         // Set default values for "From" and "To" fields
         $('#iataCodeFrom').val('OSL').trigger('change');
         $('#iataCodeTo').val('PMI').trigger('change');
+
+        // Get query parameters
+        const queryParams = getQueryParams();
+        if (queryParams.iataCodeTo) {
+            console.log("setting the iataCodeTo as " + queryParams.iataCodeTo);
+            $('#iataCodeTo').val(queryParams.iataCodeTo).trigger('change');
+            console.log($('#iataCodeTo').val());
+        }
     });
+
+
 
 
     document.getElementById('sheetyForm').addEventListener('submit', async function (event) {
