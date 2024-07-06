@@ -654,8 +654,6 @@ $(document).ready(function () {
 
         // Get query parameters
         const queryParams = getQueryParams();
-        console.log($('#iataCodeTo').val());
-        console.log("Trying to set the iataCodeTo as " + queryParams.iataCodeTo);
         if (queryParams.iataCodeTo) {
             console.log("setting the iataCodeTo as " + queryParams.iataCodeTo);
             $('#iataCodeTo').val(queryParams.iataCodeTo).trigger('change');

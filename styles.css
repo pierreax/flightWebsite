@@ -45,6 +45,31 @@ h2 {
     font-size: 1.0em;
 }
 
+/* Styles for the clickable link */
+a.destinations-link {
+    display: block;
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px;
+    max-width: 300px;
+    background-color: var(--button-bg);
+    color: white;
+    text-decoration: none;
+    font-family: 'Avenir Light', sans-serif;
+    font-size: 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+a.destinations-link:hover,
+a.destinations-link:active {
+    background-color: var(--button-hover-bg);
+    transform: translateY(-2px);
+}
+
+
+
+
 #maxPricePerPerson {
     margin-top: 5px;
 }
