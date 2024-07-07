@@ -246,7 +246,7 @@ input, select {
     vertical-align: middle; /* Align the icon with the middle of the select field */
 }
 
-/.form-group.iata-field {
+.form-group.iata-field {
     display: flex;
     align-items: center;
     position: relative;

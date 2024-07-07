@@ -1,4 +1,5 @@
 ICY - Icy Bay
+city:LON - London All Airports
 HGZ - Hogatza
 BYW - Blakely Island
 BDF - Bradford
@@ -6370,7 +6371,7 @@ PHH - Phan Thiet
 VKG - Rach Gia
 TBB - Tuy Hoa
 SGN - Ho Chi Minh City
-THD - Thanh H�a
+THD - Thanh H a
 VII - Vinh
 VTG - Vung Tau
 VBA - Aeng
