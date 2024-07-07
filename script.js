@@ -283,9 +283,19 @@ $(document).ready(function () {
             return '';
         }
         const selectedOptionText = selectedOptionData[0].text;
-        const iataCode = selectedOptionText.split(' - ')[0];
-        return iataCode.trim();
+        const iataCode = selectedOptionText.split(' - ')[0].trim();
+        const containsAllAirports = selectedOptionText.toLowerCase().includes("all airports");
+
+        // If the Aiport Name contains All Airports we need to add city: so that we can search all Airports in the region
+        if (containsAllAirports) {
+            console.log('Adding city: in front of IATA: ',iataCode)
+            return `city:${iataCode}`;
+        } else {
+            console.log('Returning plain IATA: ', iataCode)
+            return iataCode;
+        }
     }
+
 
     function parseInputValue(value) {
         if (typeof value === 'string' && value === "NaN/NaN/NaN") {

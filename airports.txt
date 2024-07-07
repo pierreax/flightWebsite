@@ -1,5 +1,30 @@
+BUH - Bucharest All Airports
+BUE - Buenos Aires All Airports
+DTT - Detroit All Airports
+IZM - Izmir All Airports
+YEA - Edmonton All Airports
+JKT - Jakarta All Airports
+LON - London All Airports
+MIL - Mailand All Airports
+YMQ - Montreal All Airports
+PAR - Paris All Airports
+REK - Reykjavik All Airports
+RIO - Rio de Janeiro All Airports
+ROM - Rome All Airports
+SAO - Sao Paulo All Airports
+YTO - Toronto All Airports
+STO - Stockholm All Airports
+WAS - Washington D.C. All Airports
+TYO - Tokyo All Airports
+BAK - Baku All Airports
+BHZ - Belo Horizonte All Airports
+BJS - Beijing All Airports
+NYC - New York All Airports
+OSA - Osaka All Airports
+SEL - Seoul All Airports
+NCP - Luzon All Airports
+MOW - Moscow All Airports
 ICY - Icy Bay
-city:LON - London All Airports
 HGZ - Hogatza
 BYW - Blakely Island
 BDF - Bradford
@@ -2488,7 +2513,6 @@ HLR - Fort Hood(Killeen)
 HMN - Alamogordo
 HMT - Hemet
 HNB - Huntingburg
-city:NYC - New York All Airports
 HSH - Las Vegas
 HOB - Hobbs
 HON - Huron
