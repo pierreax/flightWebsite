@@ -407,7 +407,6 @@ YQU - Grande Prairie
 YQV - Yorkton
 YQW - North Battleford
 YQX - Gander
-YQY - Sydney
 YQZ - Quesnel
 YRA - Gameti
 YRB - Resolute Bay
@@ -482,7 +481,6 @@ YXQ - Beaver Creek
 YXR - Earlton
 YXS - Prince George
 YXT - Terrace
-YXU - London
 YXX - Abbotsford
 YXY - Whitehorse
 YXZ - Wawa
@@ -839,7 +837,7 @@ CWL - Cardiff
 SWS - Swansea
 BRS - Bristol
 LPL - Liverpool
-LTN - London
+LTN - London Luton
 LEQ - Land's End
 PLH - Plymouth
 ISC - St. Mary's
@@ -853,13 +851,11 @@ ACI - Saint Anne
 GCI - Saint Peter Port
 JER - Saint Helier
 ESH - Brighton
-BQH - London
-LGW - London
+LGW - London Gatwock
 KRH - Redhill
-LCY - London
 FAB - Farnborough
 BBS - Yateley
-LHR - London
+LHR - London Heathrow
 SEN - Southend
 LYX - Lydd
 MSE - Manston
@@ -898,7 +894,7 @@ ADX - St. Andrews
 LMO - Lossiemouth
 CBG - Cambridge
 NWI - Norwich
-STN - London
+STN - London Stanstead
 QFO - Duxford
 HYC - High Wycombe
 EXT - Exeter
@@ -913,7 +909,6 @@ FFD - Fairford
 BZZ - Brize Norton
 ODH - Odiham
 WXF - Wethersfield
-NHT - London
 QCY - Coningsby
 BEQ - Thetford
 OKH - Cottesmore
@@ -956,7 +951,7 @@ SXL - Sligo
 WAT - Waterford
 AAR - Aarhus
 BLL - Billund
-CPH - Copenhagen
+CPH - Copenhagen Kastrup
 EBJ - Esbjerg
 KRP - Karup
 BYR - Laeso
@@ -987,7 +982,7 @@ DLD - Dagali
 BDU - Malselv
 EVE - Evenes
 FRO - Floro
-OSL - Oslo
+OSL - Oslo Gardemoen
 HMR - Hamar
 HAU - Karmoy
 HFT - Hammerfest
@@ -1008,7 +1003,6 @@ HOV - Orsta
 MQN - Mo i Rana
 RVK - Rorvik
 RRS - Roros
-RYG - Rygge
 SRP - Svea
 LYR - Longyearbyen
 SDN - Sandane
@@ -1024,7 +1018,7 @@ TOS - Tromso
 TRF - Torp
 TRD - Trondheim
 VDS - Vadso
-SVG - Stavanger
+SVG - Stavanger Sola
 QYY - Bialystok
 BXP - Biala Podlaska
 BZG - Bydgoszcz
@@ -1075,7 +1069,7 @@ KSD - Karlstad
 VST - Stockholm / Vasteras
 LLA - Lulea
 ARN - Stockholm Arlanda
-BMA - Stockholm
+BMA - Stockholm Bromma
 GVX - Gavle / Sandviken
 LPI - Linkoping
 NRK - Norrkoping
@@ -2494,6 +2488,7 @@ HLR - Fort Hood(Killeen)
 HMN - Alamogordo
 HMT - Hemet
 HNB - Huntingburg
+city: NYC - New York All Airports
 HSH - Las Vegas
 HOB - Hobbs
 HON - Huron
@@ -2502,6 +2497,7 @@ HOT - Hot Springs
 HOU - Houston
 HPN - White Plains
 HPT - Hampton
+EAS - San Sebastián
 HPY - Baytown
 HQM - Hoquiam
 HES - Hermiston
@@ -2666,7 +2662,6 @@ LOL - Lovelock
 BBX - Philadelphia
 LOT - Chicago/Romeoville
 LOU - Louisville
-LOZ - London
 LPC - Lompoc
 LQK - Pickens
 LRD - Laredo
@@ -6783,7 +6778,6 @@ XCH - Christmas Island
 RBU - Roebourne
 RMA - Roma
 NDS - Sandstone
-BWU - Sydney
 CBR - Canberra
 CFS - Coffs Harbour
 DBO - Dubbo
