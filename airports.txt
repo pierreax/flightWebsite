@@ -2488,7 +2488,7 @@ HLR - Fort Hood(Killeen)
 HMN - Alamogordo
 HMT - Hemet
 HNB - Huntingburg
-city: NYC - New York All Airports
+city:NYC - New York All Airports
 HSH - Las Vegas
 HOB - Hobbs
 HON - Huron
