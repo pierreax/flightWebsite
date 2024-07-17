@@ -21,6 +21,7 @@ $(document).ready(function () {
     let returnDate_To = ''; // Variable to store the selected return date to
     let globalTequilaResponse = null; // Global variable to store the raw JSON response from Tequila API
     let airlinesDict = {};     // Global variable to store airline data for lookup
+    let city = '';  // Global variable to store the City that the user is broswing from to set iataCodeFrom
 
 
     // Async function to fetch and store airline names at the start
@@ -43,15 +44,48 @@ $(document).ready(function () {
         // ... other countries and their default currencies
     };
 
-    // Currencies based on IP-location
+    // Currencies and City based on IP-location
     $.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
         const countryCode = response.country_code2;
+        city = response.city;
         const defaultCurrency = defaultCurrencies[countryCode];
-
         if (defaultCurrency) {
             $('#currency').val(defaultCurrency);
         }
+
+        // Now fetch the IATA code using the Tequila API
+        fetchClosestAirport(city);
     });
+
+            
+
+    // Function to fetch the closest airport based on City
+    function fetchClosestAirport(city) {
+        console.log('Searching closest airport to: ',city);
+        const url = `https://tequila-api.kiwi.com/locations/query?term=${encodeURIComponent(city)}&location_types=airport&limit=1`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
+            }
+        };
+    
+        fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                if (data.locations && data.locations.length > 0) {
+                    const airportIATA = data.locations[0].code;
+                    console.log('Closest airport IATA code:', airportIATA);
+                    $('#iataCodeFrom').val(airportIATA).trigger('change');
+                } else {
+                    console.log('No airport found for this city:', city);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching airport data:', error);
+            });
+    }
+
 
     // Attach the click event handler to the switch icon
     $('.switch-icon-container').on('click', function() {
