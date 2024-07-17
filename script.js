@@ -530,7 +530,6 @@ $(document).ready(function () {
         const selectedAirlines = $('#excludeAirlines').val();
         
         if (!globalTequilaResponse || !globalTequilaResponse.data) {
-            console.log('No flight data available to filter.');
             return;
         }
     
