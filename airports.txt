@@ -5784,7 +5784,6 @@ PBX - Porto Alegre Do Norte
 AAI - Arraias
 ROO - Rondonopolis
 AIR - Aripuana
-0 - Tesouro
 OPS - Sinop
 STZ - Santa Terezinha
 IRZ - Santa Isabel Do Rio Negro
