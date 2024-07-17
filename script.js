@@ -27,7 +27,6 @@ $(document).ready(function () {
     // Async function to fetch and store airline names at the start
     async function fetchData() {
         airlinesDict = await readAirlinesData();
-        console.log("Airline names fetched:", airlinesDict);
         // Any other operations that need to wait for airlinesDict to be populated
     }
 
@@ -61,7 +60,7 @@ $(document).ready(function () {
 
     // Function to fetch the closest airport based on City
     function fetchClosestAirport(city) {
-        console.log('Searching closest airport to: ',city);
+        console.log('Searching closest airport to:', city);
         const url = `https://tequila-api.kiwi.com/locations/query?term=${encodeURIComponent(city)}&location_types=airport&limit=1`;
         const options = {
             method: 'GET',
