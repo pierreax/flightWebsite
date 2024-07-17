@@ -1,7 +1,26 @@
 $(document).ready(function () {
     console.log("Loaded Site");
 
+    // Initialize Select2 for the "IATA Code From" and "IATA Code To" fields
+    $('#iataCodeFrom, #iataCodeTo').select2({
+        placeholder: function() {
+            $(this).data('placeholder');
+        },
+        allowClear: true,
+        width: '100%',
+    });
 
+    // Focus the search field when Select2 opens
+    $(document).on('select2:open', function() {
+        setTimeout(function() {
+            document.querySelector('.select2-container--open .select2-search__field').focus();
+        }, 0);
+    });
+
+    // Clear initial selection for 'iataCodeTo' after page load
+    $('#iataCodeTo').val(null).trigger('change');
+    console.log('iataCodeisNUL');
+    
     // Function to parse query parameters
     function getQueryParams() {
         const params = new URLSearchParams(window.location.search);
@@ -12,7 +31,6 @@ $(document).ready(function () {
         return queryParams;
     }
 
-
     let selectedStartDate = ''; // Variable to store the selected date in flatpickr
     let selectedEndDate = ''; // Variable to store the selected end date in flatpickr
     let depDate_From = ''; // Variable to store the selected dep date from
@@ -21,8 +39,7 @@ $(document).ready(function () {
     let returnDate_To = ''; // Variable to store the selected return date to
     let globalTequilaResponse = null; // Global variable to store the raw JSON response from Tequila API
     let airlinesDict = {};     // Global variable to store airline data for lookup
-    let city = '';  // Global variable to store the City that the user is broswing from to set iataCodeFrom
-
+    let city = '';  // Global variable to store the City that the user is browsing from to set iataCodeFrom
 
     // Async function to fetch and store airline names at the start
     async function fetchData() {
@@ -31,7 +48,6 @@ $(document).ready(function () {
     }
 
     fetchData(); // Call the async function
-
 
     // Currencies based on IP-location
     const defaultCurrencies = {
@@ -55,8 +71,6 @@ $(document).ready(function () {
         // Now fetch the IATA code using the Tequila API
         fetchClosestAirport(city);
     });
-
-            
 
     // Function to fetch the closest airport based on City
     function fetchClosestAirport(city) {
@@ -84,7 +98,6 @@ $(document).ready(function () {
                 console.error('Error fetching airport data:', error);
             });
     }
-
 
     // Attach the click event handler to the switch icon
     $('.switch-icon-container').on('click', function() {
@@ -161,8 +174,6 @@ $(document).ready(function () {
             toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
         }
     });
-    
-    
 
     // Tool tip function
     $('#helpBtn').on('click', function(event) {
@@ -187,7 +198,6 @@ $(document).ready(function () {
         }
     });
 
-
     function formatDate(dateObject) {
         if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
             console.error('Invalid date:', dateObject);
@@ -199,12 +209,11 @@ $(document).ready(function () {
         return `${day}/${month}/${year}`;
     }
 
-
     // Initialize Flatpickr
     const flatpickrInstance = flatpickr("#dateField", {
         altInput: true,
         mode: "range",
-        altFormat: "F j, Y",
+        altFormat: "j F Y",
         dateFormat: "d-m-Y",
         minDate: "today",
         onChange: function(selectedDates, dateStr, instance) {
@@ -261,7 +270,6 @@ $(document).ready(function () {
         }
     });
 
-
     // Listener for Flexible dates switch changes
     $('#flexibleDates').change(function() {
         if ($(this).is(':checked')) {
@@ -301,8 +309,6 @@ $(document).ready(function () {
         // Note: You can reinitialize or update the dropdown with any default options here if needed
     });
 
-
-
     // Define the extractIATACode function here so it's available when suggestPriceLimit is called
     function extractIATACode(elementId) {
         const selectElement = document.getElementById(elementId);
@@ -319,7 +325,7 @@ $(document).ready(function () {
         const iataCode = selectedOptionText.split(' - ')[0].trim();
         const containsAllAirports = selectedOptionText.toLowerCase().includes("all airports");
 
-        // If the Aiport Name contains All Airports we need to add city: so that we can search all Airports in the region
+        // If the Airport Name contains All Airports we need to add city: so that we can search all Airports in the region
         if (containsAllAirports) {
             console.log('Adding city: in front of IATA: ',iataCode)
             return `city:${iataCode}`;
@@ -328,7 +334,6 @@ $(document).ready(function () {
             return iataCode;
         }
     }
-
 
     function parseInputValue(value) {
         if (typeof value === 'string' && value === "NaN/NaN/NaN") {
@@ -393,16 +398,14 @@ $(document).ready(function () {
             console.log("Max stops input enabled, cleared, and styled as normal");
         }
     });
-    
-    
-    
+
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
         $('.loader').show(); // Show the loading icon
-    
+
         // Check the state of the switch to determine the mode for airlines inclusion or exclusion
         let airlineModeSwitchState = $('#airlineModeSwitch').is(':checked');
-    
+
         const requestData = {
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
@@ -421,35 +424,35 @@ $(document).ready(function () {
             select_airlines: $('#excludeAirlines').val().join(','),
             select_airlines_exclude: !airlineModeSwitchState // Set based on the switch state
         };
-    
+
         try {
             const response = await fetch('https://flightwebsiteapp.azurewebsites.net/api/TequilaProxy?code=GhYsupW4LCOGgGU3la2TWS88HV3_O34Z7CpZvQAWx1UVAzFugvTJJA==', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(requestData)
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const tequilaResponse = await response.json();
             console.log('Raw response from Tequila API:', tequilaResponse);
-    
+
             // Store the raw response globally for later use
             globalTequilaResponse = tequilaResponse;
             console.log('Raw response from Tequila API:', tequilaResponse);
-    
+
             if (tequilaResponse.data && tequilaResponse.data.length > 0) {
                 // Since the response is sorted, the first flight has the lowest price
                 const lowestPriceFlight = tequilaResponse.data[0];
                 const roundedPrice = Math.ceil(lowestPriceFlight.price); // Round up the price
                 $('#maxPricePerPerson').val(roundedPrice);
-    
+
                 // Extract unique airlines from the response to update the dropdown
                 const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
                 updateExcludedAirlinesDropdown(uniqueAirlines);
-    
+
                 // Enable the Submit button since a matching flight was found
                 $('#submitFormButton').prop('disabled', false);
                 // Show the Advanced Settings label after suggestPriceLimit is executed
@@ -457,7 +460,7 @@ $(document).ready(function () {
             } else {
                 alert("No flights available for the given parameters. Please adjust your search criteria.");
             }
-    
+
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('There was an error processing your request. Please try again later.');
@@ -465,8 +468,7 @@ $(document).ready(function () {
             $('.loader').hide(); // Hide the loading icon once processing is complete
         }
     }
-    
-    
+
     // This revised version uses the airlinesDict to display names but stores codes as values.
     async function updateExcludedAirlinesDropdown(airlines) {
         // Clear the current options in the dropdown
@@ -484,7 +486,6 @@ $(document).ready(function () {
             allowClear: true
         });
     }
-
 
     // Track the mode based on the switch's position
     let airlineSelectionMode = false; // False for exclude mode, true for include mode
@@ -518,8 +519,6 @@ $(document).ready(function () {
         // Call updatePriceBasedOnSelection to adjust the price field according to the new mode and selected airlines
         updatePriceBasedOnSelection();
     });
-
-
 
     // Add an event listener to the "excludeAirlines" dropdown
     $('#excludeAirlines').on('change', function() {
@@ -555,9 +554,6 @@ $(document).ready(function () {
             $('#maxPricePerPerson').val(''); // Clear the price field
         }
     }
-    
-    
-
 
     // Function to adjust dates based on flexible date switch
     function adjustDatesForFlexibility() {
@@ -591,7 +587,6 @@ $(document).ready(function () {
         returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
     }
 
-
     // Function to calculate suggested price limit
     function calculateSuggestedPriceLimit(currentPriceData) {
         if (currentPriceData && currentPriceData.data && currentPriceData.data.length > 0) {
@@ -609,12 +604,11 @@ $(document).ready(function () {
                 id: iata,
                 text: `${iata} - ${data[iata]}`
             })),
-            placeholder: 'Start typing to search...',
+            placeholder: 'Start typing your destination...',
             allowClear: true,
             width: '100%'
         });
     }
-
 
     // Function to read data from the "airports.txt" file
     async function readAirportsData() {
@@ -661,38 +655,16 @@ $(document).ready(function () {
             return {};
         }
     }
-    
-
-    // Initialize Select2 for the "IATA Code From" and "IATA Code To" fields
-    $('#iataCodeFrom, #iataCodeTo').select2({
-        placeholder: 'Start typing to search...',
-        allowClear: true,
-        width: '100%'
-    });
-
-
-    // Initialize Select2 for the "Exclude Airlines" dropdown
-    $('#excludeAirlines').select2({
-        width: '100%', // Ensures the dropdown matches the width of its container
-        placeholder: 'Select airlines to exclude', // Placeholder text when nothing is selected
-        allowClear: true // Allows users to clear their selection
-    });
-
-
-
-    // Additional code to focus on the search field when Select2 is opened
-    $(document).on('select2:open', () => {
-        document.querySelector('.select2-search__field').focus();
-    });
 
     // Populate the IATA Code From and IATA Code To dropdowns with Select2
     readAirportsData().then(airportData => {
         populateDropdownWithSelect2('#iataCodeFrom', airportData);
         populateDropdownWithSelect2('#iataCodeTo', airportData);
 
-        // Set default values for "From" and "To" fields
+        // Set default values for "From" field
         $('#iataCodeFrom').val('OSL').trigger('change');
-        $('#iataCodeTo').val('PMI').trigger('change');
+        $('#iataCodeTo').val(null).trigger('change');
+        console.log('IataToisStillNul');
 
         // Get query parameters
         const queryParams = getQueryParams();
@@ -703,124 +675,115 @@ $(document).ready(function () {
         }
     });
 
-
-
-
     document.getElementById('sheetyForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    adjustDatesForFlexibility(); // Adjust dates and get them formatted
-    $('.loader').show(); // Show the loader
+        event.preventDefault();
+        adjustDatesForFlexibility(); // Adjust dates and get them formatted
+        $('.loader').show(); // Show the loader
 
-    // Generate a unique token for each submission
-    function generateToken() {
-        if (window.crypto && window.crypto.randomUUID) {
-            return window.crypto.randomUUID();
-        } else {
-            return new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
-        }
-    }
-
-    // Azure Function URL for the SheetyProxy
-    const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/SheetyProxy?code=yt4tWIWvuAOyUAXGb51D3loGGNcVNFrODYJaroWnBGGxAzFuxfFYvA==';
-
-    // Check the state of the switch to determine the mode for airlines inclusion or exclusion
-    let airlineModeSwitchState = $('#airlineModeSwitch').is(':checked');
-    let selectedAirlines = $('#excludeAirlines').val();
-
-    if (airlineModeSwitchState && (!selectedAirlines || selectedAirlines.length === 0)) {
-        alert('Please include at least one airline in your search.');
-        $('#excludeAirlines').select2('open'); // Focus on the airline selection
-        $('.loader').hide(); // Hide the loader if validation fails
-        return; // Exit the function to prevent submission
-    }
-
-    // Extract the times from the noUiSlider
-    const outboundTimes = outboundSlider.noUiSlider.get();
-    let inboundTimes = ['', '']; // Default to empty strings
-    // Only get inbound times if it's not a one-way trip
-    if (!$('#oneWayTrip').is(':checked')) {
-        inboundTimes = inboundSlider.noUiSlider.get();
-    }
-
-    let formData = {
-        price: {
-            iataCodeFrom: extractIATACode('iataCodeFrom'),
-            iataCodeTo: extractIATACode('iataCodeTo'),
-            flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
-            maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
-            currency: document.getElementById('currency').value,
-            maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
-            nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
-            depDateFrom: depDate_From,
-            depDateTo: depDate_To,
-            returnDateFrom: returnDate_From,
-            returnDateTo: returnDate_To,
-            dtimeFrom: outboundTimes[0],
-            dtimeTo: outboundTimes[1],
-            retDtimeFrom: inboundTimes[0],
-            retDtimeTo: inboundTimes[1],
-            maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
-            excludedAirlines: $('#excludeAirlines').val() ? $('#excludeAirlines').val().join(',') : '',
-            exclude: !airlineModeSwitchState, // Set based on the switch state
-            email: document.getElementById('email').value,
-            token: generateToken(),
-            lastFetchedPrice: 0,
-            lowestFetchedPrice: 'null'
-        }
-    };
-
-    console.log('Sending data to SheetyProxy:', formData);
-
-    try {
-        const response = await fetch(azureFunctionUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        // Generate a unique token for each submission
+        function generateToken() {
+            if (window.crypto && window.crypto.randomUUID) {
+                return window.crypto.randomUUID();
+            } else {
+                return new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
+            }
         }
 
-        const json = await response.json();
-        console.log('SheetyProxy response:', json);
+        // Azure Function URL for the SheetyProxy
+        const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/SheetyProxy?code=yt4tWIWvuAOyUAXGb51D3loGGNcVNFrODYJaroWnBGGxAzFuxfFYvA==';
 
-        // Clear form fields
-        document.getElementById('sheetyForm').reset();
+        // Check the state of the switch to determine the mode for airlines inclusion or exclusion
+        let airlineModeSwitchState = $('#airlineModeSwitch').is(':checked');
+        let selectedAirlines = $('#excludeAirlines').val();
 
-        // After successful submission, explicitly clear the price field and any related global variables
-        globalTequilaResponse = null; // Reset global variable holding the response
-        $('#maxPricePerPerson').val(''); // Clear the price field
+        if (airlineModeSwitchState && (!selectedAirlines || selectedAirlines.length === 0)) {
+            alert('Please include at least one airline in your search.');
+            $('#excludeAirlines').select2('open'); // Focus on the airline selection
+            $('.loader').hide(); // Hide the loader if validation fails
+            return; // Exit the function to prevent submission
+        }
 
+        // Extract the times from the noUiSlider
+        const outboundTimes = outboundSlider.noUiSlider.get();
+        let inboundTimes = ['', '']; // Default to empty strings
+        // Only get inbound times if it's not a one-way trip
+        if (!$('#oneWayTrip').is(':checked')) {
+            inboundTimes = inboundSlider.noUiSlider.get();
+        }
 
-        // Show browser alert
-        alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
-    } catch (error) {
-        console.error('Error:', error);
-        alert('There was an error processing your request. Please try again later.');
-    } finally {
-        $('.loader').hide(); // Hide the loader
-    }
+        let formData = {
+            price: {
+                iataCodeFrom: extractIATACode('iataCodeFrom'),
+                iataCodeTo: extractIATACode('iataCodeTo'),
+                flightType: $('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
+                maxPricePerPerson: document.getElementById('maxPricePerPerson').value,
+                currency: document.getElementById('currency').value,
+                maxStops: parseInputValue(parseInt(document.getElementById('maxStops').value)),
+                nbrPassengers: parseInputValue(parseInt(document.getElementById('nbrPassengers').value)),
+                depDateFrom: depDate_From,
+                depDateTo: depDate_To,
+                returnDateFrom: returnDate_From,
+                returnDateTo: returnDate_To,
+                dtimeFrom: outboundTimes[0],
+                dtimeTo: outboundTimes[1],
+                retDtimeFrom: inboundTimes[0],
+                retDtimeTo: inboundTimes[1],
+                maxFlightDuration: parseInputValue(parseFloat(document.getElementById('maxFlightDuration').value)),
+                excludedAirlines: $('#excludeAirlines').val() ? $('#excludeAirlines').val().join(',') : '',
+                exclude: !airlineModeSwitchState, // Set based on the switch state
+                email: document.getElementById('email').value,
+                token: generateToken(),
+                lastFetchedPrice: 0,
+                lowestFetchedPrice: 'null'
+            }
+        };
 
-    // Reset default values for "From" and "To" fields
-    $('#iataCodeFrom').val('OSL').trigger('change');
-    $('#iataCodeTo').val('PMI').trigger('change');
-    // Reset the outbound and inbound time range sliders to default values
-    outboundSlider.noUiSlider.set([0, 24]);
-    inboundSlider.noUiSlider.set([0, 24]);
+        console.log('Sending data to SheetyProxy:', formData);
 
-    // Optionally, if you're changing the text dynamically based on the slider values,
-    // reset those texts here as well
-    document.getElementById('outboundTimeStartDisplay').innerHTML = '0:00';
-    document.getElementById('outboundTimeEndDisplay').innerHTML = '24:00';
-    document.getElementById('inboundTimeStartDisplay').innerHTML = '0:00';
-    document.getElementById('inboundTimeEndDisplay').innerHTML = '24:00';
+        try {
+            const response = await fetch(azureFunctionUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const json = await response.json();
+            console.log('SheetyProxy response:', json);
+
+            // Clear form fields
+            document.getElementById('sheetyForm').reset();
+
+            // After successful submission, explicitly clear the price field and any related global variables
+            globalTequilaResponse = null; // Reset global variable holding the response
+            $('#maxPricePerPerson').val(''); // Clear the price field
+
+            // Show browser alert
+            alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
+        } catch (error) {
+            console.error('Error:', error);
+            alert('There was an error processing your request. Please try again later.');
+        } finally {
+            $('.loader').hide(); // Hide the loader
+        }
+
+        // Reset default values for "From" and "To" fields
+        $('#iataCodeFrom').val('OSL').trigger('change');
+        $('#iataCodeTo').val('PMI').trigger('change');
+        // Reset the outbound and inbound time range sliders to default values
+        outboundSlider.noUiSlider.set([0, 24]);
+        inboundSlider.noUiSlider.set([0, 24]);
+
+        // Optionally, if you're changing the text dynamically based on the slider values,
+        // reset those texts here as well
+        document.getElementById('outboundTimeStartDisplay').innerHTML = '0:00';
+        document.getElementById('outboundTimeEndDisplay').innerHTML = '24:00';
+        document.getElementById('inboundTimeStartDisplay').innerHTML = '0:00';
+        document.getElementById('inboundTimeEndDisplay').innerHTML = '24:00';
+    });
 });
-
-});
-
-
-
-
