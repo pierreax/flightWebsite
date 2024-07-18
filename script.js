@@ -175,6 +175,16 @@ $(document).ready(function () {
         }
     }
 
+    function parseInputValue(value) {
+        if (typeof value === 'string' && value === "NaN/NaN/NaN") {
+            return "";  // Or handle the invalid date case as needed
+        }
+        if (isNaN(value)) {
+            return "";
+        }
+        return value;
+    }
+
     // Initialize Outbound Time Range Slider
     var outboundSlider = document.getElementById('outbound-timeRangeSlider');
     noUiSlider.create(outboundSlider, {
@@ -754,9 +764,9 @@ $(document).ready(function () {
             $('.loader').hide(); // Hide the loader
         }
 
-        // Reset default values for "From" and "To" fields
-        $('#iataCodeFrom').val('OSL').trigger('change');
-        $('#iataCodeTo').val('PMI').trigger('change');
+        // Reset default values for "From" field based on location
+        fetchClosestAirport(city);
+                
         // Reset the outbound and inbound time range sliders to default values
         outboundSlider.noUiSlider.set([0, 24]);
         inboundSlider.noUiSlider.set([0, 24]);
