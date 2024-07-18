@@ -51,6 +51,20 @@ $(document).ready(function () {
         $(this).val('');
     });
 
+    // Prevent default autocomplete behavior
+    $("#iataCodeFrom, #iataCodeTo").on('focus', function() {
+        this.setAttribute('readonly', true);
+        setTimeout(() => {
+            this.removeAttribute('readonly');
+        }, 100);
+    });
+
+    // Force remove the default dropdown arrow
+    $("#iataCodeFrom, #iataCodeTo").on("focus", function () {
+        $(this).attr("autocomplete", "off");
+        $(this).attr("type", "text"); // Ensure the input type is text
+    });
+
     // Function to parse query parameters
     function getQueryParams() {
         const params = new URLSearchParams(window.location.search);

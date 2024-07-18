@@ -251,6 +251,48 @@ input, select {
 #iataCodeTo, #iataCodeFrom {
     text-align: center;
 }
+
+/* General reset for appearance */
+input[list] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Hide the default arrow in input fields with list attribute */
+input[list]::-webkit-calendar-picker-indicator,
+input[list]::-webkit-clear-button,
+input[list]::-webkit-inner-spin-button,
+input[list]::-webkit-outer-spin-button,
+input[list]::-ms-clear,
+input[list]::-ms-expand {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* Ensuring no dropdown on hover or focus */
+input[list]:hover,
+input[list]:focus {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Additional check for input[type="text"] with list attribute */
+input[type="text"][list] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Specific fix for the arrow in some browsers */
+input[type="text"][list]::-webkit-search-cancel-button,
+input[type="text"][list]::-webkit-search-decoration {
+    display: none;
+}
+
+
+
   
 /* Adjustments for the switch icon container */
 .switch-icon-container {
