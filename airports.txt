@@ -5028,8 +5028,6 @@ CUT - Cutral-Co
 CPC - Chapelco/San Martin de los Andes
 CDJ - Conceicao Do Araguaia
 JTC - Bauru
-0 - Rio De Janeiro
-0 - Amapa
 AQA - Araraquara
 AJU - Aracaju
 AIF - Assis
@@ -5050,7 +5048,6 @@ BPG - Barra Do Garcas
 BZC - Cabo Frio
 CAC - Cascavel
 CFB - Cabo Frio
-0 - Cacador
 CNF - Belo Horizonte
 CGR - Campo Grande
 XAP - Chapeco
@@ -5071,16 +5068,13 @@ PPB - Presidente Prudente
 MAO - Manaus
 JCR - Jacareacanga
 ESI - Espinosa
-0 - Sao Pedro Da Aldeia
 IGU - Foz Do Iguacu
 FLN - Florianopolis
 FEN - Fernando De Noronha
-0 - Sao Jose Da Barra
 FOR - Fortaleza
 GIG - Rio De Janeiro
 GJM - Guajara-Mirim
 GYN - Goiania
-0 - Gaviao Peixoto
 GRU - Sao Paulo
 GPB - Guarapuava
 GVR - Governador Valadares
@@ -5090,9 +5084,7 @@ ITA - Itacoatiara
 ITB - Itaituba
 IOS - Ilheus
 IPN - Ipatinga
-0 - Itumbiara
 IMP - Imperatriz
-0 - Belem
 JJD - Jijoca de Jericoacoara
 JDF - Juiz De Fora
 JPA - Joao Pessoa
@@ -5105,7 +5097,6 @@ LAJ - Lages
 LIP - Lins
 LDB - Londrina
 LAZ - Bom Jesus Da Lapa
-0 - Lagoa Santa
 MAB - Maraba
 MQH - Minacu
 MEU - Almeirim
@@ -5132,7 +5123,6 @@ PET - Pelotas
 PNZ - Petrolina
 PNB - Porto Nacional
 PMG - Ponta Pora
-0 - Belo Horizonte
 BPS - Porto Seguro
 PVH - Porto Velho
 VDC - Vitoria Da Conquista
@@ -5158,7 +5148,6 @@ TFF - Tefe
 TJL - Tres Lagoas
 TRQ - Tarauaca
 TEC - Telemaco Borba
-0 - Torres
 TBT - Tabatinga
 TUR - Tucurui
 SJL - Sao Gabriel Da Cachoeira
@@ -5169,7 +5158,6 @@ UBA - Uberaba
 VAG - Varginha
 BVH - Vilhena
 VIX - Vitoria
-0 - Sao Gabriel Da Cachoeira
 QPS - Pirassununga
 IZA - Juiz De Fora
 ZUD - Ancud
@@ -5225,47 +5213,25 @@ TTC - Taltal
 ZAL - Valdivia
 KNA - Vina Del Mar
 CPQ - Campinas
-0 - Santa Ernestina
 QCJ - Botucatu
-0 - Bariri
 OLC - Sao Paulo De Olivenca
 SOD - Sorocaba
-0 - Moncoes
 QDC - Dracena
-0 - Palmares Paulista
-0 - Barretos
-0 - Altair
-0 - Garca
-0 - Jaboticabal
 JLS - Jales
-0 - Sao Joaquim Da Barra
-0 - Morro Agudo
 QOA - Mococa
-0 - Lucelia
-0 - Leme
 QGC - Lencois Paulista
-0 - Matao
-0 - Mirassol
-0 - Mogi Mirim
-0 - Novo Horizonte
-0 - Nova Europa
 QNV - Nova Iguacu
 OUS - Ourinhos
 OIA - Ourilandia Do Norte
-0 - Presidente Venceslau
 QHB - Piracicaba
-0 - Sao Miguel Arcanjo
 QIQ - Rio Claro
 QVP - Avare
 QRZ - Resende
 QSC - Sao Carlos
-0 - Orlandia
-0 - Ubarana
 UBT - Ubatuba
 ITP - Itaperuna
 QGS - Alagoinhas
 VOT - Votuporanga
-0 - Pontal
 QGB - Limeira
 ATF - Ambato
 OCC - Coca
@@ -5307,11 +5273,8 @@ ESG - Mariscal Estigarribia
 OLK - Fuerte Olimpo
 PIL - Pilar
 PJC - Pedro Juan Caballero
-0 - Morro Agudo
-0 - Guaira
 LVR - Lucas do Rio Verde
 FRC - Franca
-0 - Ipigua
 JUA - Juara
 CFO - Confresa
 NPR - Novo Progresso
@@ -5476,31 +5439,24 @@ ORG - Paramaribo
 APY - Alto Parnaiba
 APQ - Arapiraca
 AMJ - Almenara
-0 - Aracaju
 BDC - Barra Do Corda
 BVM - Belmonte
-0 - Boquira
 BRA - Barreiras
 BSS - Balsas
 BMS - Brumado
 BQQ - Barra
-0 - Campo Do Meio
 CTP - Carutapera
 CPU - Cururupu
-0 - Campina Verde
 QCH - Colatina
 RDC - Redencao
 LEP - Leopoldina
 DTI - Diamantina
 DIQ - Divinopolis
 CNV - Canavieiras
-0 - Recife
-0 - Formiga
 SXX - Sao Felix Do Xingu
 GUZ - Guarapari
 GDP - Guadalupe
 GNM - Guanambi
-0 - Grajau
 GMS - Uberlandia
 QGP - Garanhuns
 IRE - Irece
@@ -5515,54 +5471,32 @@ JDR - Sao Joao Del Rei
 CMP - Santana Do Araguaia
 QDF - Conselheiro Lafaiete
 CDI - Cachoeiro Do Itapemirim
-0 - Colinas
 QCP - Currais Novos
 LVB - Livramento Do Brumado
 SSO - Sao Lourenco
 MTE - Monte Alegre
-0 - Mombaca
-0 - Monte Santo De Minas
 MVS - Mucuri
 SBJ - Sao Mateus
 PTQ - Porto De Moz
 NNU - Nanuque
 QBX - Sobral
-0 - Morro Do Chapeu
-0 - Oeiras
-0 - Ouro Fino
-0 - Propria
 PSW - Passos
 FEJ - Feijo
 ORX - Oriximina
-0 - Pastos Bons
 PCS - Picos
 POJ - Patos De Minas
-0 - Piata
-0 - Patrocinio
-0 - Pompeu
-0 - Paraguacu
 PIV - Pirapora
 FLB - Floriano
-0 - Magda
 PDF - Prado
-0 - Rio Paranaiba
 CAU - Caruaru
-0 - Riachao
-0 - Sacramento
-0 - Santarem
 SFK - Soure
 TXF - Teixeira De Freitas
 OBI - Obidos
-0 - Monte Carmelo
 TFL - Teofilo Otoni
-0 - Buritirama
 VAL - Valenca
-0 - Santa Maria Da Vitoria
-0 - Conceicao Das Alagoas
 QID - Tres Coracoes
 BVS - Breves
 CMC - Camocim
-0 - Machado
 QXC - Barra De Santo Antonio
 GGF - Almeirim
 PHI - Pinheiro
@@ -5623,39 +5557,31 @@ PEM - Puerto Maldonado
 PIU - Piura
 CUZ - Cusco
 APU - Apucarana
-0 - Passo Fundo
 BGV - Bento Goncalves
 BNU - Blumenau
-0 - Bandeirantes
 CCI - Concordia
 CSS - Cassilandia
 QCN - Canela
 CKO - Cornelio Procopio
 GGH - Cianorte
 DOU - Dourados
-0 - Sao Sepe
 ERM - Erechim
 FBE - Francisco Beltrao
-0 - Guapore
 QGA - Guaira
 HRZ - Horizontina
 IJU - Ijui
 ITQ - Itaqui
 JCB - Joacaba
-0 - Julio De Castilho
 CBW - Campo Mourao
 QDB - Cachoeira Do Sul
 QCR - Curitibanos
 OAL - Cacoal
-0 - Laguna
 LVB - Itirapina
 LOI - Lontras
 ALQ - Alegrete
 QMF - Mafra
 QGF - Montenegro
 QHV - Novo Hamburgo
-0 - Nonoai
-0 - Nova Prata
 SQX - Sao Miguel Do Oeste
 APX - Arapongas
 AIR - Paracatu
@@ -5663,31 +5589,17 @@ PTO - Pato Branco
 PNG - Paranagua
 PVI - Paranavai
 PBB - Paranaiba
-0 - Tanque Novo
-0 - Mundo Novo
 QAC - Castro
 SQY - Sao Lourenco Do Sul
 QOJ - Sao Borja
 CSU - Santa Cruz Do Sul
-0 - Soledade
-0 - Sao Gabriel
-0 - Sao Joaquim
-0 - Sertanopolis
-0 - Tres Passos
 UMU - Umuarama
 QVB - Uniao Da Vitoria
-0 - Guaira
 VIA - Videira
-0 - Veranopolis
 CTQ - Santa Vitoria Do Palmar
-0 - Pitangueiras
-0 - Venancio Aires
-0 - Cacapava Do Sul
-0 - Sarandi
 AXE - Xanxere
 AAG - Arapoti
 SRA - Santa Rosa
-0 - Centenario Do Sul
 PGZ - Ponta Grossa
 ATI - Artigas
 CYR - Colonia
@@ -5738,14 +5650,10 @@ TUV - Tucupita
 VLN - Valencia
 VIG - El Vigia
 VLV - Valera
-0 - Araguaiana
-0 - Buriti Alegre
 BAZ - Barcelos
 RBB - Borba
 CAF - Carauari
 CQS - Costa Marques
-0 - Cavalcante
-0 - Ceres
 DMT - Diamantino
 DNO - Dianopolis
 ARS - Aragarcas
@@ -5757,7 +5665,6 @@ GRP - Gurupi
 AUX - Araguaina
 GGB - Agua Boa
 HUW - Humaita
-0 - Iaciara
 IPG - Santo Antonio Do Ica
 IDO - Cristalandia
 JPR - Ji-Parana
@@ -5767,7 +5674,6 @@ JTI - Jatai
 CCX - Caceres
 CIZ - Coari
 TLZ - Catalao
-0 - Caceres
 LBR - Labrea
 RVD - Rio Verde
 MBZ - Maues
