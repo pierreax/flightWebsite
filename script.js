@@ -16,10 +16,6 @@ $(document).ready(function () {
             document.querySelector('.select2-container--open .select2-search__field').focus();
         }, 0);
     });
-
-    // Clear initial selection for 'iataCodeTo' after page load
-    $('#iataCodeTo').val(null).trigger('change');
-    console.log('iataCodeisNUL');
     
     // Function to parse query parameters
     function getQueryParams() {
@@ -49,24 +45,16 @@ $(document).ready(function () {
 
     fetchData(); // Call the async function
 
-    // Currencies based on IP-location
-    const defaultCurrencies = {
-        'SE': 'SEK',
-        'US': 'USD',
-        'GB': 'GBP',
-        'NO': 'NOK',
-        'DK': 'DKK'
-        // ... other countries and their default currencies
-    };
 
     // Currencies and City based on IP-location
     $.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
-        const countryCode = response.country_code2;
+        console.log(response);
         city = response.city;
-        const defaultCurrency = defaultCurrencies[countryCode];
-        if (defaultCurrency) {
-            $('#currency').val(defaultCurrency);
-        }
+        currency = response.currency.code;
+        console.log(currency);
+
+        // Update the currency based on the IP-response
+        $('#currency').val(currency).trigger('change');
 
         // Now fetch the IATA code using the Tequila API
         fetchClosestAirport(city);
@@ -664,7 +652,6 @@ $(document).ready(function () {
         // Set default values for "From" field
         $('#iataCodeFrom').val('OSL').trigger('change');
         $('#iataCodeTo').val(null).trigger('change');
-        console.log('IataToisStillNul');
 
         // Get query parameters
         const queryParams = getQueryParams();
