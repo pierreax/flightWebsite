@@ -1,22 +1,56 @@
 $(document).ready(function () {
     console.log("Loaded Site");
 
-    // Initialize Select2 for the "IATA Code From" and "IATA Code To" fields
-    $('#iataCodeFrom, #iataCodeTo').select2({
-        placeholder: function() {
-            $(this).data('placeholder');
-        },
-        allowClear: true,
-        width: '100%',
+    let airportData = {};
+
+    // Initialize the datalists for "IATA Code From" and "IATA Code To"
+    readAirportsData().then(data => {
+        airportData = data;
+        populateDatalist('iataCodeFromList', airportData);
+        populateDatalist('iataCodeToList', airportData);
     });
 
-    // Focus the search field when Select2 opens
-    $(document).on('select2:open', function() {
-        setTimeout(function() {
-            document.querySelector('.select2-container--open .select2-search__field').focus();
-        }, 0);
+    // Function to read data from the "airports.txt" file
+    async function readAirportsData() {
+        try {
+            const response = await fetch('airports.txt');
+            const text = await response.text();
+
+            // Split text into lines and create a dictionary
+            const airportLines = text.split('\n');
+            airportLines.forEach(line => {
+                const [iata, city] = line.split(' - ');
+                if (iata && city) {
+                    airportData[iata.trim()] = city.trim();
+                }
+            });
+
+            return airportData;
+
+        } catch (error) {
+            console.error('Error reading airports data:', error);
+            return {};
+        }
+    }
+
+    // Initialize jQuery UI Autocomplete for the "IATA Code From" and "IATA Code To" fields
+    $("#iataCodeFrom, #iataCodeTo").autocomplete({
+        source: function(request, response) {
+            const results = $.map(airportData, function(value, key) {
+                if (key.toLowerCase().startsWith(request.term.toLowerCase()) || value.toLowerCase().includes(request.term.toLowerCase())) {
+                    return { label: `${key} - ${value}`, value: `${key} - ${value}` };
+                }
+            });
+            response(results.slice(0, 10)); // Limit results to top 10 matches
+        },
+        minLength: 2 // Minimum length of characters before search starts
     });
-    
+
+    // Clear the IATA fields when clicked
+    $("#iataCodeFrom, #iataCodeTo").on('click', function() {
+        $(this).val('');
+    });
+
     // Function to parse query parameters
     function getQueryParams() {
         const params = new URLSearchParams(window.location.search);
@@ -44,7 +78,6 @@ $(document).ready(function () {
     }
 
     fetchData(); // Call the async function
-
 
     // Currencies and City based on IP-location
     $.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
@@ -77,7 +110,7 @@ $(document).ready(function () {
                 if (data.locations && data.locations.length > 0) {
                     const airportIATA = data.locations[0].code;
                     console.log('Closest airport IATA code:', airportIATA);
-                    $('#iataCodeFrom').val(airportIATA).trigger('change');
+                    $('#iataCodeFrom').val(`${airportIATA} - ${airportData[airportIATA]}`).trigger('change');
                 } else {
                     console.log('No airport found for this city:', city);
                 }
@@ -98,7 +131,27 @@ $(document).ready(function () {
         $('#iataCodeFrom').val(toCode).trigger('change');
         $('#iataCodeTo').val(fromCode).trigger('change');
     }
-    
+
+    // Function to extract IATA code
+    function extractIATACode(inputId) {
+        const inputValue = document.getElementById(inputId).value;
+        if (!inputValue) {
+            console.error('Input value not found');
+            return '';
+        }
+        const iataCode = inputValue.split(' - ')[0].trim();
+        const containsAllAirports = inputValue.toLowerCase().includes("all airports");
+
+        // If the Airport Name contains All Airports we need to add city: so that we can search all Airports in the region
+        if (containsAllAirports) {
+            console.log('Adding city: in front of IATA: ', iataCode);
+            return `city:${iataCode}`;
+        } else {
+            console.log('Returning plain IATA: ', iataCode);
+            return iataCode;
+        }
+    }
+
     // Initialize Outbound Time Range Slider
     var outboundSlider = document.getElementById('outbound-timeRangeSlider');
     noUiSlider.create(outboundSlider, {
@@ -268,7 +321,7 @@ $(document).ready(function () {
     });
 
     // When the value of origin (iataCodeFrom) changes
-    $('#iataCodeFrom').on('change', function() {
+    $('#iataCodeFrom').on('input', function() {
         // Clear selections in the "Exclude Airlines" dropdown
         $('#excludeAirlines').val(null).trigger('change');
         $('#excludeAirlines').select2({
@@ -287,7 +340,7 @@ $(document).ready(function () {
     });
 
     // When the value of destination (iataCodeTo) changes
-    $('#iataCodeTo').on('change', function() {
+    $('#iataCodeTo').on('input', function() {
         // Clear selections in the "Exclude Airlines" dropdown
         $('#excludeAirlines').val(null).trigger('change');
 
@@ -296,42 +349,6 @@ $(document).ready(function () {
 
         // Note: You can reinitialize or update the dropdown with any default options here if needed
     });
-
-    // Define the extractIATACode function here so it's available when suggestPriceLimit is called
-    function extractIATACode(elementId) {
-        const selectElement = document.getElementById(elementId);
-        if (!selectElement) {
-            console.error('Select element not found');
-            return '';
-        }
-        const selectedOptionData = $(selectElement).select2('data');
-        if (!selectedOptionData || !selectedOptionData.length) {
-            console.error('No data found in Select2 for: ' + elementId);
-            return '';
-        }
-        const selectedOptionText = selectedOptionData[0].text;
-        const iataCode = selectedOptionText.split(' - ')[0].trim();
-        const containsAllAirports = selectedOptionText.toLowerCase().includes("all airports");
-
-        // If the Airport Name contains All Airports we need to add city: so that we can search all Airports in the region
-        if (containsAllAirports) {
-            console.log('Adding city: in front of IATA: ',iataCode)
-            return `city:${iataCode}`;
-        } else {
-            console.log('Returning plain IATA: ', iataCode)
-            return iataCode;
-        }
-    }
-
-    function parseInputValue(value) {
-        if (typeof value === 'string' && value === "NaN/NaN/NaN") {
-            return "";  // Or handle the invalid date case as needed
-        }
-        if (isNaN(value)) {
-            return "";
-        }
-        return value;
-    }
 
     $('#suggestPriceBtn').on('click', function() {
         // Check if the travel dates are selected
@@ -585,44 +602,6 @@ $(document).ready(function () {
         }
     }
 
-    // Function to populate a dropdown with options using Select2
-    function populateDropdownWithSelect2(selectElement, data) {
-        $(selectElement).select2({
-            data: Object.keys(data).map(iata => ({
-                id: iata,
-                text: `${iata} - ${data[iata]}`
-            })),
-            placeholder: 'Start typing your destination...',
-            allowClear: true,
-            width: '100%'
-        });
-    }
-
-    // Function to read data from the "airports.txt" file
-    async function readAirportsData() {
-        try {
-            const response = await fetch('airports.txt');
-            const text = await response.text();
-
-            // Split text into lines and create a dictionary
-            const airportLines = text.split('\n');
-            const airportData = {};
-
-            airportLines.forEach(line => {
-                const [iata, city] = line.split(' - ');
-                if (iata && city) {
-                    airportData[iata.trim()] = city.trim();
-                }
-            });
-
-            return airportData;
-
-        } catch (error) {
-            console.error('Error reading airports data:', error);
-            return {};
-        }
-    }
-
     // Function to read data from the "airline_data.txt" file
     async function readAirlinesData() {
         try {
@@ -644,23 +623,16 @@ $(document).ready(function () {
         }
     }
 
-    // Populate the IATA Code From and IATA Code To dropdowns with Select2
-    readAirportsData().then(airportData => {
-        populateDropdownWithSelect2('#iataCodeFrom', airportData);
-        populateDropdownWithSelect2('#iataCodeTo', airportData);
-
-        // Set default values for "From" field
-        $('#iataCodeFrom').val('OSL').trigger('change');
-        $('#iataCodeTo').val(null).trigger('change');
-
-        // Get query parameters
-        const queryParams = getQueryParams();
-        if (queryParams.iataCodeTo) {
-            console.log("setting the iataCodeTo as " + queryParams.iataCodeTo);
-            $('#iataCodeTo').val(queryParams.iataCodeTo).trigger('change');
-            console.log($('#iataCodeTo').val());
-        }
-    });
+    function populateDatalist(datalistId, data) {
+        const datalist = document.getElementById(datalistId);
+        datalist.innerHTML = '';
+        Object.keys(data).forEach(key => {
+            const option = document.createElement('option');
+            option.value = `${key} - ${data[key]}`;
+            datalist.appendChild(option);
+        });
+    }
+    
 
     document.getElementById('sheetyForm').addEventListener('submit', async function (event) {
         event.preventDefault();
