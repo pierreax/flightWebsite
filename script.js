@@ -3,11 +3,27 @@ $(document).ready(function () {
 
     let airportData = {};
 
+    // Function to parse query parameters
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const queryParams = {};
+        for (const [key, value] of params.entries()) {
+            queryParams[key] = value;
+        }
+        return queryParams;
+    }
+
     // Initialize the datalists for "IATA Code From" and "IATA Code To"
     readAirportsData().then(data => {
         airportData = data;
         populateDatalist('iataCodeFromList', airportData);
         populateDatalist('iataCodeToList', airportData);
+
+        // Apply URL parameters after data is loaded
+        const queryParams = getQueryParams();
+        if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
+            $('#iataCodeTo').val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
+        }
     });
 
     // Function to read data from the "airports.txt" file
@@ -62,18 +78,11 @@ $(document).ready(function () {
     // Force remove the default dropdown arrow
     $("#iataCodeFrom, #iataCodeTo").on("focus", function () {
         $(this).attr("autocomplete", "off");
-        $(this).attr("type", "text"); // Ensure the input type is text
+        $(this).css("appearance", "none");
+        $(this).css("-webkit-appearance", "none");
+        $(this).css("-moz-appearance", "none");
+        $(this).css("-ms-appearance", "none");
     });
-
-    // Function to parse query parameters
-    function getQueryParams() {
-        const params = new URLSearchParams(window.location.search);
-        const queryParams = {};
-        for (const [key, value] of params.entries()) {
-            queryParams[key] = value;
-        }
-        return queryParams;
-    }
 
     let selectedStartDate = ''; // Variable to store the selected date in flatpickr
     let selectedEndDate = ''; // Variable to store the selected end date in flatpickr
@@ -117,7 +126,7 @@ $(document).ready(function () {
                 'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
             }
         };
-    
+
         fetch(url, options)
             .then(response => response.json())
             .then(data => {
@@ -215,7 +224,7 @@ $(document).ready(function () {
     document.getElementById('advancedSettingsToggle').addEventListener('click', function() {
         var advancedSettings = document.getElementById('advancedSettings');
         var toggleButton = document.getElementById('advancedSettingsToggle');
-        
+
         if (advancedSettings.style.display === 'none' || !advancedSettings.style.display) {
             advancedSettings.style.display = 'block';
             toggleButton.classList.add('expanded'); // Add the 'expanded' class
@@ -229,7 +238,7 @@ $(document).ready(function () {
             toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
         }
     });
-
+    
     // Tool tip function
     $('#helpBtn').on('click', function(event) {
         const tooltip = document.getElementById('tooltip');
