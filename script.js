@@ -748,8 +748,6 @@ $(document).ready(function () {
             const json = await response.json();
             console.log('SheetyProxy response:', json);
 
-            // Clear form fields
-            document.getElementById('sheetyForm').reset();
 
             // After successful submission, explicitly clear the price field and any related global variables
             globalTequilaResponse = null; // Reset global variable holding the response
@@ -757,16 +755,45 @@ $(document).ready(function () {
 
             // Show browser alert
             alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
+
+                // Attempt to send email via Azure Function after the user alert
+                try {
+                    const emailResponse = await fetch('https://flightwebsiteapp.azurewebsites.net/api/SendMail?code=urTgCqRuwcXc8tnQ1xF6sj8vWKRLGs0-NoFKuNHoSFoMAzFuOzIDgg%3D%3D', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            subject: "New submission for your Flight Robot",
+                            body: `Great news, somebody just signed up for your Flight Robot! Here are the details:<br><br>
+                                From: ${extractIATACode('iataCodeFrom')}<br>
+                                To: ${extractIATACode('iataCodeTo')}<br>
+                                Date: ${depDate_From}<br>
+                                Passengers: ${parseInputValue(parseInt(document.getElementById('nbrPassengers').value))}<br>
+                                Email: ${document.getElementById('email').value}<br><br>
+                                Thank you!`,
+                            recipient_email: email
+                        })
+                    });
+        
+                    if (!emailResponse.ok) {
+                        console.error('Failed to send email.');
+                    }
+                } catch (emailError) {
+                    console.error('Error during email sending:', emailError.message);
+                }
         } catch (error) {
             console.error('Error:', error);
             alert('There was an error processing your request. Please try again later.');
         } finally {
             $('.loader').hide(); // Hide the loader
+            // Clear form fields
+            document.getElementById('sheetyForm').reset();
         }
 
         // Reset default values for "From" field based on location
         fetchClosestAirport(city);
-                
+
         // Reset the outbound and inbound time range sliders to default values
         outboundSlider.noUiSlider.set([0, 24]);
         inboundSlider.noUiSlider.set([0, 24]);

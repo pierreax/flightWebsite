@@ -252,13 +252,7 @@ input, select {
     text-align: center;
 }
 
-/* General reset for appearance */
-input[list] {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
-  
+ 
 /* Adjustments for the switch icon container */
 .switch-icon-container {
     display: flex;
@@ -623,6 +617,47 @@ form .form-group .disabled-input {
 /* Reset default mobile browser styles */
 input:-webkit-autofill {
     transition: background-color 5000s ease-in-out 0s;
+}
+
+/* General reset for appearance */
+input[list] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    -ms-appearance: none !important;
+}
+
+/* Hide the default arrow in input fields with list attribute */
+input[list]::-webkit-calendar-picker-indicator,
+input[list]::-webkit-clear-button,
+input[list]::-webkit-inner-spin-button,
+input[list]::-webkit-outer-spin-button,
+input[list]::-ms-clear,
+input[list]::-ms-expand {
+    display: none !important;
+    -webkit-appearance: none !important;
+}
+
+/* Ensuring no dropdown on hover or focus */
+input[list]:hover,
+input[list]:focus {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    -ms-appearance: none !important;
+}
+
+/* Specific fix for the arrow in some browsers */
+input[list]::-webkit-search-cancel-button,
+input[list]::-webkit-search-decoration {
+    display: none !important;
+}
+
+/* Edge-specific CSS hack */
+@supports (-ms-ime-align: auto) {
+    input[list]::-ms-expand {
+        display: none !important;
+    }
 }
 
 
