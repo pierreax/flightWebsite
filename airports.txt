@@ -1069,7 +1069,7 @@ WAW - Warsaw
 WRO - Wroclaw
 IEG - Babimost
 XWP - Hassleholm
-GOT - Gothenburg
+GOT - Gothenburg Landvetter Airport
 JKG - Jonkoping
 LDK - Lidkoping
 GSE - Gothenburg
