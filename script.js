@@ -107,7 +107,7 @@ $(document).ready(function () {
         console.log(response);
         city = response.city;
         currency = response.currency.code;
-        console.log(currency);
+        console.log('Setting the currency to:',currency);
 
         // Update the currency based on the IP-response
         $('#currency').val(currency).trigger('change');
