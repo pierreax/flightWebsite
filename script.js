@@ -290,6 +290,9 @@ $(document).ready(function () {
         altFormat: "j F Y",
         dateFormat: "d-m-Y",
         minDate: "today",
+        locale: {
+            firstDayOfWeek: 1 // Set Monday as the first day of the week
+        },
         onChange: function(selectedDates, dateStr, instance) {
             console.log(selectedDates, dateStr);
             // Update the selected start and end dates
