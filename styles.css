@@ -139,6 +139,7 @@ input, select {
     flex: 1; /* Allow input to grow and fill the space */
     text-align: center; /* Align text to the right */
     color: var(--text-color);
+    background-color: var(--background-color) !important;
 }
   
 .date-field input::placeholder {
@@ -165,7 +166,6 @@ input, select {
 .form-group input,
 .form-group select {
     flex: 1;
-    text-align: right;
 }
   
 /* Floating label styles */
@@ -209,8 +209,14 @@ input, select {
     width: 100%; /* Ensures the div takes up the full width of its parent */
 }
   
-.switch {
-    margin: 0 auto; /* Centers the switch within its div container */
+.form-group.switches .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px; /* Width of the switch */
+    height: 20px; /* Height of the switch */
+    margin: 5px 0;
+    background-color: var(--slider-bg); /* Fallback color if slider doesn’t render correctly */
+    border-radius: 24px;
 }
   
 /* Adjusts label to be centered above switch */
@@ -507,16 +513,18 @@ input[type="submit"]:active {
   
 /* The slider */
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--slider-bg);
-  transition: .4s;
-  border-radius: 24px; /* Fully rounded corners for the slider */
-}
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--slider-bg);
+    transition: .4s;
+    border-radius: 24px; /* Fully rounded corners for the slider */
+  }
+
+  
   
 .slider:before {
   position: absolute;
@@ -524,14 +532,13 @@ input[type="submit"]:active {
   height: 20px; /* Height of the circle inside the slider */
   width: 20px; /* Width of the circle inside the slider */
   left: 0px;
-  bottom: 2px;
   background-color: white;
   transition: .4s;
   border-radius: 50%; /* Circular shape for the slider */
 }
   
 input:checked + .slider {
-  background-color: var(--slider-active-bg); /* Color when the switch is active/checked */
+  background-color: var(--slider-active-bg) !important; /* Color when the switch is active/checked */
 }
   
 input:focus + .slider {
@@ -539,12 +546,13 @@ input:focus + .slider {
 }
   
 input:checked + .slider:before {
-  transform: translateX(18px); /* Slide the circle to the right on check */
+  transform: translateX(20px); /* Slide the circle to the right on check */
 }
   
 /* Rounded sliders */
 .slider.round {
   border-radius: 24px;
+  background-color: #ccc !important;
 }
   
 .slider.round:before {
@@ -602,6 +610,77 @@ form .form-group .disabled-input {
     background-color: var(--slider-bg); /* Light gray for background */
     color: #9e9e9e; /* Dimmed text color */
 }
+
+
+/* Modal Styles */
+.modal-content {
+    background-color: var(--input-background);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Avenir Light', sans-serif;
+}
+
+/* Modal Header */
+.modal-header {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.2em;
+    font-weight: normal;
+    padding: 15px;
+}
+
+.modal-title {
+    font-family: 'Avenir Light', sans-serif;
+}
+
+/* Close button in header */
+.modal-header .btn-close {
+    color: var(--text-color);
+    opacity: 1;
+    background: transparent;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 20px;
+    color: var(--text-color);
+    font-size: 1em;
+    text-align: center;
+}
+
+/* Modal Footer */
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 15px;
+    justify-content: center;
+}
+
+/* Buttons inside Modal */
+.modal-footer .btn-primary {
+    background-color: var(--button-bg);
+    border: none;
+    color: white;
+    font-family: 'Avenir Light', sans-serif;
+    transition: background-color 0.3s;
+}
+
+.modal-footer .btn-primary:hover {
+    background-color: var(--button-hover-bg);
+}
+
+.modal-footer .btn-secondary {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-family: 'Avenir Light', sans-serif;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: var(--input-background);
+}
+
   
 /* Safari */
 @-webkit-keyframes spin {

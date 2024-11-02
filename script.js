@@ -93,6 +93,11 @@ $(document).ready(function () {
     let globalTequilaResponse = null; // Global variable to store the raw JSON response from Tequila API
     let airlinesDict = {};     // Global variable to store airline data for lookup
     let city = '';  // Global variable to store the City that the user is browsing from to set iataCodeFrom
+    let redirectEmail ='';
+    let redirectIataCodeTo ='';
+    let redirectCurrency ='';
+    let redirectCity ='';
+    let redirectUrl ='';
 
     // Async function to fetch and store airline names at the start
     async function fetchData() {
@@ -658,6 +663,52 @@ $(document).ready(function () {
             return {};
         }
     }
+    
+    function askForHotelTracking() {
+        console.log('modal is shown.');
+        $('#hotelTrackingModal').modal('show');
+    }
+    
+
+    // Function to fetch city name based on the IATA code
+    async function fetchCityFromIATACode(redirectIataCodeTo) {
+        const url = `https://tequila-api.kiwi.com/locations/query?term=${encodeURIComponent(redirectIataCodeTo)}&location_types=airport&limit=1`;
+        console.log(url);
+        const options = {
+            method: 'GET',
+            headers: {
+                'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+            console.log(data);
+            
+            if (data.locations && data.locations.length > 0) {
+                return data.locations[0].city.name || '';
+            }
+        } catch (error) {
+            console.error('Error fetching city from IATA code:', error);
+        }
+        return '';
+    }
+
+    // Event listener for the confirm button in the modal
+    $('#confirmHotelTracker').on('click', async function() {     
+        // Redirect to hotel tracker form with parameters
+        console.log(redirectUrl);
+        window.location.href = redirectUrl;
+    });
+
+    
+    // Optionally handle the modal dismissal
+    $('.modal-footer .btn-secondary').on('click', function() {
+        console.log('No is selected, clearing the form.');
+    });
+    
+    
 
     function populateDatalist(datalistId, data) {
         const datalist = document.getElementById(datalistId);
@@ -751,13 +802,21 @@ $(document).ready(function () {
             const json = await response.json();
             console.log('SheetyProxy response:', json);
 
+            // Capture IATA code, email, and currency
+            redirectEmail = encodeURIComponent($('#email').val());
+            redirectCurrency = encodeURIComponent($('#currency').val());
+            redirectIataCodeTo = $('#iataCodeTo').val().split(' - ')[0];
+            console.log(redirectIataCodeTo);
 
-            // After successful submission, explicitly clear the price field and any related global variables
-            globalTequilaResponse = null; // Reset global variable holding the response
-            $('#maxPricePerPerson').val(''); // Clear the price field
 
-            // Show browser alert
-            alert('Thank you for your submission! We will check prices daily and let you know when we find a matching flight!');
+
+            // Fetch city name and redirect to hotel tracker URL
+            redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
+            redirectUrl = `https://www.robotize.no/hotels?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
+
+            // Ask for Hotel tracker
+            askForHotelTracking();
+
 
                 // Attempt to send email via Azure Function after the user alert
                 try {
@@ -791,6 +850,9 @@ $(document).ready(function () {
         } finally {
             $('.loader').hide(); // Hide the loader
             // Clear form fields
+            // After successful submission, explicitly clear the price field and any related global variables
+            globalTequilaResponse = null; // Reset global variable holding the response
+            $('#maxPricePerPerson').val(''); // Clear the price field
             document.getElementById('sheetyForm').reset();
         }
 
