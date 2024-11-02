@@ -701,7 +701,7 @@ $j(document).ready(function () {
     $('#confirmHotelTracker').on('click', async function() {     
         // Redirect to hotel tracker form with parameters
         console.log(redirectUrl);
-        window.location.href = redirectUrl;
+        top.location.href = redirectUrl;
     });
 
     
