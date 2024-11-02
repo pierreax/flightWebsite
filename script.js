@@ -294,8 +294,8 @@ $j(document).ready(function () {
     const flatpickrInstance = flatpickr("#dateField", {
         altInput: true,
         mode: "range",
-        altFormat: "j F Y",
-        dateFormat: "d-m-Y",
+        altFormat: "j M Y",
+        dateFormat: "j M Y",
         minDate: "today",
         locale: {
             firstDayOfWeek: 1 // Set Monday as the first day of the week
