@@ -1,4 +1,6 @@
-$(document).ready(function () {
+const $j = jQuery.noConflict();
+
+$j(document).ready(function () {
     console.log("Loaded Site");
 
     let airportData = {};
@@ -666,7 +668,7 @@ $(document).ready(function () {
     
     function askForHotelTracking() {
         console.log('modal is shown.');
-        $('#hotelTrackingModal').modal('show');
+        $j('#hotelTrackingModal').modal('show');
     }
     
 
