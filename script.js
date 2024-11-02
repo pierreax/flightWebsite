@@ -674,30 +674,23 @@ $j(document).ready(function () {
     }
     
 
-    // Function to fetch city name based on the IATA code
+    // Updated function to use Azure Function as the middle layer
     async function fetchCityFromIATACode(redirectIataCodeTo) {
-        const url = `https://tequila-api.kiwi.com/locations/query?term=${encodeURIComponent(redirectIataCodeTo)}&location_types=airport&limit=1`;
-        console.log(url);
-        const options = {
-            method: 'GET',
-            headers: {
-                'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
-            }
-        };
+        const azureFunctionUrl = `https://flightwebsiteapp.azurewebsites.net/api/getCityByIATA?code=6iDcU0ch2kn7UWPbXl-Uz1pt4B4q03EpSOoe1wxumEr8AzFuTc5gxg%3D%3D&iataCode=${encodeURIComponent(redirectIataCodeTo)}`;
 
         try {
-            const response = await fetch(url, options);
+            const response = await fetch(azureFunctionUrl);
             const data = await response.json();
             console.log(data);
-            
-            if (data.locations && data.locations.length > 0) {
-                return data.locations[0].city.name || '';
-            }
+
+            return data.city || '';
         } catch (error) {
             console.error('Error fetching city from IATA code:', error);
         }
         return '';
     }
+
+
 
     // Event listener for the confirm button in the modal
     $j('#confirmHotelTracker').on('click', async function() {     
