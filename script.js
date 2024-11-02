@@ -832,11 +832,11 @@ $j(document).ready(function () {
                         body: JSON.stringify({
                             subject: "New submission for your Flight Robot",
                             body: `Great news, somebody just signed up for your Flight Robot! Here are the details:<br><br>
-                                From: $j{extractIATACode('iataCodeFrom')}<br>
-                                To: $j{extractIATACode('iataCodeTo')}<br>
-                                Date: $j{depDate_From}<br>
-                                Passengers: $j{parseInputValue(parseInt(document.getElementById('nbrPassengers').value))}<br>
-                                Email: $j{document.getElementById('email').value}<br><br>
+                                From: ${extractIATACode('iataCodeFrom')}<br>
+                                To: ${extractIATACode('iataCodeTo')}<br>
+                                Date: ${depDate_From}<br>
+                                Passengers: ${parseInputValue(parseInt(document.getElementById('nbrPassengers').value))}<br>
+                                Email: ${document.getElementById('email').value}<br><br>
                                 Thank you!`,
                             recipient_email: email
                         })
