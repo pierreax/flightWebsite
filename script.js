@@ -505,7 +505,7 @@ $j(document).ready(function () {
     
             // Store the raw response globally for later use
             globalTequilaResponse = tequilaResponse;
-            console.log('Raw response from Tequila API:', tequilaResponse);
+
 
             if (tequilaResponse.data && tequilaResponse.data.length > 0) {
                 // Since the response is sorted, the first flight has the lowest price
@@ -719,6 +719,7 @@ $j(document).ready(function () {
     // Optionally handle the modal dismissal
     $j('.modal-footer .btn-secondary').on('click', function() {
         console.log('No is selected, clearing the form.');
+        location.reload();
     });
     
     
@@ -826,8 +827,6 @@ $j(document).ready(function () {
 
             // Ask for Hotel tracker
             askForHotelTracking();
-
-
                 // Attempt to send email via backend API after the user alert
                 try {
                     const emailResponse = await fetch('/api/sendMail', {
@@ -860,35 +859,7 @@ $j(document).ready(function () {
             alert('There was an error processing your request. Please try again later.');
         } finally {
             $j('.loader').hide(); // Hide the loader
-            // Clear form fields
-            // After successful submission, explicitly clear the price field and any related global variables
-            globalTequilaResponse = null; // Reset global variable holding the response
-            $j('#maxPricePerPerson').val(''); // Clear the price field
-            document.getElementById('sheetyForm').reset();
         }
 
-        updateCurrencyAndLocation(); //Populate currency and iataCodeFrom
-
-        // Reset default values for "From" field based on location
-        fetchClosestAirport(city);
-
-        // Reset the outbound and inbound time range sliders to default values
-        outboundSlider.noUiSlider.set([0, 24]);
-        inboundSlider.noUiSlider.set([0, 24]);
-
-        // Show inboud routes if hidden
-        $j('#inbound-timeRangeSlider').show();
-        $j('#inbound-timeRangeDisplay').show();
-
-        //Reset flatpicker
-        flatpickrInstance.set('mode', 'range');
-        flatpickrInstance.clear(); // This clears the selection
-
-        // Optionally, if you're changing the text dynamically based on the slider values,
-        // reset those texts here as well
-        document.getElementById('outboundTimeStartDisplay').innerHTML = '0:00';
-        document.getElementById('outboundTimeEndDisplay').innerHTML = '24:00';
-        document.getElementById('inboundTimeStartDisplay').innerHTML = '0:00';
-        document.getElementById('inboundTimeEndDisplay').innerHTML = '24:00';
     });
 });
