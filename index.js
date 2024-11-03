@@ -1,10 +1,15 @@
 const express = require('express');
+const path = require('path');
+
 const app = express();
+const port = process.env.PORT || 8080;
 
-const port = process.env.PORT || 8080; // Use the environment variable for the port
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname)));
 
+// Send index.html file for the root path
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(port, () => {
