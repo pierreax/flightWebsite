@@ -611,6 +611,13 @@ form .form-group .disabled-input {
     color: #9e9e9e; /* Dimmed text color */
 }
 
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    min-height: 100vh; /* Ensures it covers the full viewport height */
+}
+
+
 
 /* Modal Styles */
 .modal-content {
