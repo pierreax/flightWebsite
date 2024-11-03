@@ -109,22 +109,29 @@ $j(document).ready(function () {
 
     fetchData(); // Call the async function
 
-    // Currencies and Location based on IP-location
-    $j.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
-        console.log(response);
 
-        const currency = response.currency.code;
-        const latitude = response.latitude;
-        const longitude = response.longitude;
+    // Function to get currency and location based on IP and update currency field
+    function updateCurrencyAndLocation() {
+        $j.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
+            console.log(response);
 
-        console.log('Setting the currency to:', currency);
+            const currency = response.currency.code;
+            const latitude = response.latitude;
+            const longitude = response.longitude;
 
-        // Update the currency based on the IP-response
-        $j('#currency').val(currency).trigger('change');
+            console.log('Setting the currency to:', currency);
 
-        // Now fetch the IATA code using the Azure Function as a middle layer with coordinates
-        fetchClosestAirport(latitude, longitude);
-    });
+            // Update the currency based on the IP-response
+            $j('#currency').val(currency).trigger('change');
+
+            // Fetch the IATA code using the Azure Function as a middle layer with coordinates
+            fetchClosestAirport(latitude, longitude);
+        }).fail(function(error) {
+            console.error("Error fetching IP-based location and currency:", error);
+        });
+    }
+
+    updateCurrencyAndLocation(); //Populate currency and iataCodeFrom
 
     // Function to fetch the closest airport using coordinates through the backend
     async function fetchClosestAirport(latitude, longitude) {
@@ -860,12 +867,21 @@ $j(document).ready(function () {
             document.getElementById('sheetyForm').reset();
         }
 
+        updateCurrencyAndLocation(); //Populate currency and iataCodeFrom
+
         // Reset default values for "From" field based on location
         fetchClosestAirport(city);
 
         // Reset the outbound and inbound time range sliders to default values
         outboundSlider.noUiSlider.set([0, 24]);
         inboundSlider.noUiSlider.set([0, 24]);
+
+        // Show inboud routes if hidden
+        $j('#inbound-timeRangeSlider').show();
+        $j('#inbound-timeRangeDisplay').show();
+
+        //Reset flatpicker
+        flatpickrInstance.set('mode', 'range');
 
         // Optionally, if you're changing the text dynamically based on the slider values,
         // reset those texts here as well
