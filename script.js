@@ -126,22 +126,53 @@ $j(document).ready(function () {
         fetchClosestAirport(latitude, longitude);
     });
 
-    // Function to fetch the closest airport using coordinates via Azure Function
+    // Function to fetch the closest airport using coordinates directly via Amadeus API
     async function fetchClosestAirport(latitude, longitude) {
         console.log('Searching closest airport to coordinates:', latitude, longitude);
 
-        const azureFunctionUrl = `https://flightwebsiteapp.azurewebsites.net/api/getIATAByLocation?code=IQZK4KI-vgB4_HphYQRTq5deOk6ZRTHE1DvlQZAtB50aAzFuHG8yww==&latitude=${latitude}&longitude=${longitude}`;
+        const tokenUrl = 'https://api.amadeus.com/v1/security/oauth2/token';
+        const amadeusUrl = `https://api.amadeus.com/v1/reference-data/locations/airports?latitude=${latitude}&longitude=${longitude}`;
+        const clientId = process.env.AMADEUS_API_KEY;  // Make sure these are securely stored in environment variables
+        const clientSecret = process.env.AMADEUS_API_SECRET;
 
         try {
-            const response = await fetch(azureFunctionUrl);
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            // Step 1: Obtain access token
+            const tokenResponse = await fetch(tokenUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    grant_type: 'client_credentials',
+                    client_id: clientId,
+                    client_secret: clientSecret
+                })
+            });
+
+            if (!tokenResponse.ok) {
+                throw new Error(`Failed to obtain token: ${tokenResponse.status} - ${tokenResponse.statusText}`);
             }
 
-            const data = await response.json();
-            if (data && data.iataCode) { // Check for iataCode, not airportIATA
-                const airportIATA = data.iataCode;
+            const tokenData = await tokenResponse.json();
+            const accessToken = tokenData.access_token;
+            console.log('Access token obtained successfully.');
+
+            // Step 2: Request nearest airport with access token
+            const amadeusResponse = await fetch(amadeusUrl, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+
+            if (!amadeusResponse.ok) {
+                throw new Error(`Failed to fetch airport data: ${amadeusResponse.status} - ${amadeusResponse.statusText}`);
+            }
+
+            const amadeusData = await amadeusResponse.json();
+            const airports = amadeusData.data;
+            if (airports && airports.length > 0) {
+                const nearestAirport = airports[0];
+                const airportIATA = nearestAirport.iataCode;
                 console.log('Closest airport IATA code:', airportIATA);
+
                 // Assuming airportData is an object mapping IATA codes to airport names
                 $j('#iataCodeFrom').val(`${airportIATA} - ${airportData[airportIATA] || ''}`).trigger('change');
             } else {
@@ -151,6 +182,7 @@ $j(document).ready(function () {
             console.error('Error fetching airport data:', error);
         }
     }
+
 
 
     // Attach the click event handler to the switch icon
@@ -453,10 +485,9 @@ $j(document).ready(function () {
     async function suggestPriceLimit() {
         console.log("Sending Current Price request");
         $j('.loader').show(); // Show the loading icon
-
-        // Check the state of the switch to determine the mode for airlines inclusion or exclusion
+    
         let airlineModeSwitchState = $j('#airlineModeSwitch').is(':checked');
-
+    
         const requestData = {
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
@@ -473,54 +504,49 @@ $j(document).ready(function () {
             ret_dtime_from: $j('#oneWayTrip').is(':checked') ? '' : inboundSlider.noUiSlider.get()[0],
             ret_dtime_to: $j('#oneWayTrip').is(':checked') ? '' : inboundSlider.noUiSlider.get()[1],
             select_airlines: $j('#excludeAirlines').val().join(','),
-            select_airlines_exclude: !airlineModeSwitchState // Set based on the switch state
+            select_airlines_exclude: !airlineModeSwitchState
         };
-
+    
         console.log(requestData);
-
+    
         try {
-            const response = await fetch('https://flightwebsiteapp.azurewebsites.net/api/TequilaProxy?code=GhYsupW4LCOGgGU3la2TWS88HV3_O34Z7CpZvQAWx1UVAzFugvTJJA==', {
+            const response = await fetch('/api/suggestPriceLimit', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestData)
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const tequilaResponse = await response.json();
             console.log('Raw response from Tequila API:', tequilaResponse);
-
-            // Store the raw response globally for later use
+    
             globalTequilaResponse = tequilaResponse;
-            console.log('Raw response from Tequila API:', tequilaResponse);
-
+    
             if (tequilaResponse.data && tequilaResponse.data.length > 0) {
-                // Since the response is sorted, the first flight has the lowest price
                 const lowestPriceFlight = tequilaResponse.data[0];
-                const roundedPrice = Math.ceil(lowestPriceFlight.price); // Round up the price
+                const roundedPrice = Math.ceil(lowestPriceFlight.price);
                 $j('#maxPricePerPerson').val(roundedPrice);
-
-                // Extract unique airlines from the response to update the dropdown
+    
                 const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
                 updateExcludedAirlinesDropdown(uniqueAirlines);
-
-                // Enable the Submit button since a matching flight was found
+    
                 $j('#submitFormButton').prop('disabled', false);
-                // Show the Advanced Settings label after suggestPriceLimit is executed
                 $j('#advancedSettingsToggle').show();
             } else {
                 alert("No flights available for the given parameters. Please adjust your search criteria.");
             }
-
+    
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('There was an error processing your request. Please try again later.');
         } finally {
-            $j('.loader').hide(); // Hide the loading icon once processing is complete
+            $j('.loader').hide();
         }
     }
+    
 
     // This revised version uses the airlinesDict to display names but stores codes as values.
     async function updateExcludedAirlinesDropdown(airlines) {
@@ -677,21 +703,21 @@ $j(document).ready(function () {
     }
     
 
-    // Updated function to use Azure Function as the middle layer
     async function fetchCityFromIATACode(redirectIataCodeTo) {
-        const azureFunctionUrl = `https://flightwebsiteapp.azurewebsites.net/api/getCityByIATA?code=6iDcU0ch2kn7UWPbXl-Uz1pt4B4q03EpSOoe1wxumEr8AzFuTc5gxg%3D%3D&iataCode=${encodeURIComponent(redirectIataCodeTo)}`;
-
+        const backendUrl = `/api/getCityByIATA?iataCode=${encodeURIComponent(redirectIataCodeTo)}`;
+    
         try {
-            const response = await fetch(azureFunctionUrl);
+            const response = await fetch(backendUrl);
             const data = await response.json();
             console.log(data);
-
+    
             return data.city || '';
         } catch (error) {
             console.error('Error fetching city from IATA code:', error);
         }
         return '';
     }
+    
 
 
 
@@ -734,9 +760,6 @@ $j(document).ready(function () {
                 return new Date().getTime().toString(36) + Math.random().toString(36).slice(2);
             }
         }
-
-        // Azure Function URL for the SheetyProxy
-        const azureFunctionUrl = 'https://flightwebsiteapp.azurewebsites.net/api/SheetyProxy?code=yt4tWIWvuAOyUAXGb51D3loGGNcVNFrODYJaroWnBGGxAzFuxfFYvA==';
 
         // Check the state of the switch to determine the mode for airlines inclusion or exclusion
         let airlineModeSwitchState = $j('#airlineModeSwitch').is(':checked');
@@ -787,7 +810,7 @@ $j(document).ready(function () {
         console.log('Sending data to SheetyProxy:', formData);
 
         try {
-            const response = await fetch(azureFunctionUrl, {
+            const response = await fetch('/api/sheetyProxy', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -818,9 +841,9 @@ $j(document).ready(function () {
             askForHotelTracking();
 
 
-                // Attempt to send email via Azure Function after the user alert
+                // Attempt to send email via backend API after the user alert
                 try {
-                    const emailResponse = await fetch('https://flightwebsiteapp.azurewebsites.net/api/SendMail?code=urTgCqRuwcXc8tnQ1xF6sj8vWKRLGs0-NoFKuNHoSFoMAzFuOzIDgg%3D%3D', {
+                    const emailResponse = await fetch('/api/sendMail', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -834,16 +857,17 @@ $j(document).ready(function () {
                                 Passengers: ${parseInputValue(parseInt(document.getElementById('nbrPassengers').value))}<br>
                                 Email: ${document.getElementById('email').value}<br><br>
                                 Thank you!`,
-                            recipient_email: email
+                            recipient_email: document.getElementById('email').value  // Using recipient email directly from form input
                         })
                     });
-        
+
                     if (!emailResponse.ok) {
-                        console.error('Failed to send email.');
+                        throw new Error('Failed to send email.');
                     }
                 } catch (emailError) {
                     console.error('Error during email sending:', emailError.message);
                 }
+
         } catch (error) {
             console.error('Error:', error);
             alert('There was an error processing your request. Please try again later.');
