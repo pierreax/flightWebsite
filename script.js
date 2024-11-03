@@ -496,7 +496,28 @@ $j(document).ready(function () {
             const tequilaResponse = await response.json();
             console.log('Raw response from Tequila API:', tequilaResponse);
     
-            // Process tequilaResponse as needed
+            // Store the raw response globally for later use
+            globalTequilaResponse = tequilaResponse;
+            console.log('Raw response from Tequila API:', tequilaResponse);
+
+            if (tequilaResponse.data && tequilaResponse.data.length > 0) {
+                // Since the response is sorted, the first flight has the lowest price
+                const lowestPriceFlight = tequilaResponse.data[0];
+                const roundedPrice = Math.ceil(lowestPriceFlight.price); // Round up the price
+                $j('#maxPricePerPerson').val(roundedPrice);
+
+                // Extract unique airlines from the response to update the dropdown
+                const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
+                updateExcludedAirlinesDropdown(uniqueAirlines);
+
+                // Enable the Submit button since a matching flight was found
+                $j('#submitFormButton').prop('disabled', false);
+                // Show the Advanced Settings label after suggestPriceLimit is executed
+                $j('#advancedSettingsToggle').show();
+            } else {
+                alert("No flights available for the given parameters. Please adjust your search criteria.");
+            }
+
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('There was an error processing your request. Please try again later.');
