@@ -464,8 +464,8 @@ $j(document).ready(function () {
         $j('.loader').show(); // Show the loading icon
     
         let airlineModeSwitchState = $j('#airlineModeSwitch').is(':checked');
-    
-        const requestData = {
+        
+        const params = new URLSearchParams({
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
             dateFrom: depDate_From,
@@ -473,7 +473,7 @@ $j(document).ready(function () {
             returnFrom: returnDate_From,
             returnTo: returnDate_To,
             maxStops: parseInt($j('#maxStops').val()),
-            maxFlyDuration: parseFloat($j('#maxFlightDuration').val()),
+            maxFlyDuration: parseFloat($j('#maxFlightDuration').val()) || '', // avoid NaN
             flightType: $j('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
             currency: $j('#currency').val(),
             dtime_from: outboundSlider.noUiSlider.get()[0],
@@ -482,15 +482,11 @@ $j(document).ready(function () {
             ret_dtime_to: $j('#oneWayTrip').is(':checked') ? '' : inboundSlider.noUiSlider.get()[1],
             select_airlines: $j('#excludeAirlines').val().join(','),
             select_airlines_exclude: !airlineModeSwitchState
-        };
-    
-        console.log(requestData);
+        });
     
         try {
-            const response = await fetch('/api/suggestPriceLimit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData)
+            const response = await fetch(`/api/suggestPriceLimit?${params.toString()}`, {
+                method: 'GET'
             });
     
             if (!response.ok) {
@@ -500,22 +496,7 @@ $j(document).ready(function () {
             const tequilaResponse = await response.json();
             console.log('Raw response from Tequila API:', tequilaResponse);
     
-            globalTequilaResponse = tequilaResponse;
-    
-            if (tequilaResponse.data && tequilaResponse.data.length > 0) {
-                const lowestPriceFlight = tequilaResponse.data[0];
-                const roundedPrice = Math.ceil(lowestPriceFlight.price);
-                $j('#maxPricePerPerson').val(roundedPrice);
-    
-                const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
-                updateExcludedAirlinesDropdown(uniqueAirlines);
-    
-                $j('#submitFormButton').prop('disabled', false);
-                $j('#advancedSettingsToggle').show();
-            } else {
-                alert("No flights available for the given parameters. Please adjust your search criteria.");
-            }
-    
+            // Process tequilaResponse as needed
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('There was an error processing your request. Please try again later.');
@@ -523,6 +504,7 @@ $j(document).ready(function () {
             $j('.loader').hide();
         }
     }
+    
     
 
     // This revised version uses the airlinesDict to display names but stores codes as values.

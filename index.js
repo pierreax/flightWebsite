@@ -65,17 +65,39 @@ app.get('/api/getCityByIATA', async (req, res) => {
 });
 
 // Route to suggest price limit using Tequila API
-app.post('/api/suggestPriceLimit', async (req, res) => {
-    const requestData = req.body;
+app.get('/api/suggestPriceLimit', async (req, res) => {
+    const {
+        origin, destination, dateFrom, dateTo, returnFrom, returnTo,
+        maxStops, maxFlyDuration, flightType, currency, dtime_from,
+        dtime_to, ret_dtime_from, ret_dtime_to, select_airlines,
+        select_airlines_exclude
+    } = req.query;
+
+    const queryParams = new URLSearchParams({
+        fly_from: origin,
+        fly_to: destination,
+        date_from: dateFrom,
+        date_to: dateTo,
+        return_from: returnFrom,
+        return_to: returnTo,
+        max_stopovers: maxStops,
+        max_fly_duration: maxFlyDuration,
+        flight_type: flightType,
+        curr: currency,
+        dtime_from,
+        dtime_to,
+        ret_dtime_from,
+        ret_dtime_to,
+        select_airlines,
+        select_airlines_exclude: select_airlines_exclude ? "1" : "0"
+    });
 
     try {
-        const response = await fetch('https://tequila-api.kiwi.com/v2/search', {
-            method: 'POST',
+        const response = await fetch(`https://tequila-api.kiwi.com/v2/search?${queryParams.toString()}`, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'apikey': process.env.TEQUILA_API_KEY
-            },
-            body: JSON.stringify(requestData)
+            }
         });
 
         const data = await response.json();
@@ -85,6 +107,7 @@ app.post('/api/suggestPriceLimit', async (req, res) => {
         res.status(500).json({ error: "Failed to suggest price limit" });
     }
 });
+
 
 // Microsoft Graph setup for sending emails
 const TENANT_ID = process.env.EMAIL_TENANT_ID;
