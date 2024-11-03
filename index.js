@@ -46,6 +46,53 @@ app.post('/api/getClosestAirport', async (req, res) => {
     }
 });
 
+// Route for Sheety Proxy
+app.post('/api/sheetyProxy', async (req, res) => {
+    const formData = req.body;
+    const sheetyApiUrl = process.env.SHEETY_API_URL; // Set your Sheety API URL in environment variables
+    const sheetyToken = process.env.SHEETY_TOKEN; // Set your Sheety API token in environment variables
+
+    try {
+        const sheetyResponse = await fetch(sheetyApiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sheetyToken}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!sheetyResponse.ok) {
+            // Handle non-2xx responses
+            const errorData = await sheetyResponse.json();
+            console.error(`Error posting data to Sheety: ${sheetyResponse.status} - ${sheetyResponse.statusText}`);
+            console.error(`Response data: ${JSON.stringify(errorData)}`);
+            return res.status(sheetyResponse.status).json(errorData);
+        }
+
+        const responseData = await sheetyResponse.json();
+        res.status(200).json(responseData); // Return Sheety's response to the client
+
+    } catch (error) {
+        console.error("Error posting data to Sheety:", error.message);
+
+        if (error.response) {
+            // Sheety responded with an error status
+            console.error(`Response status: ${error.response.status}`);
+            console.error(`Response data: ${JSON.stringify(error.response.data)}`);
+            res.status(error.response.status).json(error.response.data || { error: 'Error occurred while posting data to Sheety.' });
+        } else if (error.request) {
+            // No response received from Sheety
+            console.error(`No response received from Sheety: ${error.message}`);
+            res.status(500).json({ error: 'No response received from Sheety.' });
+        } else {
+            // Error setting up the request
+            console.error(`Error setting up request to Sheety: ${error.message}`);
+            res.status(500).json({ error: 'Error setting up request to Sheety.' });
+        }
+    }
+});
+
 // Route to fetch city by IATA code using Tequila API
 app.get('/api/getCityByIATA', async (req, res) => {
     const { iataCode } = req.query;
