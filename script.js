@@ -126,48 +126,25 @@ $j(document).ready(function () {
         fetchClosestAirport(latitude, longitude);
     });
 
-    // Function to fetch the closest airport using coordinates directly via Amadeus API
+    // Function to fetch the closest airport using coordinates through the backend
     async function fetchClosestAirport(latitude, longitude) {
         console.log('Searching closest airport to coordinates:', latitude, longitude);
 
-        const tokenUrl = 'https://api.amadeus.com/v1/security/oauth2/token';
-        const amadeusUrl = `https://api.amadeus.com/v1/reference-data/locations/airports?latitude=${latitude}&longitude=${longitude}`;
-        const clientId = process.env.AMADEUS_API_KEY;  // Make sure these are securely stored in environment variables
-        const clientSecret = process.env.AMADEUS_API_SECRET;
-
         try {
-            // Step 1: Obtain access token
-            const tokenResponse = await fetch(tokenUrl, {
+            // Call the backend API endpoint
+            const response = await fetch('/api/getClosestAirport', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    grant_type: 'client_credentials',
-                    client_id: clientId,
-                    client_secret: clientSecret
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ latitude, longitude })
             });
 
-            if (!tokenResponse.ok) {
-                throw new Error(`Failed to obtain token: ${tokenResponse.status} - ${tokenResponse.statusText}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch airport data: ${response.status} - ${response.statusText}`);
             }
 
-            const tokenData = await tokenResponse.json();
-            const accessToken = tokenData.access_token;
-            console.log('Access token obtained successfully.');
-
-            // Step 2: Request nearest airport with access token
-            const amadeusResponse = await fetch(amadeusUrl, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
-
-            if (!amadeusResponse.ok) {
-                throw new Error(`Failed to fetch airport data: ${amadeusResponse.status} - ${amadeusResponse.statusText}`);
-            }
-
-            const amadeusData = await amadeusResponse.json();
+            const amadeusData = await response.json();
             const airports = amadeusData.data;
+
             if (airports && airports.length > 0) {
                 const nearestAirport = airports[0];
                 const airportIATA = nearestAirport.iataCode;
@@ -179,7 +156,7 @@ $j(document).ready(function () {
                 console.log('No airport found near this location');
             }
         } catch (error) {
-            console.error('Error fetching airport data:', error);
+            console.error('Error fetching closest airport:', error);
         }
     }
 
