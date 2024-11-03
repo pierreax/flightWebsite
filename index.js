@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const fetch = require('node-fetch');  // Ensure `node-fetch` is installed if needed: npm install node-fetch
+const fetch = require('node-fetch');  // Required only if you're using Node <18
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -87,31 +87,92 @@ app.post('/api/suggestPriceLimit', async (req, res) => {
     }
 });
 
-// Route to send email using SendGrid API
+// Microsoft Graph setup for sending emails
+const TENANT_ID = process.env.EMAIL_TENANT_ID;
+const CLIENT_ID = process.env.EMAIL_CLIENT_ID;
+const CLIENT_SECRET = process.env.EMAIL_CLIENT_SECRET;
+const SCOPE = 'https://graph.microsoft.com/.default';
+const TOKEN_ENDPOINT = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
+const EMAIL_ADDRESS = "pierre@robotize.no"; // Sender email address
+
+// Function to get Microsoft Graph access token
+async function getAccessToken() {
+    const tokenData = {
+        grant_type: 'client_credentials',
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        scope: SCOPE
+    };
+
+    const response = await fetch(TOKEN_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(tokenData).toString()
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to get access token: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.access_token;
+}
+
+// Function to send an email through Microsoft Graph API
+async function sendEmail(subject, body, recipientEmail, token) {
+    const SENDMAIL_ENDPOINT = `https://graph.microsoft.com/v1.0/users/${EMAIL_ADDRESS}/sendMail`;
+
+    const message = {
+        message: {
+            subject: subject,
+            body: {
+                contentType: "HTML",
+                content: body
+            },
+            toRecipients: [
+                {
+                    emailAddress: {
+                        address: recipientEmail
+                    }
+                }
+            ]
+        },
+        saveToSentItems: "true"
+    };
+
+    const response = await fetch(SENDMAIL_ENDPOINT, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to send email: ${JSON.stringify(errorData)}`);
+    }
+
+    return response.ok;
+}
+
+// Route to send an email using Microsoft Graph
 app.post('/api/sendMail', async (req, res) => {
-    const { subject, body, recipient_email } = req.body;
+    const { subject = "New submission for your Flight Robot", body = "Great news, somebody just signed up for your Flight Robot", recipient_email } = req.body;
 
     try {
-        const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                personalizations: [{ to: [{ email: recipient_email }] }],
-                from: { email: 'your-email@example.com' },  // Update this with your sender email
-                subject,
-                content: [{ type: 'text/html', value: body }]
-            })
-        });
+        const token = await getAccessToken();  // Get access token
+        const result = await sendEmail(subject, body, recipient_email, token);  // Send email
 
-        if (!response.ok) throw new Error("Failed to send email");
-
-        res.json({ message: "Email sent successfully" });
+        if (result) {
+            res.json({ message: "Email sent successfully" });
+        } else {
+            res.status(500).json({ error: "Failed to send email" });
+        }
     } catch (error) {
         console.error("Error sending email:", error);
-        res.status(500).json({ error: "Failed to send email" });
+        res.status(500).json({ error: "An error occurred while sending email" });
     }
 });
 
