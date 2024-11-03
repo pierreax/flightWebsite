@@ -9,6 +9,6 @@
     "start": "node index.js"
   },
   "dependencies": {
-    // List any dependencies your app requires
+    "jquery": "^3.6.0"
   }
 }
