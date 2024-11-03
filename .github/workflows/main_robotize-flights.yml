@@ -28,7 +28,7 @@ jobs:
           name: static-site
 
       - name: Unzip artifact
-        run: unzip release.zip
+        run: unzip -o release.zip  # Added -o flag to force overwrite
 
       - name: Login to Azure
         uses: azure/login@v2
