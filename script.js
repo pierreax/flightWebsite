@@ -474,7 +474,7 @@ $j(document).ready(function () {
             returnTo: returnDate_To,
             maxStops: parseInt($j('#maxStops').val()),
             maxFlyDuration: parseFloat($j('#maxFlightDuration').val()) || '', // avoid NaN
-            flightType: $j('#oneWayTrip').is(':checked') ? 'one-way' : 'return',
+            flightType: $j('#oneWayTrip').is(':checked') ? 'oneway' : 'return',
             currency: $j('#currency').val(),
             dtime_from: outboundSlider.noUiSlider.get()[0],
             dtime_to: outboundSlider.noUiSlider.get()[1],
