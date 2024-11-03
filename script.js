@@ -882,6 +882,7 @@ $j(document).ready(function () {
 
         //Reset flatpicker
         flatpickrInstance.set('mode', 'range');
+        flatpickrInstance.clear(); // This clears the selection
 
         // Optionally, if you're changing the text dynamically based on the slider values,
         // reset those texts here as well
