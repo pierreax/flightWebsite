@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const fetch = require('node-fetch');  // Required only if you're using Node <18
 
 const app = express();
 const port = process.env.PORT || 8080;
