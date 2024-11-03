@@ -109,46 +109,49 @@ $j(document).ready(function () {
 
     fetchData(); // Call the async function
 
-    // Currencies and City based on IP-location
+    // Currencies and Location based on IP-location
     $j.get('https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f', function(response) {
         console.log(response);
-        city = response.city;
-        currency = response.currency.code;
-        console.log('Setting the currency to:',currency);
+
+        const currency = response.currency.code;
+        const latitude = response.latitude;
+        const longitude = response.longitude;
+
+        console.log('Setting the currency to:', currency);
 
         // Update the currency based on the IP-response
         $j('#currency').val(currency).trigger('change');
 
-        // Now fetch the IATA code using the Tequila API
-        fetchClosestAirport(city);
+        // Now fetch the IATA code using the Azure Function as a middle layer with coordinates
+        fetchClosestAirport(latitude, longitude);
     });
 
-    // Function to fetch the closest airport based on City
-    function fetchClosestAirport(city) {
-        console.log('Searching closest airport to:', city);
-        const url = `https://tequila-api.kiwi.com/locations/query?term=$j{encodeURIComponent(city)}&location_types=airport&limit=1`;
-        const options = {
-            method: 'GET',
-            headers: {
-                'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
-            }
-        };
+    // Function to fetch the closest airport using coordinates via Azure Function
+    async function fetchClosestAirport(latitude, longitude) {
+        console.log('Searching closest airport to coordinates:', latitude, longitude);
 
-        fetch(url, options)
-            .then(response => response.json())
-            .then(data => {
-                if (data.locations && data.locations.length > 0) {
-                    const airportIATA = data.locations[0].code;
-                    console.log('Closest airport IATA code:', airportIATA);
-                    $j('#iataCodeFrom').val(`$j{airportIATA} - $j{airportData[airportIATA]}`).trigger('change');
-                } else {
-                    console.log('No airport found for this city:', city);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching airport data:', error);
-            });
+        const azureFunctionUrl = `https://flightwebsiteapp.azurewebsites.net/api/getIATAByLocation?code=IQZK4KI-vgB4_HphYQRTq5deOk6ZRTHE1DvlQZAtB50aAzFuHG8yww==&latitude=${latitude}&longitude=${longitude}`;
+
+        try {
+            const response = await fetch(azureFunctionUrl);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            if (data && data.iataCode) { // Check for iataCode, not airportIATA
+                const airportIATA = data.iataCode;
+                console.log('Closest airport IATA code:', airportIATA);
+                // Assuming airportData is an object mapping IATA codes to airport names
+                $j('#iataCodeFrom').val(`${airportIATA} - ${airportData[airportIATA] || ''}`).trigger('change');
+            } else {
+                console.log('No airport found near this location');
+            }
+        } catch (error) {
+            console.error('Error fetching airport data:', error);
+        }
     }
+
 
     // Attach the click event handler to the switch icon
     $j('.switch-icon-container').on('click', function() {
