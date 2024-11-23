@@ -165,9 +165,15 @@
         <!-- Tooltip -->
         <div id="tooltip" style="display:none;">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
 
+        <!-- Advanced Settings Toggle Button -->
+        <div class="form-group">
+            <button class="btn btn-link d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSettings" aria-expanded="false" aria-controls="advancedSettings">
+                Advanced Settings <span id="advancedSettingsIcon" class="arrow-down ms-2">&#9660;</span>
+            </button>
+        </div>
+
         <!-- Advanced Settings Section -->
-        <div id="advancedSettingsToggle" role="button" tabindex="0">Advanced Settings</div>
-        <div id="advancedSettings" style="display:none;">
+        <div id="advancedSettings" class="collapse">
             <div class="airline-selection-container">
                 <div class="switch-row">
                     <div class="switch-label">Exclude Airlines</div>
@@ -185,6 +191,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Price Limit Field and Label -->
         <div class="form-group floating-label">

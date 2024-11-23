@@ -23,6 +23,7 @@ $(document).ready(function () {
         excludeAirlinesSelect: $('#excludeAirlines'),
         airlineModeSwitch: $('#airlineModeSwitch'),
         advancedSettingsToggle: $('#advancedSettingsToggle'),
+        advancedSettingsIcon: $('#advancedSettingsIcon'),
         advancedSettings: $('#advancedSettings'),
         suggestPriceBtn: $('#suggestPriceBtn'),
         outboundSlider: $('#outbound-timeRangeSlider')[0],
@@ -728,6 +729,17 @@ $(document).ready(function () {
     };
 
     /**
+     * Rotate the arrow icon based on collapse state.
+     */
+       const handleAdvancedSettingsCollapse = () => {
+        if (SELECTORS.advancedSettings.hasClass('show')) {
+            SELECTORS.advancedSettingsIcon.html('&#9650;'); // Up arrow
+        } else {
+            SELECTORS.advancedSettingsIcon.html('&#9660;'); // Down arrow
+        }
+    };
+
+    /**
      * Handle changes in the "Exclude Airlines" dropdown.
      */
     const handleExcludedAirlinesChange = () => {
@@ -833,6 +845,10 @@ $(document).ready(function () {
 
         // Airline mode switch change
         SELECTORS.airlineModeSwitch.on('change', handleAirlineModeSwitchChange);
+
+        // Bootstrap Collapse Events for Advanced Settings
+        SELECTORS.advancedSettings.on('shown.bs.collapse', handleAdvancedSettingsCollapse);
+        SELECTORS.advancedSettings.on('hidden.bs.collapse', handleAdvancedSettingsCollapse);
 
         // Help button tooltip toggle
         SELECTORS.helpBtn.on('click', toggleTooltip);
