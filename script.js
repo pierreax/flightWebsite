@@ -375,7 +375,7 @@ $(document).ready(function () {
     };
 
     /**
-     * Fetch the closest airport based on latitude and longitude via the backend API.
+     * Fetch the closest airport based on latitude and longitude via the backend API using Aviationstack.
      * @param {number} latitude 
      * @param {number} longitude 
      */
@@ -390,27 +390,40 @@ $(document).ready(function () {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to fetch airport data: ${response.status} - ${response.statusText}`);
+                // Attempt to parse error message from backend
+                const errorData = await response.json();
+                const errorMessage = errorData.error || `Failed to fetch airport data: ${response.status} - ${response.statusText}`;
+                throw new Error(errorMessage);
             }
 
-            const amadeusData = await response.json();
-            const airports = amadeusData.data;
+            const aviationstackData = await response.json();
+            
+            // Check if required fields are present
+            if (
+                aviationstackData.airport_iata &&
+                aviationstackData.airport_name &&
+                aviationstackData.city_name &&
+                aviationstackData.country_name
+            ) {
+                const airportIATA = aviationstackData.airport_iata;
+                const airportName = aviationstackData.airport_name;
+                const cityName = aviationstackData.city_name;
+                const countryName = aviationstackData.country_name;
 
-            if (airports && airports.length > 0) {
-                const nearestAirport = airports[0];
-                const airportIATA = nearestAirport.iataCode;
-                console.log('Closest airport IATA code:', airportIATA);
+                console.log(`Closest Airport: ${airportIATA} - ${airportName}, ${cityName}, ${countryName}`);
 
-                // Set the IATA Code From field
-                const airportName = airportData[airportIATA] || '';
+                // Update the IATA Code From field in the UI
                 SELECTORS.iataCodeFrom.val(`${airportIATA} - ${airportName}`).trigger('change');
             } else {
-                console.log('No airport found near this location');
+                console.log('No airport data found in the response.');
+                alert('No nearby airports found based on your location. Please select your departure airport manually.');
             }
         } catch (error) {
             console.error('Error fetching closest airport:', error);
+            alert('There was an error determining your closest airport. Please select your departure airport manually.');
         }
     };
+
 
     /**
      * Populate the airlines dropdown with options.

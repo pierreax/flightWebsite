@@ -15,36 +15,85 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Route to fetch the closest airport using Amadeus API
+
+
+// Route to fetch the closest airport using Aviationstack API
 app.post('/api/getClosestAirport', async (req, res) => {
     const { latitude, longitude } = req.body;
 
+    // Validate input
+    if (
+        typeof latitude !== 'number' ||
+        typeof longitude !== 'number' ||
+        isNaN(latitude) ||
+        isNaN(longitude)
+    ) {
+        return res.status(400).json({ error: 'Invalid latitude or longitude provided.' });
+    }
+
     try {
-        const tokenResponse = await fetch('https://api.amadeus.com/v1/security/oauth2/token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                grant_type: 'client_credentials',
-                client_id: process.env.AMADEUS_API_KEY,
-                client_secret: process.env.AMADEUS_API_SECRET
-            })
-        });
+        const apiKey = process.env.AVIATIONSTACK_API_KEY;
 
-        const tokenData = await tokenResponse.json();
-        const accessToken = tokenData.access_token;
+        if (!apiKey) {
+            console.error('Aviationstack API key is not set in environment variables.');
+            return res.status(500).json({ error: 'Server configuration error.' });
+        }
 
-        const amadeusResponse = await fetch(
-            `https://api.amadeus.com/v1/reference-data/locations/airports?latitude=${latitude}&longitude=${longitude}`,
-            { headers: { Authorization: `Bearer ${accessToken}` } }
-        );
+        // Construct the Aviationstack API URL with query parameters
+        const url = new URL('https://api.aviationstack.com/v1/airports');
+        const params = {
+            access_key: apiKey,
+            lat: latitude,
+            lon: longitude,
+            radius: 200, // Search radius in kilometers
+            limit: 1,   // Get only the closest airport
+        };
 
-        const data = await amadeusResponse.json();
-        res.json(data);
+        // Append query parameters to the URL
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+        // Make the GET request to Aviationstack
+        const aviationstackResponse = await fetch(url.toString());
+
+        // Check if the response status is OK (200)
+        if (!aviationstackResponse.ok) {
+            const errorText = await aviationstackResponse.text();
+            console.error(`Aviationstack API error: ${aviationstackResponse.status} - ${errorText}`);
+            return res.status(aviationstackResponse.status).json({ error: 'Failed to fetch closest airport.' });
+        }
+
+        const data = await aviationstackResponse.json();
+
+        // Check if any airports were found
+        if (data.data && data.data.length > 0) {
+            const nearestAirport = data.data[0];
+            console.log('Closest Airport:', nearestAirport);
+
+            // Structure the response data as needed
+            const responseData = {
+                airport_iata: nearestAirport.airport_iata,
+                airport_icao: nearestAirport.airport_icao,
+                airport_name: nearestAirport.airport_name,
+                city_iata: nearestAirport.city_iata,
+                city_icao: nearestAirport.city_icao,
+                city_name: nearestAirport.city_name,
+                country_name: nearestAirport.country_name,
+                latitude: nearestAirport.latitude,
+                longitude: nearestAirport.longitude,
+                // Include other necessary fields if required
+            };
+
+            return res.json(responseData);
+        } else {
+            console.log('No airport found near this location.');
+            return res.status(404).json({ error: 'No nearby airports found.' });
+        }
     } catch (error) {
-        console.error("Error fetching closest airport:", error);
-        res.status(500).json({ error: "Failed to fetch closest airport" });
+        console.error('Error fetching closest airport:', error);
+        return res.status(500).json({ error: 'Failed to fetch closest airport.' });
     }
 });
+
 
 // Route for Sheety Proxy
 app.post('/api/sheetyProxy', async (req, res) => {
@@ -157,7 +206,7 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
 
 
 // Microsoft Graph setup for sending emails
-const TENANT_ID = process.env.EMAIL_TENANT_ID;
+const EMAIL_TENANT_ID = process.env.EMAIL_TENANT_ID;
 const EMAIL_CLIENT_ID = process.env.EMAIL_CLIENT_ID;
 const EMAIL_CLIENT_SECRET = process.env.EMAIL_CLIENT_SECRET;
 
