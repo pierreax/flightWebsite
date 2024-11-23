@@ -237,6 +237,38 @@ $(document).ready(function () {
         });
     };
 
+    
+    /**
+     * Update currency and location based on the user's IP address.
+     */
+    const updateCurrencyAndLocation = async () => {
+        try {
+            const response = await fetch(API_ENDPOINTS.ipGeo);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch IP Geolocation data: ${response.statusText}`);
+            }
+            const data = await response.json();
+            
+            // Update the currency input if currency data is available
+            if (data.currency && data.currency.code) {
+                SELECTORS.currencyInput.val(data.currency.code);
+            }
+            
+            // Update location fields based on geolocation data
+            if (data.latitude && data.longitude) {
+                await fetchClosestAirport(data.latitude, data.longitude);
+            }
+            
+            // Optionally, you can update other location-related fields here
+            // For example, setting a default city or IATA code if needed
+            
+        } catch (error) {
+            console.error('Error updating currency and location:', error);
+            // Optionally, you can handle the error by setting default values or notifying the user
+        }
+    };
+
+
     // ===========================
     // Event Handler Functions
     // ===========================
