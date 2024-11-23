@@ -507,8 +507,6 @@ $(document).ready(function () {
 
             // Enable the Submit button since a matching flight was found
             SELECTORS.submitFormButton.prop('disabled', false);
-            // Show the Advanced Settings toggle after suggestPriceLimit is executed
-            SELECTORS.advancedSettingsToggle.show();
         } else {
             alert("No flights available for the given parameters. Please adjust your search criteria.");
         }
