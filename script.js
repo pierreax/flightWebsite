@@ -375,7 +375,7 @@ $(document).ready(function () {
     };
 
     /**
-     * Fetch the closest airport based on latitude and longitude via the backend API using Aviationstack.
+     * Fetch the closest airport based on latitude and longitude via the backend API using Tequila.
      * @param {number} latitude 
      * @param {number} longitude 
      */
@@ -396,20 +396,15 @@ $(document).ready(function () {
                 throw new Error(errorMessage);
             }
 
-            const aviationstackData = await response.json();
-            console.log(aviationstackData);
+            const tequilaData = await response.json();
+            console.log('Tequila API Response:', tequilaData);
             
             // Check if required fields are present
-            if (
-                aviationstackData.airport_iata &&
-                aviationstackData.airport_name &&
-                aviationstackData.city_name &&
-                aviationstackData.country_name
-            ) {
-                const airportIATA = aviationstackData.airport_iata;
-                const airportName = aviationstackData.airport_name;
-                const cityName = aviationstackData.city_name;
-                const countryName = aviationstackData.country_name;
+            if (tequilaData.code) {
+                const airportIATA = tequilaData.code;
+                const airportName = airportData[airportIATA] || 'Unknown Airport';
+                const cityName = tequilaData.city || 'Unknown City';
+                const countryName = tequilaData.country || 'Unknown Country';
 
                 console.log(`Closest Airport: ${airportIATA} - ${airportName}, ${cityName}, ${countryName}`);
 
@@ -424,6 +419,7 @@ $(document).ready(function () {
             alert('There was an error determining your closest airport. Please select your departure airport manually.');
         }
     };
+
 
 
     /**

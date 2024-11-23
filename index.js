@@ -17,57 +17,62 @@ app.get('/', (req, res) => {
 
 
 
-// Route to fetch the closest airport using Aviationstack API
+// Route to fetch the closest airport using Tequila API
 app.post('/api/getClosestAirport', async (req, res) => {
     const { latitude, longitude } = req.body;
 
     try {
-        const apiKey = process.env.AVIATIONSTACK_API_KEY;
+        const apiKey = process.env.TEQUILA_API_KEY;
 
         if (!apiKey) {
-            console.error('Aviationstack API key is not set in environment variables.');
+            console.error('Tequila API key is not set in environment variables.');
             return res.status(500).json({ error: 'Server configuration error.' });
         }
 
-        // Construct the Aviationstack API URL with query parameters
-        const url = new URL('https://api.aviationstack.com/v1/airports');
+        // Construct the Tequila API URL with query parameters
+        const url = new URL('https://api.tequila.kiwi.com/locations/radius');
         const params = {
-            access_key: apiKey,
             lat: latitude,
             lon: longitude,
-            radius: 200, // Search radius in kilometers
-            limit: 1,   // Get only the closest airport
+            radius: 250, // Search radius in kilometers
+            locale: 'en-US',
+            location_types: 'airport',
+            limit: 1, // Get only the closest airport
+            active_only: true,
         };
 
         // Append query parameters to the URL
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-        // Make the GET request to Aviationstack
-        const aviationstackResponse = await fetch(url.toString());
+        // Make the GET request to Tequila API
+        const tequilaResponse = await fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'apikey': apiKey
+            }
+        });
 
         // Check if the response status is OK (200)
-        if (!aviationstackResponse.ok) {
-            const errorText = await aviationstackResponse.text();
-            console.error(`Aviationstack API error: ${aviationstackResponse.status} - ${errorText}`);
-            return res.status(aviationstackResponse.status).json({ error: 'Failed to fetch closest airport.' });
+        if (!tequilaResponse.ok) {
+            const errorText = await tequilaResponse.text();
+            console.error(`Tequila API error: ${tequilaResponse.status} - ${errorText}`);
+            return res.status(tequilaResponse.status).json({ error: 'Failed to fetch closest airport.' });
         }
 
-        const data = await aviationstackResponse.json();
+        const data = await tequilaResponse.json();
 
-        // Check if any airports were found
-        if (data.data && data.data.length > 0) {
-            const nearestAirport = data.data[0];
+        // Check if any locations were found
+        if (data.locations && data.locations.length > 0) {
+            const nearestAirport = data.locations[0];
             console.log('Closest Airport:', nearestAirport);
 
             // Structure the response data as needed
             const responseData = {
-                airport_iata: nearestAirport.airport_iata,
-                airport_icao: nearestAirport.airport_icao,
-                airport_name: nearestAirport.airport_name,
-                city_iata: nearestAirport.city_iata,
-                city_icao: nearestAirport.city_icao,
-                city_name: nearestAirport.city_name,
-                country_name: nearestAirport.country_name,
+                code: nearestAirport.code,       // IATA code (e.g., "OSL")
+                icao: nearestAirport.icao,       // ICAO code (e.g., "ENGM")
+                name: nearestAirport.name,       // Airport name (if available)
+                city: nearestAirport.city,       // City name (if available)
+                country: nearestAirport.country, // Country name (if available)
                 latitude: nearestAirport.latitude,
                 longitude: nearestAirport.longitude,
                 // Include other necessary fields if required
