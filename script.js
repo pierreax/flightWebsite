@@ -643,6 +643,7 @@ $(document).ready(function () {
             alert('There was an error processing your request. Please try again later.');
         } finally {
             SELECTORS.loader.hide();
+            window.location.reload();
         }
     };
 
@@ -730,6 +731,7 @@ $(document).ready(function () {
         console.log('User confirmed hotel tracking.');
         window.location.href = redirectUrl;
     };
+
 
     /**
      * Handle the switch icon click to toggle IATA codes.
