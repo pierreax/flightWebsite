@@ -48,7 +48,7 @@ $(document).ready(function () {
         suggestPriceLimit: '/api/suggestPriceLimit',
         getCityByIATA: '/api/getCityByIATA',
         sheetyProxy: '/api/sheetyProxy',
-        sendMail: '/api/sendMail',
+        sendMail: '/api/sendEmail',
         readAirportsData: 'airports.txt',
         readAirlinesData: 'airline_data.txt',
     };
