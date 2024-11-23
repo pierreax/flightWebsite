@@ -412,6 +412,25 @@ $(document).ready(function () {
     };
 
     /**
+     * Populate the airlines dropdown with options.
+     * @param {Array} airlines 
+     */
+    const updateExcludedAirlinesDropdown = (airlines) => {
+        // Clear existing options
+        SELECTORS.excludeAirlinesSelect.empty();
+
+        // Populate with new airline options
+        airlines.forEach(code => {
+            const airlineName = airlinesDict[code] || code;
+            SELECTORS.excludeAirlinesSelect.append(new Option(airlineName, code));
+        });
+
+        // Reinitialize Select2 to update options
+        initializeSelect2(airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude');
+    };
+
+
+    /**
      * Suggest price limit by querying the backend API.
      */
     const suggestPriceLimit = async () => {
