@@ -787,6 +787,7 @@ $(document).ready(function () {
      */
     const updatePriceBasedOnSelection = () => {
         const selectedAirlines = SELECTORS.excludeAirlinesSelect.val();
+        console.log('Selected Airlines: ',selectedAirlines);
 
         if (!globalTequilaResponse || !globalTequilaResponse.data) {
             return;
