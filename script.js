@@ -31,6 +31,15 @@ $(document).ready(function () {
         helpBtn: $('#helpBtn'),
         tooltip: $('#tooltip'),
         confirmHotelTrackerBtn: $('#confirmHotelTracker'),
+        hotelTrackingModal: $('#hotelTrackingModal'),
+        dateField: $('#dateField'),
+        outboundTimeStartDisplay: $('#outboundTimeStartDisplay'),
+        outboundTimeEndDisplay: $('#outboundTimeEndDisplay'),
+        inboundTimeStartDisplay: $('#inboundTimeStartDisplay'),
+        inboundTimeEndDisplay: $('#inboundTimeEndDisplay'),
+        maxPricePerPerson: $('#maxPricePerPerson'),
+        iataCodeFromList: $('#iataCodeFromList'),
+        iataCodeToList: $('#iataCodeToList'),
     };
 
     const API_ENDPOINTS = {
@@ -105,49 +114,43 @@ $(document).ready(function () {
     }
 
     /**
+     * Initialize a noUiSlider.
+     * @param {HTMLElement} sliderElement 
+     * @param {Function} updateCallback 
+     */
+    const initializeSlider = (sliderElement, updateCallback) => {
+        noUiSlider.create(sliderElement, {
+            start: [0, 24],
+            connect: true,
+            range: {
+                'min': 0,
+                'max': 24
+            },
+            step: 1,
+            format: wNumb({
+                decimals: 0,
+                postfix: ':00'
+            }),
+            tooltips: false,
+        });
+
+        sliderElement.noUiSlider.on('update', updateCallback);
+    };
+
+    /**
      * Initialize the noUiSliders for outbound and inbound times.
      */
     const initializeSliders = () => {
         // Outbound Time Range Slider
-        noUiSlider.create(SELECTORS.outboundSlider, {
-            start: [0, 24],
-            connect: true,
-            range: {
-                'min': 0,
-                'max': 24
-            },
-            step: 1,
-            format: wNumb({
-                decimals: 0,
-                postfix: ':00'
-            }),
-            tooltips: false,
-        });
-
-        SELECTORS.outboundSlider.noUiSlider.on('update', function (values, handle) {
-            $('#outboundTimeStartDisplay').text(values[0]);
-            $('#outboundTimeEndDisplay').text(values[1]);
+        initializeSlider(SELECTORS.outboundSlider, function (values, handle) {
+            SELECTORS.outboundTimeStartDisplay.text(values[0]);
+            SELECTORS.outboundTimeEndDisplay.text(values[1]);
         });
 
         // Inbound Time Range Slider
-        noUiSlider.create(SELECTORS.inboundSlider, {
-            start: [0, 24],
-            connect: true,
-            range: {
-                'min': 0,
-                'max': 24
-            },
-            step: 1,
-            format: wNumb({
-                decimals: 0,
-                postfix: ':00'
-            }),
-            tooltips: false,
-        });
-
-        SELECTORS.inboundSlider.noUiSlider.on('update', function (values, handle) {
-            $('#inboundTimeStartDisplay').text(values[0]);
-            $('#inboundTimeEndDisplay').text(values[1]);
+        initializeSlider(SELECTORS.inboundSlider, function (values, handle) {
+            SELECTORS.inboundTimeStartDisplay.text(values[0]);
+            SELECTORS.inboundTimeEndDisplay.text(values[1]);
         });
     };
 
@@ -155,7 +158,7 @@ $(document).ready(function () {
      * Initialize the autocomplete functionality for IATA code fields.
      */
     const initializeAutocomplete = () => {
-        $("#iataCodeFrom, #iataCodeTo").autocomplete({
+        $(".autocomplete-iata").autocomplete({
             source: function (request, response) {
                 const results = $.map(airportData, function (value, key) {
                     if (key.toLowerCase().startsWith(request.term.toLowerCase()) || value.toLowerCase().includes(request.term.toLowerCase())) {
@@ -181,6 +184,17 @@ $(document).ready(function () {
             const option = document.createElement('option');
             option.value = `${key} - ${data[key]}`;
             datalist.appendChild(option);
+        });
+    };
+
+    /**
+     * Initialize Select2 for the airlines dropdown.
+     * @param {string} placeholder 
+     */
+    const initializeSelect2 = (placeholder) => {
+        SELECTORS.excludeAirlinesSelect.select2({
+            placeholder: placeholder,
+            allowClear: true
         });
     };
 
@@ -214,6 +228,13 @@ $(document).ready(function () {
 
         // Confirm hotel tracker button click
         SELECTORS.confirmHotelTrackerBtn.on('click', handleConfirmHotelTracker);
+
+        // Close tooltip when clicking outside
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('#helpBtn, #tooltip').length) {
+                SELECTORS.tooltip.hide();
+            }
+        });
     };
 
     // ===========================
@@ -264,8 +285,7 @@ $(document).ready(function () {
         if (SELECTORS.oneWayTripCheckbox.is(':checked')) {
             console.log("One-way trip selected");
             // Hide inbound slider and adjust display
-            $('#inbound-timeRangeSlider').hide();
-            $('#inbound-timeRangeDisplay').hide();
+            $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').hide();
             $('#outbound-timeRangeDisplay').html('Departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
             // Set Flatpickr to single date mode
             flatpickrInstance.set('mode', 'single');
@@ -279,8 +299,7 @@ $(document).ready(function () {
         } else {
             console.log("Return trip selected");
             // Show inbound slider and revert display
-            $('#inbound-timeRangeSlider').show();
-            $('#inbound-timeRangeDisplay').show();
+            $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').show();
             $('#outbound-timeRangeDisplay').html('Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
             flatpickrInstance.set('mode', 'range');
         }
@@ -315,10 +334,7 @@ $(document).ready(function () {
     const handleAirlineModeSwitchChange = () => {
         airlineSelectionMode = SELECTORS.airlineModeSwitch.is(':checked');
         const newPlaceholder = airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude';
-        SELECTORS.excludeAirlinesSelect.select2('destroy').select2({
-            placeholder: newPlaceholder,
-            allowClear: true
-        });
+        initializeSelect2(newPlaceholder);
 
         if (airlineSelectionMode) {
             // Include mode: select all airlines
@@ -355,101 +371,6 @@ $(document).ready(function () {
         const toVal = SELECTORS.iataCodeTo.val();
         SELECTORS.iataCodeFrom.val(toVal).trigger('change');
         SELECTORS.iataCodeTo.val(fromVal).trigger('change');
-    };
-
-    // ===========================
-    // Helper Functions
-    // ===========================
-
-    /**
-     * Extract the IATA code from an input field.
-     * @param {string} inputId 
-     * @returns {string} IATA code, possibly prefixed with 'city:'.
-     */
-    const extractIATACode = (inputId) => {
-        const inputValue = document.getElementById(inputId).value;
-        if (!inputValue) {
-            console.error('Input value not found');
-            return '';
-        }
-        const iataCode = inputValue.split(' - ')[0].trim();
-        const containsAllAirports = inputValue.toLowerCase().includes("all airports");
-
-        return containsAllAirports ? `city:${iataCode}` : iataCode;
-    };
-
-    /**
-     * Safely parse input values, handling NaN cases.
-     * @param {number} value 
-     * @returns {number|string} Parsed value or empty string.
-     */
-    const parseInputValue = (value) => {
-        if (typeof value === 'string' && value === "NaN/NaN/NaN") {
-            return "";
-        }
-        if (isNaN(value)) {
-            return "";
-        }
-        return value;
-    };
-
-    /**
-     * Generate a unique token for each submission.
-     * @returns {string} Unique token.
-     */
-    const generateToken = () => {
-        if (window.crypto && window.crypto.randomUUID) {
-            return window.crypto.randomUUID();
-        } else {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-        }
-    };
-
-    /**
-     * Format a Date object to DD/MM/YYYY.
-     * @param {Date} dateObject 
-     * @returns {string} Formatted date string.
-     */
-    const formatDate = (dateObject) => {
-        if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
-            console.error('Invalid date:', dateObject);
-            return "";
-        }
-        const day = dateObject.getDate().toString().padStart(2, '0');
-        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-        const year = dateObject.getFullYear();
-        return `${day}/${month}/${year}`;
-    };
-
-    /**
-     * Adjust dates based on the flexible dates toggle.
-     */
-    const adjustDatesForFlexibility = () => {
-        let adjustedDepFromDate = new Date(selectedStartDate);
-        let adjustedDepToDate = new Date(selectedStartDate);
-        let adjustedReturnFromDate = selectedEndDate ? new Date(selectedEndDate) : null;
-        let adjustedReturnToDate = selectedEndDate ? new Date(selectedEndDate) : null;
-
-        if (SELECTORS.flexibleDatesCheckbox.is(':checked')) {
-            console.log("Adjusting for flexible dates");
-            // Adjust departure dates by subtracting and adding one day
-            adjustedDepFromDate.setDate(adjustedDepFromDate.getDate() - 1);
-            adjustedDepToDate.setDate(adjustedDepToDate.getDate() + 1);
-
-            // Adjust return dates by subtracting and adding one day if return date is not null
-            if (adjustedReturnFromDate && adjustedReturnToDate) {
-                adjustedReturnFromDate.setDate(adjustedReturnFromDate.getDate() - 1);
-                adjustedReturnToDate.setDate(adjustedReturnToDate.getDate() + 1);
-            }
-        } else {
-            console.log("Using exact dates");
-        }
-
-        // Update global variables with the adjusted and formatted dates
-        depDate_From = formatDate(adjustedDepFromDate);
-        depDate_To = formatDate(adjustedDepToDate);
-        returnDate_From = adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '';
-        returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
     };
 
     /**
@@ -489,9 +410,9 @@ $(document).ready(function () {
         if (filteredFlights.length > 0) {
             const lowestPrice = filteredFlights[0].price;
             const roundedPrice = Math.ceil(lowestPrice);
-            $('#maxPricePerPerson').val(roundedPrice);
+            SELECTORS.maxPricePerPerson.val(roundedPrice);
         } else {
-            $('#maxPricePerPerson').val('');
+            SELECTORS.maxPricePerPerson.val('');
         }
     };
 
@@ -500,46 +421,36 @@ $(document).ready(function () {
     // ===========================
 
     /**
-     * Load airport data from a text file.
-     * @returns {Object} Airport data mapping IATA codes to city names.
+     * Load data from a specified endpoint.
+     * @param {string} endpoint 
+     * @param {string} type - 'text' or 'json'
+     * @returns {Object} Parsed data
      */
-    const loadAirportData = async () => {
+    const loadData = async (endpoint, type = 'json') => {
         try {
-            const response = await fetch(API_ENDPOINTS.readAirportsData);
-            const text = await response.text();
-            const data = {};
+            const response = await fetch(API_ENDPOINTS[endpoint]);
+            if (!response.ok) throw new Error(`Failed to load ${endpoint}: ${response.statusText}`);
 
-            text.split('\n').forEach(line => {
-                const [iata, city] = line.split(' - ');
-                if (iata && city) {
-                    data[iata.trim()] = city.trim();
-                }
-            });
-
-            return data;
+            if (type === 'text') {
+                const text = await response.text();
+                const data = {};
+                text.split('\n').forEach(line => {
+                    const [code, name] = line.split(' - ');
+                    if (code && name) {
+                        data[code.trim()] = name.trim();
+                    }
+                });
+                return data;
+            } else if (type === 'json') {
+                const data = await response.json();
+                const dict = {};
+                data.forEach(item => {
+                    dict[item.code] = item.name;
+                });
+                return dict;
+            }
         } catch (error) {
-            console.error('Error loading airport data:', error);
-            return {};
-        }
-    };
-
-    /**
-     * Load airline data from a JSON file.
-     * @returns {Object} Airline data mapping airline codes to airline names.
-     */
-    const loadAirlineData = async () => {
-        try {
-            const response = await fetch(API_ENDPOINTS.readAirlinesData);
-            const data = await response.json();
-            const airlineDict = {};
-
-            data.forEach(airline => {
-                airlineDict[airline.code] = airline.name;
-            });
-
-            return airlineDict;
-        } catch (error) {
-            console.error('Error loading airline data:', error);
+            console.error(`Error loading ${endpoint}:`, error);
             return {};
         }
     };
@@ -589,7 +500,7 @@ $(document).ready(function () {
         console.log("Sending Current Price request");
         SELECTORS.loader.show(); // Show the loading icon
 
-        let airlineModeSwitchState = SELECTORS.airlineModeSwitch.is(':checked');
+        const airlineModeSwitchState = SELECTORS.airlineModeSwitch.is(':checked');
 
         const params = new URLSearchParams({
             origin: extractIATACode('iataCodeFrom'),
@@ -602,11 +513,11 @@ $(document).ready(function () {
             maxFlyDuration: parseFloat(SELECTORS.maxFlightDurationInput.val()) || '',
             flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'oneway' : 'return',
             currency: SELECTORS.currencyInput.val(),
-            dtime_from: $('#outboundTimeStartDisplay').text(),
-            dtime_to: $('#outboundTimeEndDisplay').text(),
-            ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : $('#inboundTimeStartDisplay').text(),
-            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : $('#inboundTimeEndDisplay').text(),
-            select_airlines: SELECTORS.excludeAirlinesSelect.val().join(','),
+            dtime_from: SELECTORS.outboundTimeStartDisplay.text(),
+            dtime_to: SELECTORS.outboundTimeEndDisplay.text(),
+            ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked()') ? '' : SELECTORS.inboundTimeStartDisplay.text(),
+            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked()') ? '' : SELECTORS.inboundTimeEndDisplay.text(),
+            select_airlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
             select_airlines_exclude: !airlineModeSwitchState
         });
 
@@ -642,7 +553,7 @@ $(document).ready(function () {
         if (tequilaResponse.data && tequilaResponse.data.length > 0) {
             const lowestPriceFlight = tequilaResponse.data[0];
             const roundedPrice = Math.ceil(lowestPriceFlight.price);
-            $('#maxPricePerPerson').val(roundedPrice);
+            SELECTORS.maxPricePerPerson.val(roundedPrice);
 
             const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
             updateExcludedAirlinesDropdown(uniqueAirlines);
@@ -754,13 +665,103 @@ $(document).ready(function () {
      */
     const askForHotelTracking = () => {
         console.log('Showing hotel tracking modal.');
-        $('#hotelTrackingModal').modal('show');
+        SELECTORS.hotelTrackingModal.modal('show');
     };
-
 
     // ===========================
     // Helper Functions
     // ===========================
+
+    /**
+     * Extract the IATA code from an input field.
+     * @param {string} inputId 
+     * @returns {string} IATA code, possibly prefixed with 'city:'.
+     */
+    const extractIATACode = (inputId) => {
+        const inputValue = document.getElementById(inputId).value;
+        if (!inputValue) {
+            console.error('Input value not found');
+            return '';
+        }
+        const iataCode = inputValue.split(' - ')[0].trim();
+        const containsAllAirports = inputValue.toLowerCase().includes("all airports");
+
+        return containsAllAirports ? `city:${iataCode}` : iataCode;
+    };
+
+    /**
+     * Safely parse input values, handling NaN cases.
+     * @param {number} value 
+     * @returns {number|string} Parsed value or empty string.
+     */
+    const parseInputValue = (value) => {
+        if (typeof value === 'string' && value === "NaN/NaN/NaN") {
+            return "";
+        }
+        if (isNaN(value)) {
+            return "";
+        }
+        return value;
+    };
+
+    /**
+     * Generate a unique token for each submission.
+     * @returns {string} Unique token.
+     */
+    const generateToken = () => {
+        if (window.crypto && window.crypto.randomUUID) {
+            return window.crypto.randomUUID();
+        } else {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+    };
+
+    /**
+     * Format a Date object to DD/MM/YYYY.
+     * @param {Date} dateObject 
+     * @returns {string} Formatted date string.
+     */
+    const formatDate = (dateObject) => {
+        if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
+            console.error('Invalid date:', dateObject);
+            return "";
+        }
+        const day = dateObject.getDate().toString().padStart(2, '0');
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+        const year = dateObject.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    /**
+     * Adjust dates based on the flexible dates toggle.
+     */
+    const adjustDatesForFlexibility = () => {
+        let adjustedDepFromDate = new Date(selectedStartDate);
+        let adjustedDepToDate = new Date(selectedStartDate);
+        let adjustedReturnFromDate = selectedEndDate ? new Date(selectedEndDate) : null;
+        let adjustedReturnToDate = selectedEndDate ? new Date(selectedEndDate) : null;
+
+        if (SELECTORS.flexibleDatesCheckbox.is(':checked')) {
+            console.log("Adjusting for flexible dates");
+            // Adjust departure dates by subtracting and adding one day
+            adjustedDepFromDate.setDate(adjustedDepFromDate.getDate() - 1);
+            adjustedDepToDate.setDate(adjustedDepToDate.getDate() + 1);
+
+            // Adjust return dates by subtracting and adding one day if return date is not null
+            if (adjustedReturnFromDate && adjustedReturnToDate) {
+                adjustedReturnFromDate.setDate(adjustedReturnFromDate.getDate() - 1);
+                adjustedReturnToDate.setDate(adjustedReturnToDate.getDate() + 1);
+            }
+        } else {
+            console.log("Using exact dates");
+        }
+
+        // Update global variables with the adjusted and formatted dates
+        depDate_From = formatDate(adjustedDepFromDate);
+        depDate_To = formatDate(adjustedDepToDate);
+        returnDate_From = adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '';
+        returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
+    };
 
     /**
      * Get query parameters from the URL.
@@ -791,7 +792,7 @@ $(document).ready(function () {
                 iataCodeFrom: extractIATACode('iataCodeFrom'),
                 iataCodeTo: extractIATACode('iataCodeTo'),
                 flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'one-way' : 'return',
-                maxPricePerPerson: $('#maxPricePerPerson').val(),
+                maxPricePerPerson: SELECTORS.maxPricePerPerson.val(),
                 currency: SELECTORS.currencyInput.val(),
                 maxStops: parseInputValue(parseInt(SELECTORS.maxStopsInput.val())),
                 nbrPassengers: parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val())),
@@ -827,10 +828,7 @@ $(document).ready(function () {
         });
 
         // Reinitialize Select2 to update options
-        SELECTORS.excludeAirlinesSelect.select2({
-            placeholder: airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude',
-            allowClear: true
-        });
+        initializeSelect2(airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude');
     };
 
     // ===========================
@@ -843,8 +841,10 @@ $(document).ready(function () {
     const init = async () => {
         try {
             // Load airport and airline data
-            airportData = await loadAirportData();
-            airlinesDict = await loadAirlineData();
+            [airportData, airlinesDict] = await Promise.all([
+                loadData('readAirportsData', 'text'),
+                loadData('readAirlinesData', 'json')
+            ]);
 
             // Populate datalists
             populateDatalist('iataCodeFromList', airportData);
@@ -860,10 +860,7 @@ $(document).ready(function () {
             initializeDatePicker();
 
             // Initialize Select2 for airlines dropdown
-            SELECTORS.excludeAirlinesSelect.select2({
-                placeholder: 'Select airlines to exclude',
-                allowClear: true
-            });
+            initializeSelect2('Select airlines to exclude');
 
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
