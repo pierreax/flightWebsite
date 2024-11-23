@@ -397,6 +397,7 @@ $(document).ready(function () {
             }
 
             const aviationstackData = await response.json();
+            console.log(aviationstackData);
             
             // Check if required fields are present
             if (
