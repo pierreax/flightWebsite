@@ -834,26 +834,6 @@ $(document).ready(function () {
     };
 
     // ===========================
-    // Utility Functions
-    // ===========================
-
-    /**
-     * Format a Date object to DD/MM/YYYY.
-     * @param {Date} dateObject 
-     * @returns {string} Formatted date string.
-     */
-    const formatDate = (dateObject) => {
-        if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
-            console.error('Invalid date:', dateObject);
-            return "";
-        }
-        const day = dateObject.getDate().toString().padStart(2, '0');
-        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-        const year = dateObject.getFullYear();
-        return `${day}/${month}/${year}`;
-    };
-
-    // ===========================
     // Initialization Sequence
     // ===========================
 
