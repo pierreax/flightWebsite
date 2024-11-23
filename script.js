@@ -810,8 +810,11 @@ $(document).ready(function () {
             const lowestPrice = filteredFlights[0].price;
             const roundedPrice = Math.ceil(lowestPrice);
             SELECTORS.maxPricePerPerson.val(roundedPrice);
+            console.log('Updated the price to:',roundedPrice);
         } else {
             SELECTORS.maxPricePerPerson.val('');
+            console.log('Updated the price to nothing');
+
         }
     };
 
