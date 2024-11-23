@@ -733,16 +733,6 @@ $(document).ready(function () {
         }
     };
 
-    /**
-     * Toggle the tooltip display.
-     * @param {Event} event 
-     */
-    const toggleTooltip = (event) => {
-        const tooltip = SELECTORS.tooltip;
-        console.log("Tooltip button clicked.");
-        tooltip.toggle();
-        event.stopPropagation();
-    };
 
     /**
      * Send an email notification via the backend API.
