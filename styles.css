@@ -12,7 +12,7 @@
     --slider-bg: #ccc;
     --slider-active-bg: #4CAF50;
 }
-  
+
 /* Fonts */
 @font-face {
     font-family: 'Avenir Light';
@@ -20,14 +20,14 @@
     font-weight: normal;
     font-style: normal;
 }
-  
+
 /* Global styles */
 body {
     font-family: 'Avenir Light', sans-serif;
     margin: 20px;
     background-color: var(--background-color);
 }
-  
+
 h1, h2 {
     color: var(--text-color);
     margin: 0;
@@ -36,15 +36,15 @@ h1, h2 {
     background-color: var(--accent-color);
     font-weight: normal;
 }
-  
+
 h1 {
     font-size: 1.2em;
 }
-  
+
 h2 {
     font-size: 1.0em;
 }
-  
+
 /* Styles for the clickable link */
 a.destinations-link {
     display: block;
@@ -60,17 +60,17 @@ a.destinations-link {
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.2s;
 }
-  
+
 a.destinations-link:hover,
 a.destinations-link:active {
     background-color: var(--input-background);
     transform: translateY(-2px);
 }
-  
+
 #maxPricePerPerson {
     margin-top: 5px;
 }
-  
+
 /* Form styles */
 form {
     position: relative;
@@ -81,13 +81,13 @@ form {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: var(--input-background);
 }
-  
+
 label {
     display: block;
     padding: 10px;
     color: var(--text-color);
 }
-  
+
 input, select {
     width: 100%;
     padding: 10px; /* Adjust top padding */
@@ -100,7 +100,7 @@ input, select {
     -webkit-appearance: none;
     text-align: center; /* Center text in all input fields */
 }
-  
+
 /* Input group styles */
 .input-group {
     display: flex;
@@ -110,20 +110,20 @@ input, select {
     margin-bottom: 10px; /* Space between this group and the next element */
     text-align: right;
 }
-  
+
 /* Small input row within the input group */
 .input-group .form-group .small-input-row {
     flex: 1; /* Allows each item to grow */
     margin-right: 10px; /* Space between items */
 }
-  
+
 .small-input-row label {
     flex-grow: 1;
     margin-right: 10px;
     white-space: nowrap;
     color: var(--text-color);
 }
-  
+
 /* Date field styles */
 .date-field {
     display: flex;
@@ -133,19 +133,19 @@ input, select {
     font-size: 12px;
     color: var(--text-color);
 }
-  
+
 /* Styles for input inside date-field */
 .date-field input {
     flex: 1; /* Allow input to grow and fill the space */
-    text-align: center; /* Align text to the right */
+    text-align: center; /* Align text to the center */
     color: var(--text-color);
     background-color: var(--background-color) !important;
 }
-  
+
 .date-field input::placeholder {
     color: var(--text-color); /* Text color for the placeholder */
 }
-  
+
 /* Form group styles */
 .form-group {
     display: flex;
@@ -155,25 +155,25 @@ input, select {
     vertical-align: middle; /* Align the icon with the middle of the select field */
     flex-grow: 1;
 }
-  
+
 .form-group label {
     white-space: nowrap;
     text-align: left;
     flex: 0 0 auto; /* Do not grow or shrink */
 }
-  
+
 /* Styles for form-group input and select */
 .form-group input,
 .form-group select {
     flex: 1;
 }
-  
+
 /* Floating label styles */
 .floating-label {
     position: relative;
     color: var(--text-color);
 }
-  
+
 .floating-label input,
 .floating-label select {
     border: 1px solid var(--border-color);
@@ -182,7 +182,7 @@ input, select {
     background: var(--background-color);
     -webkit-appearance: none;
 }
-  
+
 .floating-label label {
     position: absolute;
     pointer-events: none;
@@ -193,52 +193,86 @@ input, select {
     padding: 0px;
     font-size: 8px; /* Adjust font size for initial state */
 }
-  
+
 /* Centering switch labels and switches */
 .form-group.switches {
     display: flex;
-    align-items: center; /* Centers items horizontally in the container */
-    justify-content: center; /* Centers items vertically if necessary */
-    gap: 10px; /* Adds some space between each switch */
-}
-  
-.form-group.switches > div {
-    display: flex;
     flex-direction: column;
-    align-items: center; /* Centers the content (both label and switch) vertically */
-    width: 100%; /* Ensures the div takes up the full width of its parent */
+    align-items: flex-start; /* Align switches to the start */
+    gap: 10px; /* Adds some space between each switch */
+    padding-top: 10px;
 }
-  
-.form-group.switches .switch {
+
+/* Removed redundant custom switch styles
+.switch {
     position: relative;
     display: inline-block;
-    width: 40px; /* Width of the switch */
-    height: 20px; /* Height of the switch */
+    width: 18px;
+    height: 4px;
     margin: 5px 0;
-    background-color: var(--slider-bg); /* Fallback color if slider doesn’t render correctly */
+    background-color: var(--slider-bg) !important; 
     border-radius: 24px;
 }
-  
-/* Adjusts label to be centered above switch */
-.form-group.switches label {
-    display: block; /* Ensures label takes its own line */
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
-  
-.floating-label input:focus ~ label,
-.floating-label input:not(:placeholder-shown) ~ label,
-#currency ~ label { /* This targets the label for the currency field specifically */
-    top: 1px; /* Adjust position for focused or filled state */
-    left: 3px;
-    font-size: 6px; /* Adjust font size when focused or filled */
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--slider-bg) !important; 
+    transition: .4s;
+    border-radius: 24px;
 }
-  
-/* New styles for 'Travel duration (max)' label */
-#maxFlightDuration + .small-label::after {
-    content: " (max)";
-    display: block; /* Makes the pseudo-element behave like a block, putting it on a new line */
-    font-size: smaller; /* Optional: makes the '(max)' font size smaller */
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 0px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
 }
-  
+
+input:checked + .slider {
+    background-color: var(--slider-active-bg) !important;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--slider-active-bg);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.slider.round {
+    border-radius: 24px;
+    background-color: #ccc !important;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+*/
+
+/* New Airline Mode Switch Label Adjustment */
+.form-check.form-switch .form-check-label {
+    margin-left: 0.5rem;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Airplane Icon styles */
 .airplane-icon {
     position: absolute;
     left: 10px; /* Adjust based on your specific spacing requirements */
@@ -246,7 +280,7 @@ input, select {
     width: 24px; /* Specify width for consistency */
     height: 24px; /* Maintain aspect ratio */
 }
-  
+
 .form-group.iata-field {
     position: relative; /* Needed for absolute positioning of icons */
     display: flex;
@@ -258,307 +292,55 @@ input, select {
     text-align: center;
 }
 
- 
-/* Adjustments for the switch icon container */
+/* Adjustments for the switch icon container - Removed since Bootstrap handles switches
 .switch-icon-container {
     display: flex;
     justify-content: center;
     position: absolute;
-    right: 15%; /* Positions the icon exactly between the two fields */
-    transform: translateX(50%) translateY(-50%); /* Adjust horizontally and vertically */
-    z-index: 2; /* Ensures the icon is clickable */
+    right: 15%;
+    transform: translateX(50%) translateY(-50%);
+    z-index: 2;
 }
-  
+
 .switch-icon {
     cursor: pointer;
-    width: 20px; /* Adjust based on your icon's size */
+    width: 20px;
     height: auto;
-    left: 10px; /* Adjust as necessary, depending on padding */
+    left: 10px;
 }
-  
+*/
+
 /* Ensuring the airplane icons and selects fill their containers without additional space for the switch icon */
 .airplane-icon, .iata-field select {
     max-width: calc(100% - 30px); /* Adjust the width to account for the icon */
 }
-  
+
 /* Specific adjustments to ensure layout does not break */
 .iata-field:first-child {
     margin-right: 20px; /* Adds some space between the fields */
 }
-  
+
 .iata-field:last-child {
     margin-left: 20px; /* Adjust if needed to balance the layout */
 }
-  
+
 /* Ensure the select fields and airplane icons fill the form */
 .iata-field select,
 .iata-field .airplane-icon {
     max-width: calc(100% - 20px); /* Adjust width considering the switch icon width */
     flex-grow: 1;
 }
-  
-/* Extra padding above the switches */
-.switches {
-    padding-top: 10px;
-}
-  
-#inbound-timeRangeDisplay,
-#outbound-timeRangeDisplay {
-    font-size: 12px;
-    font-family: 'Avenir Light', sans-serif;
-    text-align: center; /* Center the text */
-    width: 100%; /* Ensure the divs take up the full width */
-    margin: 10px 0; /* Add some margin for better spacing */
-}
-  
-/* Make sure the sliders are full width within the form */
-.time-slider {
-    margin: 0 0 20px 0; /* Add some margin below the slider */
-    padding: 0 10px; /* Padding to prevent the handles from being cut off on the sides */
-}
-  
-/* Handle styles with !important to ensure override */
-.noUi-handle {
-    border-radius: 50% !important; /* Makes the handle circular */
-    background-color: var(--button-bg) !important; /* Use the button background color for consistency */
-    border: none !important; /* Adds a white border for better visibility */
-    box-shadow: 0 0 8px rgba(0,0,0,0.3) !important; /* Adds a shadow for a more lifted look */
-    cursor: pointer !important; /* Changes cursor to pointer to indicate it's draggable */
-}
-  
-.noUi-handle:after, .noUi-handle:before {
-    content: "";
+
+/* #advancedSettingsToggle removed since Bootstrap handles toggle via collapse */
+
+/* Price Limit Label Styling */
+.price-limit-label {
     display: block;
-    position: absolute;
-    height: 14px;
-    width: 1px;
-    left: 14px;
-    background-color: var(--button-bg) !important; /* Use the button background color for consistency */
-    top: 6px;
-}
-  
-.noUi-horizontal .noUi-handle-lower {
-    width: 25px !important;
-    height: 21px !important;
-    right: -10px !important;
-    top: -3px !important;
-}
-  
-.noUi-horizontal .noUi-handle-upper {
-    width: 25px !important;
-    height: 21px !important;
-    right: -16px !important;
-    top: -3px !important;
-}
-  
-/* Touch area styles */
-.noUi-touch-area {
-    cursor: pointer !important; /* Ensures the cursor changes to pointer in the touch area */
-}
-  
-/* Slider background */
-.noUi-base {
-    background-color: var(--slider-bg) !important; /* Background color of the slider */
-}
-  
-/* Connect bar styles */
-.noUi-connect {
-    background-color: var(--background-color) !important; /* Color of the active (selected) range */
-}
-  
-.noUi-target {
-    background: none !important;
-}
-  
-.switch-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-  
-.switch-label {
-    flex-grow: 1;
-    text-align: center;
-    font-size: 10px;
-}
-  
-.form-group {
-    text-align: center; /* Center the select dropdown if desired */
-    position: relative; /* Needed for positioning the switch icon absolutely */
-}
-
-
-  
-/* Submit button styles */
-input[type="submit"] {
-    background-color: var(--button-bg);
-    color: white;
-    padding: 10px;
-    border: none;
-    margin-top: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    border-radius: 5px;
-    text-align: center;
-    font-family: 'Avenir Light', sans-serif;
-}
-  
-/* Disabled button styles */
-#submitFormButton:disabled {
-    background-color: #ccc; /* Gray background */
-    color: #666; /* Darker text to indicate it's disabled */
-    cursor: not-allowed; /* Cursor to indicate the button is not clickable */
-}
-  
-input[type="submit"]:hover,
-input[type="submit"]:active {
-    background-color: var(--button-hover-bg);
-    transform: translateY(-2px);
-}
-  
-/* Suggest price button styles */
-#suggestPriceBtn {
-    position: relative; /* Make this a relative container for absolute positioning inside */
-    background-color: var(--button-bg);
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    border-radius: 5px;
-    font-family: 'Avenir Light', sans-serif;
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 0px;
-}
-  
-/* Label for advanced settings toggle */
-#advancedSettingsToggle {
-    background-color: transparent; /* Remove background color for a label-like appearance */
+    margin-bottom: 5px;
+    font-size: 14px;
     color: var(--text-color);
-    cursor: pointer;
-    font-family: 'Avenir Light', sans-serif;
-    font-size: 8px; /* Adjust font size for visibility */
-    display: inline-flex; /* Use inline-flex to keep label and symbol in the same line */
-    align-items: center;
-    justify-content: center;
-    transition: color 0.3s;
-}
-  
-/* Icon before the text */
-#advancedSettingsToggle::before {
-    content: "+"; /* "+" icon by default */
-    margin-right: 5px; /* Space between icon and text */
-    font-size: 8px; /* Icon size to match the text */
-    transition: transform 0.2s; /* Smooth transition for rotation */
-}
-  
-/* Rotate icon when expanded */
-#advancedSettingsToggle.expanded::before {
-    content: "\2212"; /* "−" icon for expanded state */
 }
 
-/* Select2 container and selections styles */
-.select2-container--default .select2-selection--multiple {
-    background-color: var(--background-color) !important; /* Match with your form's background color */
-    border: 1px solid var(--border-color); /* Match with your form's border color */
-    border-radius: 4px; /* Optional: match with your form's border-radius */
-}
-
-/* Adjust the height of the selection container to eliminate white space */
-.select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    padding: 4px 8px; /* Adjust padding to ensure content fits nicely */
-    line-height: 1.5; /* Adjust line height for better visual */
-}
-
-/* Style for the search input within the selection */
-.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
-    background-color: var(--background-color); /* Ensure background matches */
-    border: none; /* Remove any default border */
-}
-
-/* Placeholder color adjustment for consistency */
-.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field::placeholder {
-    color: var(--text-color); /* Optional: adjust placeholder text color */
-}
-
-/* When focusing on the search field, remove the outline or adjust as necessary */
-.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field:focus {
-    outline: none; /* Remove outline */
-    border: none; /* Ensure no border appears */
-}
-  
-#suggestPriceBtn:hover,
-#suggestPriceBtn:active {
-    background-color: var(--button-hover-bg);
-    transform: translateY(-2px);
-}
-  
-/* Toggle switch styles */
-/* The switch - the box around the slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 18px; /* Width of the switch */
-  height: 4px; /* Height of the switch */
-  margin: 5px 0; /* Provide some margin around the switch */
-}
-  
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-  
-/* The slider */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--slider-bg) !important; 
-    transition: .4s;
-    border-radius: 24px; /* Fully rounded corners for the slider */
-  }
-
-  
-  
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 20px; /* Height of the circle inside the slider */
-  width: 20px; /* Width of the circle inside the slider */
-  left: 0px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%; /* Circular shape for the slider */
-}
-  
-input:checked + .slider {
-  background-color: var(--slider-active-bg) !important; /* Color when the switch is active/checked */
-}
-  
-input:focus + .slider {
-  box-shadow: 0 0 1px var(--slider-active-bg); /* Optional: add a box-shadow when the switch is focused */
-}
-  
-input:checked + .slider:before {
-  transform: translateX(20px); /* Slide the circle to the right on check */
-}
-  
-/* Rounded sliders */
-.slider.round {
-  border-radius: 24px;
-  background-color: #ccc !important;
-}
-  
-.slider.round:before {
-  border-radius: 50%;
-}
-  
 /* Help button and tooltip styles */
 #helpBtn {
     position: absolute;
@@ -574,7 +356,7 @@ input:checked + .slider:before {
     font-size: 14px;
     cursor: pointer;
 }
-  
+
 #tooltip {
     display: none;
     position: absolute;
@@ -587,7 +369,7 @@ input:checked + .slider:before {
     margin-left: 35px; /* Position to the right of the help button */
     margin-top: -5px; /* Position aligned with the help button */
 }
-  
+
 /* Loader animation styles */
 .loader {
     display: none; /* Hide loader initially */
@@ -604,7 +386,7 @@ input:checked + .slider:before {
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
 }
-  
+
 /* Increased specificity for disabled input fields */
 form .form-group .disabled-input {
     background-color: var(--slider-bg); /* Light gray for background */
@@ -616,8 +398,6 @@ form .form-group .disabled-input {
     align-items: center;
     min-height: 100vh; /* Ensures it covers the full viewport height */
 }
-
-
 
 /* Modal Styles */
 .modal-content {
@@ -688,63 +468,108 @@ form .form-group .disabled-input {
     background-color: var(--input-background);
 }
 
-  
-/* Safari */
-@-webkit-keyframes spin {
-   0% { -webkit-transform: rotate(0deg); }
-   100% { -webkit-transform: rotate(360deg); }
-}
-  
-@keyframes spin {
-   0% { transform: rotate(0deg); }
-   100% { transform: rotate(360deg); }
-}
-  
-/* Reset default mobile browser styles */
-input:-webkit-autofill {
-    transition: background-color 5000s ease-in-out 0s;
+/* Submit button styles */
+input[type="submit"] {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 10px;
+    border: none;
+    margin-top: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+    text-align: center;
+    font-family: 'Avenir Light', sans-serif;
 }
 
-/* General reset for appearance */
-input[list] {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    -ms-appearance: none !important;
+#submitFormButton:disabled {
+    background-color: #ccc; /* Gray background */
+    color: #666; /* Darker text to indicate it's disabled */
+    cursor: not-allowed; /* Cursor to indicate the button is not clickable */
 }
 
-/* Hide the default arrow in input fields with list attribute */
-input[list]::-webkit-calendar-picker-indicator,
-input[list]::-webkit-clear-button,
-input[list]::-webkit-inner-spin-button,
-input[list]::-webkit-outer-spin-button,
-input[list]::-ms-clear,
-input[list]::-ms-expand {
-    display: none !important;
-    -webkit-appearance: none !important;
+input[type="submit"]:hover,
+input[type="submit"]:active {
+    background-color: var(--button-hover-bg);
+    transform: translateY(-2px);
 }
 
-/* Ensuring no dropdown on hover or focus */
-input[list]:hover,
-input[list]:focus {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    -ms-appearance: none !important;
+/* Suggest price button styles */
+#suggestPriceBtn {
+    /* Removed custom styles; now using Bootstrap's classes */
+    /* Retain any additional custom styles if needed */
 }
 
-/* Specific fix for the arrow in some browsers */
-input[list]::-webkit-search-cancel-button,
-input[list]::-webkit-search-decoration {
-    display: none !important;
+#suggestPriceBtn:hover,
+#suggestPriceBtn:active {
+    /* Removed as Bootstrap handles hover and active states */
+    /* If additional styles are needed, they can be added here */
 }
 
-/* Edge-specific CSS hack */
-@supports (-ms-ime-align: auto) {
-    input[list]::-ms-expand {
-        display: none !important;
-    }
+/* Select2 container and selections styles */
+.select2-container--default .select2-selection--multiple {
+    background-color: var(--background-color) !important; /* Match with your form's background color */
+    border: 1px solid var(--border-color); /* Match with your form's border color */
+    border-radius: 4px; /* Optional: match with your form's border-radius */
 }
 
+/* Adjust the height of the selection container to eliminate white space */
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 4px 8px; /* Adjust padding to ensure content fits nicely */
+    line-height: 1.5; /* Adjust line height for better visual */
+}
 
+/* Style for the search input within the selection */
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
+    background-color: var(--background-color); /* Ensure background matches */
+    border: none; /* Remove any default border */
+}
 
+/* Placeholder color adjustment for consistency */
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field::placeholder {
+    color: var(--text-color); /* Optional: adjust placeholder text color */
+}
+
+/* When focusing on the search field, remove the outline or adjust as necessary */
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field:focus {
+    outline: none; /* Remove outline */
+    border: none; /* Ensure no border appears */
+}
+
+/* Floating label adjustments for currency and other fields */
+.floating-label input:focus ~ label,
+.floating-label input:not(:placeholder-shown) ~ label,
+.floating-label select:focus ~ label,
+.floating-label select:not(:placeholder-shown) ~ label {
+    top: 1px; /* Adjust position for focused or filled state */
+    left: 3px;
+    font-size: 6px; /* Adjust font size when focused or filled */
+}
+
+/* Added styles for dynamic label updates if needed */
+.form-check.form-switch .form-check-label {
+    margin-left: 0.5rem;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Additional styles for slider values */
+.slider-values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* Tooltip customization using Bootstrap */
+.tooltip-inner {
+    background-color: var(--button-bg) !important;
+    color: white;
+    font-family: 'Avenir Light', sans-serif;
+    font-size: 12px;
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: var(--button-bg) !important;
+}
