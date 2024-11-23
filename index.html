@@ -81,32 +81,23 @@
         </div>
 
         <!-- One-Way Trip, Flexible Dates and Direct flight Toggle Switch Group -->
-        <div class="form-group switches">
+        <div class="form-group switches d-flex flex-column align-items-start">
             <!-- One-Way Trip Switch -->
-            <div>
-                <label for="oneWayTrip">One-Way Trip:</label>
-                <label class="switch">
-                    <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
-                    <span class="slider round"></span>
-                </label>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="oneWayTrip" name="oneWayTrip">
+                <label class="form-check-label" for="oneWayTrip">One-Way Trip</label>
             </div>
             
             <!-- Flexible Dates Switch -->
-            <div>
-                <label for="flexibleDates">+/- 1 day:</label>
-                <label class="switch">
-                    <input type="checkbox" id="flexibleDates" name="flexibleDates">
-                    <span class="slider round"></span>
-                </label>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="flexibleDates" name="flexibleDates">
+                <label class="form-check-label" for="flexibleDates">+/- 1 day</label>
             </div>
             
             <!-- Direct Flight Switch -->
-            <div>
-                <label for="directFlight">Direct flights only:</label>
-                <label class="switch">
-                    <input type="checkbox" id="directFlight" name="directFlight">
-                    <span class="slider round"></span>
-                </label>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="directFlight" name="directFlight">
+                <label class="form-check-label" for="directFlight">Direct Flights Only</label>
             </div>
         </div>
 
@@ -123,7 +114,7 @@
                 <label for="maxStops" class="small-label">Stops (max)</label>
             </div>
 
-            <!-- Travel time -->
+            <!-- Flight Duration -->
             <div class="form-group small-input-row floating-label">
                 <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="50" placeholder="" required>
                 <label for="maxFlightDuration" class="small-label">Flight duration</label>
@@ -149,21 +140,28 @@
         </div>
 
         <!-- Outbound Slider Options -->
-        <div id="outbound-timeRangeDisplay">Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span></div>
+        <div id="outbound-timeRangeDisplay">Outbound departure time: <span id="outboundTimeStartDisplay">00:00</span> - <span id="outboundTimeEndDisplay">24:00</span></div>
         <div id="outbound-timeRangeSlider" class="time-slider"></div>
 
         <!-- Inbound Slider Options -->
-        <div id="inbound-timeRangeDisplay">Inbound departure time: <span id="inboundTimeStartDisplay"></span> - <span id="inboundTimeEndDisplay"></span></div>
+        <div id="inbound-timeRangeDisplay">Inbound departure time: <span id="inboundTimeStartDisplay">00:00</span> - <span id="inboundTimeEndDisplay">24:00</span></div>
         <div id="inbound-timeRangeSlider" class="time-slider"></div>
 
         <!-- Suggest Price Button and Help Button -->
-        <button type="button" id="suggestPriceBtn">
+        <button type="button" id="suggestPriceBtn" class="btn btn-primary position-relative">
             1. Check availability
             <!-- Help Button -->
-            <div id="helpBtn">?</div>
+            <div id="helpBtn" class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-secondary">
+                ?
+            </div>
         </button>
         <!-- Tooltip -->
-        <div id="tooltip" style="display:none;">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
+        <div id="tooltip" class="tooltip bs-tooltip-top" role="tooltip" style="display:none;">
+            <div class="tooltip-arrow"></div>
+            <div class="tooltip-inner">
+                Click this button to check available flights and get the current lowest price (per person), based on your preferences.
+            </div>
+        </div>
 
         <!-- Advanced Settings Toggle Button -->
         <div class="form-group">
@@ -175,38 +173,31 @@
         <!-- Advanced Settings Section -->
         <div id="advancedSettings" class="collapse">
             <div class="airline-selection-container">
-                <div class="switch-row">
-                    <div class="switch-label">Exclude Airlines</div>
-                    <div class="switch-container">
-                        <label class="switch">
-                            <input type="checkbox" id="airlineModeSwitch">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                    <div class="switch-label">Include only Airlines</div>
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="airlineModeSwitch">
+                    <label class="form-check-label" for="airlineModeSwitch">Include only Airlines</label>
                 </div>
                 <!-- Airline Exclusion -->
                 <div class="form-group">
-                    <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple"></select>
+                    <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple" class="form-control"></select>
                 </div>
             </div>
         </div>
 
-
         <!-- Price Limit Field and Label -->
         <div class="form-group floating-label">
             <label class="price-limit-label" for="maxPricePerPerson">Price limit per person:</label>
-            <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
+            <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" class="form-control" required>
         </div>
 
         <!-- Email Field and Label -->
         <div class="form-group floating-label">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" class="form-control" required>
         </div>
 
         <!-- Submit Button -->
-        <input type="submit" id="submitFormButton" value="2. Submit" disabled>
+        <input type="submit" id="submitFormButton" value="2. Submit" class="btn btn-success mt-3" disabled>
     </form>
 
     <!-- Modal for Hotel Tracker Confirmation -->
@@ -227,8 +218,6 @@
             </div>
         </div>
     </div>
-
-
 
 </body>
 </html>
