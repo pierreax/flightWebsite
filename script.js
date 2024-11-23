@@ -546,13 +546,6 @@ $(document).ready(function () {
         event.stopPropagation();
     };
 
-    /**
-     * Handle the confirmation button in the hotel tracking modal.
-     */
-    const handleConfirmHotelTracker = () => {
-        console.log('User confirmed hotel tracking.');
-        window.location.href = redirectUrl;
-    };
 
     // ===========================
     // Helper Functions

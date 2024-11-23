@@ -158,38 +158,69 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
 
 // Microsoft Graph setup for sending emails
 const TENANT_ID = process.env.EMAIL_TENANT_ID;
-const CLIENT_ID = process.env.EMAIL_CLIENT_ID;
-const CLIENT_SECRET = process.env.EMAIL_CLIENT_SECRET;
-const SCOPE = 'https://graph.microsoft.com/.default';
-const TOKEN_ENDPOINT = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
-const EMAIL_ADDRESS = "pierre@robotize.no"; // Sender email address
+const EMAIL_CLIENT_ID = process.env.EMAIL_CLIENT_ID;
+const EMAIL_CLIENT_SECRET = process.env.EMAIL_CLIENT_SECRET;
 
-// Function to get Microsoft Graph access token
+// ------------ EMAIL ---------------
+
+app.post('/api/sendEmail', async (req, res) => {
+    try {
+        const { subject, body, recipient_email } = req.body;
+
+        // Validate required parameters
+        if (!subject || !body || !recipient_email) {
+            return res.status(400).json({ message: "Missing required parameters: subject, body, or recipient_email." });
+        }
+
+        // Get access token for Microsoft Graph API
+        const token = await getAccessToken();
+
+        // Log the token to verify it
+        console.log("Access Token:", token);
+
+        // Send the email via Microsoft Graph API
+        const result = await sendEmail(subject, body, recipient_email, token);
+
+        // Return success or failure response
+        return res.status(result ? 200 : 500).json({ message: result ? "Email sent successfully." : "Failed to send email." });
+
+    } catch (error) {
+        console.error('Error during email sending:', error.message);
+
+        // Send error message back to frontend
+        return res.status(500).json({ message: `Error during email sending: ${error.message}` });
+    }
+});
+
+
 async function getAccessToken() {
     const tokenData = {
         grant_type: 'client_credentials',
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        scope: SCOPE
+        client_id: EMAIL_CLIENT_ID,
+        client_secret: EMAIL_CLIENT_SECRET,
+        scope: 'https://graph.microsoft.com/.default'  // Make sure this scope is correct
     };
 
-    const response = await fetch(TOKEN_ENDPOINT, {
+    const response = await fetch(`https://login.microsoftonline.com/${EMAIL_TENANT_ID}/oauth2/v2.0/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(tokenData).toString()
     });
 
     if (!response.ok) {
+        console.error('Error fetching token:', await response.text());
         throw new Error(`Failed to get access token: ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('Access Token:', data.access_token); // Log to verify the token
     return data.access_token;
 }
 
-// Function to send an email through Microsoft Graph API
+
+
 async function sendEmail(subject, body, recipientEmail, token) {
-    const SENDMAIL_ENDPOINT = `https://graph.microsoft.com/v1.0/users/${EMAIL_ADDRESS}/sendMail`;
+    const SENDMAIL_ENDPOINT = `https://graph.microsoft.com/v1.0/users/pierre@robotize.no/sendMail`;
 
     const message = {
         message: {
@@ -201,49 +232,37 @@ async function sendEmail(subject, body, recipientEmail, token) {
             toRecipients: [
                 {
                     emailAddress: {
-                        address: recipientEmail
+                        address: 'pierre@robotize.no'
                     }
                 }
-            ]
+            ],
+            attachments: []  // No image attachment
         },
         saveToSentItems: "true"
     };
 
-    const response = await fetch(SENDMAIL_ENDPOINT, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(message)
-    });
-
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to send email: ${JSON.stringify(errorData)}`);
-    }
-
-    return response.ok;
-}
-
-// Route to send an email using Microsoft Graph
-app.post('/api/sendMail', async (req, res) => {
-    const { subject = "New submission for your Flight Robot", body = "Great news, somebody just signed up for your Flight Robot", recipient_email } = req.body;
-
     try {
-        const token = await getAccessToken();  // Get access token
-        const result = await sendEmail(subject, body, recipient_email, token);  // Send email
+        const response = await fetch(SENDMAIL_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(message)
+        });
 
-        if (result) {
-            res.json({ message: "Email sent successfully" });
-        } else {
-            res.status(500).json({ error: "Failed to send email" });
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error("Error response from Microsoft Graph:", errorData);
+            throw new Error(`Failed to send email: ${JSON.stringify(errorData)}`);
         }
+
+        return response.ok;
     } catch (error) {
-        console.error("Error sending email:", error);
-        res.status(500).json({ error: "An error occurred while sending email" });
+        console.error("Error in sendEmail function:", error);
+        throw error;
     }
-});
+}
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
