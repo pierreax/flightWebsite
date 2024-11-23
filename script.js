@@ -757,13 +757,6 @@ $(document).ready(function () {
         $('#hotelTrackingModal').modal('show');
     };
 
-    /**
-     * Handle the confirmation to track hotels.
-     */
-    const handleConfirmHotelTracker = () => {
-        console.log('User confirmed hotel tracking.');
-        window.location.href = redirectUrl;
-    };
 
     // ===========================
     // Helper Functions
