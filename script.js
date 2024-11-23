@@ -500,47 +500,85 @@ $(document).ready(function () {
     // ===========================
 
     /**
-     * Submit form data to SheetyProxy API.
-     * @param {Object} formData 
-     * @returns {Object} Sheety response data.
+     * Load airport data from a text file.
+     * @returns {Object} Airport data mapping IATA codes to city names.
      */
-    const submitToSheetyProxy = async (formData) => {
+    const loadAirportData = async () => {
         try {
-            const response = await fetch(API_ENDPOINTS.sheetyProxy, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
+            const response = await fetch(API_ENDPOINTS.readAirportsData);
+            const text = await response.text();
+            const data = {};
+
+            text.split('\n').forEach(line => {
+                const [iata, city] = line.split(' - ');
+                if (iata && city) {
+                    data[iata.trim()] = city.trim();
+                }
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            return await response.json();
+            return data;
         } catch (error) {
-            console.error('Error submitting to SheetyProxy:', error);
-            throw error;
+            console.error('Error loading airport data:', error);
+            return {};
         }
     };
 
     /**
-     * Fetch city name from IATA code via backend API.
-     * @param {string} iataCode 
-     * @returns {string} City name.
+     * Load airline data from a JSON file.
+     * @returns {Object} Airline data mapping airline codes to airline names.
      */
-    const fetchCityFromIATACode = async (iataCode) => {
-        const backendUrl = `${API_ENDPOINTS.getCityByIATA}?iataCode=${encodeURIComponent(iataCode)}`;
+    const loadAirlineData = async () => {
+        try {
+            const response = await fetch(API_ENDPOINTS.readAirlinesData);
+            const data = await response.json();
+            const airlineDict = {};
+
+            data.forEach(airline => {
+                airlineDict[airline.code] = airline.name;
+            });
+
+            return airlineDict;
+        } catch (error) {
+            console.error('Error loading airline data:', error);
+            return {};
+        }
+    };
+
+    /**
+     * Fetch the closest airport based on latitude and longitude via the backend API.
+     * @param {number} latitude 
+     * @param {number} longitude 
+     */
+    const fetchClosestAirport = async (latitude, longitude) => {
+        console.log('Searching closest airport to coordinates:', latitude, longitude);
 
         try {
-            const response = await fetch(backendUrl);
-            const data = await response.json();
-            console.log('City fetched:', data);
-            return data.city || '';
+            const response = await fetch(API_ENDPOINTS.getClosestAirport, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ latitude, longitude })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch airport data: ${response.status} - ${response.statusText}`);
+            }
+
+            const amadeusData = await response.json();
+            const airports = amadeusData.data;
+
+            if (airports && airports.length > 0) {
+                const nearestAirport = airports[0];
+                const airportIATA = nearestAirport.iataCode;
+                console.log('Closest airport IATA code:', airportIATA);
+
+                // Set the IATA Code From field
+                const airportName = airportData[airportIATA] || '';
+                SELECTORS.iataCodeFrom.val(`${airportIATA} - ${airportName}`).trigger('change');
+            } else {
+                console.log('No airport found near this location');
+            }
         } catch (error) {
-            console.error('Error fetching city from IATA code:', error);
-            return '';
+            console.error('Error fetching closest airport:', error);
         }
     };
 
@@ -619,6 +657,62 @@ $(document).ready(function () {
     };
 
     /**
+     * Submit form data to SheetyProxy API.
+     * @param {Object} formData 
+     * @returns {Object} Sheety response data.
+     */
+    const submitToSheetyProxy = async (formData) => {
+        try {
+            const response = await fetch(API_ENDPOINTS.sheetyProxy, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error submitting to SheetyProxy:', error);
+            throw error;
+        }
+    };
+
+    /**
+     * Capture redirect parameters after form submission.
+     */
+    const captureRedirectParameters = () => {
+        redirectEmail = encodeURIComponent(SELECTORS.emailInput.val());
+        redirectCurrency = encodeURIComponent(SELECTORS.currencyInput.val());
+        const iataCodeToValue = SELECTORS.iataCodeTo.val();
+        redirectIataCodeTo = iataCodeToValue ? iataCodeToValue.split(' - ')[0] : '';
+        console.log('Redirect IATA Code To:', redirectIataCodeTo);
+    };
+
+    /**
+     * Fetch city name from IATA code via backend API.
+     * @param {string} iataCode 
+     * @returns {string} City name.
+     */
+    const fetchCityFromIATACode = async (iataCode) => {
+        const backendUrl = `${API_ENDPOINTS.getCityByIATA}?iataCode=${encodeURIComponent(iataCode)}`;
+
+        try {
+            const response = await fetch(backendUrl);
+            const data = await response.json();
+            console.log('City fetched:', data);
+            return data.city || '';
+        } catch (error) {
+            console.error('Error fetching city from IATA code:', error);
+            return '';
+        }
+    };
+
+    /**
      * Send an email notification via the backend API.
      * @param {Object} formData 
      */
@@ -672,113 +766,7 @@ $(document).ready(function () {
     };
 
     // ===========================
-    // Backend Interaction Functions
-    // ===========================
-
-    /**
-     * Fetch the closest airport based on latitude and longitude via the backend API.
-     * @param {number} latitude 
-     * @param {number} longitude 
-     */
-    const fetchClosestAirport = async (latitude, longitude) => {
-        console.log('Searching closest airport to coordinates:', latitude, longitude);
-
-        try {
-            const response = await fetch(API_ENDPOINTS.getClosestAirport, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ latitude, longitude })
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch airport data: ${response.status} - ${response.statusText}`);
-            }
-
-            const amadeusData = await response.json();
-            const airports = amadeusData.data;
-
-            if (airports && airports.length > 0) {
-                const nearestAirport = airports[0];
-                const airportIATA = nearestAirport.iataCode;
-                console.log('Closest airport IATA code:', airportIATA);
-
-                // Set the IATA Code From field
-                const airportName = airportData[airportIATA] || '';
-                SELECTORS.iataCodeFrom.val(`${airportIATA} - ${airportName}`).trigger('change');
-            } else {
-                console.log('No airport found near this location');
-            }
-        } catch (error) {
-            console.error('Error fetching closest airport:', error);
-        }
-    };
-
-    /**
-     * Load airline data from a JSON file.
-     * @returns {Object} Airline data mapping airline codes to airline names.
-     */
-    const loadAirlineData = async () => {
-        try {
-            const response = await fetch(API_ENDPOINTS.readAirlinesData);
-            const data = await response.json();
-            const airlineDict = {};
-
-            data.forEach(airline => {
-                airlineDict[airline.code] = airline.name;
-            });
-
-            return airlineDict;
-        } catch (error) {
-            console.error('Error loading airline data:', error);
-            return {};
-        }
-    };
-
-    /**
-     * Load airport data from a text file.
-     * @returns {Object} Airport data mapping IATA codes to city names.
-     */
-    const loadAirportData = async () => {
-        try {
-            const response = await fetch(API_ENDPOINTS.readAirportsData);
-            const text = await response.text();
-            const data = {};
-
-            text.split('\n').forEach(line => {
-                const [iata, city] = line.split(' - ');
-                if (iata && city) {
-                    data[iata.trim()] = city.trim();
-                }
-            });
-
-            return data;
-        } catch (error) {
-            console.error('Error loading airport data:', error);
-            return {};
-        }
-    };
-
-    /**
-     * Populate the airlines dropdown with options.
-     * @param {Array} airlines 
-     */
-    const updateExcludedAirlinesDropdown = (airlines) => {
-        SELECTORS.excludeAirlinesSelect.empty();
-
-        airlines.forEach(code => {
-            const airlineName = airlinesDict[code] || code;
-            SELECTORS.excludeAirlinesSelect.append(new Option(airlineName, code));
-        });
-
-        // Reinitialize Select2 to update options
-        SELECTORS.excludeAirlinesSelect.select2({
-            placeholder: airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude',
-            allowClear: true
-        });
-    };
-
-    // ===========================
-    // Utility Functions
+    // Helper Functions
     // ===========================
 
     /**
@@ -834,66 +822,90 @@ $(document).ready(function () {
     };
 
     /**
-     * Update currency and location based on the user's IP.
+     * Populate the airlines dropdown with options.
+     * @param {Array} airlines 
      */
-    const updateCurrencyAndLocation = () => {
-        $.get(API_ENDPOINTS.ipGeo, function (response) {
-            console.log(response);
+    const updateExcludedAirlinesDropdown = (airlines) => {
+        SELECTORS.excludeAirlinesSelect.empty();
 
-            const currency = response.currency.code;
-            const latitude = response.latitude;
-            const longitude = response.longitude;
+        airlines.forEach(code => {
+            const airlineName = airlinesDict[code] || code;
+            SELECTORS.excludeAirlinesSelect.append(new Option(airlineName, code));
+        });
 
-            console.log('Setting the currency to:', currency);
-
-            // Update the currency based on the IP-response
-            SELECTORS.currencyInput.val(currency).trigger('change');
-
-            // Fetch the closest airport using coordinates
-            fetchClosestAirport(latitude, longitude);
-        }).fail(function (error) {
-            console.error("Error fetching IP-based location and currency:", error);
+        // Reinitialize Select2 to update options
+        SELECTORS.excludeAirlinesSelect.select2({
+            placeholder: airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude',
+            allowClear: true
         });
     };
+
+    // ===========================
+    // Utility Functions
+    // ===========================
+
+    /**
+     * Format a Date object to DD/MM/YYYY.
+     * @param {Date} dateObject 
+     * @returns {string} Formatted date string.
+     */
+    const formatDate = (dateObject) => {
+        if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
+            console.error('Invalid date:', dateObject);
+            return "";
+        }
+        const day = dateObject.getDate().toString().padStart(2, '0');
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+        const year = dateObject.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    // ===========================
+    // Initialization Sequence
+    // ===========================
 
     /**
      * Initialize the application.
      */
     const init = async () => {
-        // Load airport and airline data
-        airportData = await loadAirportData();
-        airlinesDict = await loadAirlineData();
+        try {
+            // Load airport and airline data
+            airportData = await loadAirportData();
+            airlinesDict = await loadAirlineData();
 
-        // Populate datalists
-        populateDatalist('iataCodeFromList', airportData);
-        populateDatalist('iataCodeToList', airportData);
+            // Populate datalists
+            populateDatalist('iataCodeFromList', airportData);
+            populateDatalist('iataCodeToList', airportData);
 
-        // Initialize autocomplete
-        initializeAutocomplete();
+            // Initialize autocomplete
+            initializeAutocomplete();
 
-        // Initialize sliders
-        initializeSliders();
+            // Initialize sliders
+            initializeSliders();
 
-        // Initialize date picker
-        initializeDatePicker();
+            // Initialize date picker
+            initializeDatePicker();
 
-        // Initialize Select2 for airlines dropdown
-        SELECTORS.excludeAirlinesSelect.select2({
-            placeholder: 'Select airlines to exclude',
-            allowClear: true
-        });
+            // Initialize Select2 for airlines dropdown
+            SELECTORS.excludeAirlinesSelect.select2({
+                placeholder: 'Select airlines to exclude',
+                allowClear: true
+            });
 
-        // Apply URL parameters after data is loaded
-        const queryParams = getQueryParams();
-        if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
-            SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
+            // Apply URL parameters after data is loaded
+            const queryParams = getQueryParams();
+            if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
+                SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
+            }
+
+            // Update currency and location based on IP
+            updateCurrencyAndLocation();
+
+            // Attach event listeners
+            attachEventListeners();
+        } catch (error) {
+            console.error('Initialization error:', error);
         }
-
-        // Update currency and location based on IP
-        updateCurrencyAndLocation();
-
-        // Attach event listeners
-        attachEventListeners();
     };
 
     // Start the initialization process
