@@ -21,16 +21,6 @@ app.get('/', (req, res) => {
 app.post('/api/getClosestAirport', async (req, res) => {
     const { latitude, longitude } = req.body;
 
-    // Validate input
-    if (
-        typeof latitude !== 'number' ||
-        typeof longitude !== 'number' ||
-        isNaN(latitude) ||
-        isNaN(longitude)
-    ) {
-        return res.status(400).json({ error: 'Invalid latitude or longitude provided.' });
-    }
-
     try {
         const apiKey = process.env.AVIATIONSTACK_API_KEY;
 
