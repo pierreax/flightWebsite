@@ -31,6 +31,7 @@ $(document).ready(function () {
         helpBtn: $('#helpBtn'),
         tooltip: $('#tooltip'),
         confirmHotelTrackerBtn: $('#confirmHotelTracker'),
+        cancelHotelTrackerBtn: $('#cancelHotelTracker'),
         hotelTrackingModal: $('#hotelTrackingModal'),
         dateField: $('#dateField'),
         outboundTimeStartDisplay: $('#outboundTimeStartDisplay'),
@@ -632,18 +633,18 @@ $(document).ready(function () {
             redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
             redirectUrl = `https://www.robotize.no/hotels?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
 
+            // Send email notification
+            await sendEmailNotification(formData);
+            
             // Show hotel tracking modal
             askForHotelTracking();
 
-            // Send email notification
-            await sendEmailNotification(formData);
 
         } catch (error) {
             console.error('Error during form submission:', error);
             alert('There was an error processing your request. Please try again later.');
         } finally {
             SELECTORS.loader.hide();
-            window.location.reload();
         }
     };
 
@@ -734,6 +735,15 @@ $(document).ready(function () {
 
 
     /**
+     * Handle the "No" button click to reload the page.
+     */
+    const handleCancelHotelTracker = () => {
+        console.log('User declined hotel tracking. Reloading the page.');
+        window.location.reload(true); // Forces reload from the server
+    };
+
+
+    /**
      * Handle the switch icon click to toggle IATA codes.
      */
     const switchIATACodes = () => {
@@ -820,6 +830,9 @@ $(document).ready(function () {
 
         // Confirm hotel tracker button click
         SELECTORS.confirmHotelTrackerBtn.on('click', handleConfirmHotelTracker);
+
+        // Decline hotel tracker button click
+        SELECTORS.cancelHotelTrackerBtn.on('click', handleCancelHotelTracker);
 
         // Attach event listener to suggestPriceBtn
         SELECTORS.suggestPriceBtn.on('click', suggestPriceLimit);
