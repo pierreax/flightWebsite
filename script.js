@@ -63,6 +63,7 @@ $(document).ready(function () {
     let redirectCity = '';
     let redirectUrl = '';
     let airlineSelectionMode = false; // False for exclude mode, true for include mode
+    let flatpickrInstance = null; // To store the Flatpickr instance
 
     // ===========================
     // Initialization Functions
@@ -72,7 +73,7 @@ $(document).ready(function () {
      * Initialize the Flatpickr date range picker.
      */
     const initializeDatePicker = () => {
-        return flatpickr("#dateField", {
+        flatpickrInstance = flatpickr("#dateField", {
             altInput: true,
             mode: "range",
             altFormat: "j M Y",
@@ -174,12 +175,45 @@ $(document).ready(function () {
      */
     const populateDatalist = (datalistId, data) => {
         const datalist = document.getElementById(datalistId);
+        if (!datalist) return; // Prevent errors if datalist does not exist
         datalist.innerHTML = '';
         Object.keys(data).forEach(key => {
             const option = document.createElement('option');
             option.value = `${key} - ${data[key]}`;
             datalist.appendChild(option);
         });
+    };
+
+    /**
+     * Initialize event listeners for various elements.
+     */
+    const attachEventListeners = () => {
+        // Handle form submission
+        SELECTORS.searchForm.on('submit', handleFormSubmission);
+
+        // Handle checkbox interactions
+        SELECTORS.excludeAirlinesSelect.on('change', handleExcludedAirlinesChange);
+
+        // Toggle IATA codes
+        $('.switch-icon-container').on('click', switchIATACodes);
+
+        // One-way trip checkbox change
+        SELECTORS.oneWayTripCheckbox.on('change', handleOneWayTripChange);
+
+        // Direct flight checkbox change
+        SELECTORS.directFlightCheckbox.on('change', handleDirectFlightChange);
+
+        // Flexible dates checkbox change
+        SELECTORS.flexibleDatesCheckbox.on('change', handleFlexibleDatesChange);
+
+        // Airline mode switch change
+        SELECTORS.airlineModeSwitch.on('change', handleAirlineModeSwitchChange);
+
+        // Help button tooltip toggle
+        SELECTORS.helpBtn.on('click', toggleTooltip);
+
+        // Confirm hotel tracker button click
+        SELECTORS.confirmHotelTrackerBtn.on('click', handleConfirmHotelTracker);
     };
 
     // ===========================
@@ -221,23 +255,6 @@ $(document).ready(function () {
         } finally {
             SELECTORS.loader.hide();
         }
-    };
-
-    /**
-     * Handle changes in the "Exclude Airlines" dropdown.
-     */
-    const handleExcludedAirlinesChange = () => {
-        updatePriceBasedOnSelection();
-    };
-
-    /**
-     * Toggle the switch icon to swap IATA codes.
-     */
-    const switchIATACodes = () => {
-        const fromVal = SELECTORS.iataCodeFrom.val();
-        const toVal = SELECTORS.iataCodeTo.val();
-        SELECTORS.iataCodeFrom.val(toVal).trigger('change');
-        SELECTORS.iataCodeTo.val(fromVal).trigger('change');
     };
 
     /**
@@ -285,6 +302,14 @@ $(document).ready(function () {
     };
 
     /**
+     * Handle changes in the flexible dates checkbox.
+     */
+    const handleFlexibleDatesChange = () => {
+        console.log('Flexible dates toggle changed.');
+        // Additional logic can be added here if needed
+    };
+
+    /**
      * Handle changes in the airline mode switch.
      */
     const handleAirlineModeSwitchChange = () => {
@@ -308,14 +333,10 @@ $(document).ready(function () {
     };
 
     /**
-     * Toggle the display of the tooltip.
-     * @param {Event} event 
+     * Handle changes in the "Exclude Airlines" dropdown.
      */
-    const toggleTooltip = (event) => {
-        const tooltip = SELECTORS.tooltip;
-        console.log("Tooltip button clicked.");
-        tooltip.toggle();
-        event.stopPropagation();
+    const handleExcludedAirlinesChange = () => {
+        updatePriceBasedOnSelection();
     };
 
     /**
@@ -326,8 +347,18 @@ $(document).ready(function () {
         window.location.href = redirectUrl;
     };
 
+    /**
+     * Handle the switch icon click to toggle IATA codes.
+     */
+    const switchIATACodes = () => {
+        const fromVal = SELECTORS.iataCodeFrom.val();
+        const toVal = SELECTORS.iataCodeTo.val();
+        SELECTORS.iataCodeFrom.val(toVal).trigger('change');
+        SELECTORS.iataCodeTo.val(fromVal).trigger('change');
+    };
+
     // ===========================
-    // Utility Functions
+    // Helper Functions
     // ===========================
 
     /**
@@ -422,7 +453,18 @@ $(document).ready(function () {
     };
 
     /**
-     * Update the suggested price based on selected airlines.
+     * Toggle the tooltip display.
+     * @param {Event} event 
+     */
+    const toggleTooltip = (event) => {
+        const tooltip = SELECTORS.tooltip;
+        console.log("Tooltip button clicked.");
+        tooltip.toggle();
+        event.stopPropagation();
+    };
+
+    /**
+     * Update the suggested price based on airline selections.
      */
     const updatePriceBasedOnSelection = () => {
         const selectedAirlines = SELECTORS.excludeAirlinesSelect.val();
@@ -453,48 +495,54 @@ $(document).ready(function () {
         }
     };
 
-    /**
-     * Get query parameters from the URL.
-     * @returns {Object} Query parameters as key-value pairs.
-     */
-    const getQueryParams = () => {
-        const params = new URLSearchParams(window.location.search);
-        const queryParams = {};
-        for (const [key, value] of params.entries()) {
-            queryParams[key] = value;
-        }
-        return queryParams;
-    };
-
-    /**
-     * Handle the response from the Tequila API and update the UI accordingly.
-     * @param {Object} tequilaResponse 
-     */
-    const handleTequilaResponse = (tequilaResponse) => {
-        console.log('Raw response from Tequila API:', tequilaResponse);
-
-        globalTequilaResponse = tequilaResponse;
-
-        if (tequilaResponse.data && tequilaResponse.data.length > 0) {
-            const lowestPriceFlight = tequilaResponse.data[0];
-            const roundedPrice = Math.ceil(lowestPriceFlight.price);
-            $('#maxPricePerPerson').val(roundedPrice);
-
-            const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
-            updateExcludedAirlinesDropdown(uniqueAirlines);
-
-            // Enable the Submit button since a matching flight was found
-            SELECTORS.submitFormButton.prop('disabled', false);
-            // Show the Advanced Settings toggle after suggestPriceLimit is executed
-            SELECTORS.advancedSettingsToggle.show();
-        } else {
-            alert("No flights available for the given parameters. Please adjust your search criteria.");
-        }
-    };
-
     // ===========================
     // Backend Interaction Functions
     // ===========================
+
+    /**
+     * Submit form data to SheetyProxy API.
+     * @param {Object} formData 
+     * @returns {Object} Sheety response data.
+     */
+    const submitToSheetyProxy = async (formData) => {
+        try {
+            const response = await fetch(API_ENDPOINTS.sheetyProxy, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error submitting to SheetyProxy:', error);
+            throw error;
+        }
+    };
+
+    /**
+     * Fetch city name from IATA code via backend API.
+     * @param {string} iataCode 
+     * @returns {string} City name.
+     */
+    const fetchCityFromIATACode = async (iataCode) => {
+        const backendUrl = `${API_ENDPOINTS.getCityByIATA}?iataCode=${encodeURIComponent(iataCode)}`;
+
+        try {
+            const response = await fetch(backendUrl);
+            const data = await response.json();
+            console.log('City fetched:', data);
+            return data.city || '';
+        } catch (error) {
+            console.error('Error fetching city from IATA code:', error);
+            return '';
+        }
+    };
 
     /**
      * Suggest price limit by querying the backend API.
@@ -545,56 +593,29 @@ $(document).ready(function () {
     };
 
     /**
-     * Submit form data to SheetyProxy API.
-     * @param {Object} formData 
-     * @returns {Object} Sheety response data.
+     * Handle the response from the Tequila API and update the UI accordingly.
+     * @param {Object} tequilaResponse 
      */
-    const submitToSheetyProxy = async (formData) => {
-        try {
-            const response = await fetch(API_ENDPOINTS.sheetyProxy, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
+    const handleTequilaResponse = (tequilaResponse) => {
+        console.log('Raw response from Tequila API:', tequilaResponse);
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+        globalTequilaResponse = tequilaResponse;
 
-            return await response.json();
-        } catch (error) {
-            console.error('Error submitting to SheetyProxy:', error);
-            throw error;
+        if (tequilaResponse.data && tequilaResponse.data.length > 0) {
+            const lowestPriceFlight = tequilaResponse.data[0];
+            const roundedPrice = Math.ceil(lowestPriceFlight.price);
+            $('#maxPricePerPerson').val(roundedPrice);
+
+            const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
+            updateExcludedAirlinesDropdown(uniqueAirlines);
+
+            // Enable the Submit button since a matching flight was found
+            SELECTORS.submitFormButton.prop('disabled', false);
+            // Show the Advanced Settings toggle after suggestPriceLimit is executed
+            SELECTORS.advancedSettingsToggle.show();
+        } else {
+            alert("No flights available for the given parameters. Please adjust your search criteria.");
         }
-    };
-
-    /**
-     * Fetch city name from IATA code via backend API.
-     * @param {string} iataCode 
-     * @returns {string} City name.
-     */
-    const fetchCityFromIATACode = async (iataCode) => {
-        const backendUrl = `${API_ENDPOINTS.getCityByIATA}?iataCode=${encodeURIComponent(iataCode)}`;
-
-        try {
-            const response = await fetch(backendUrl);
-            const data = await response.json();
-            console.log('City fetched:', data);
-            return data.city || '';
-        } catch (error) {
-            console.error('Error fetching city from IATA code:', error);
-            return '';
-        }
-    };
-
-    /**
-     * Ask the user if they want to track hotel prices via a modal.
-     */
-    const askForHotelTracking = () => {
-        console.log('Showing hotel tracking modal.');
-        $('#hotelTrackingModal').modal('show');
     };
 
     /**
@@ -634,101 +655,25 @@ $(document).ready(function () {
         }
     };
 
-    // ===========================
-    // Initialization Sequence
-    // ===========================
-
     /**
-     * Initialize the application.
+     * Ask the user if they want to track hotel prices via a modal.
      */
-    const init = async () => {
-        // Load airport and airline data
-        airportData = await loadAirportData();
-        airlinesDict = await loadAirlineData();
-
-        // Populate datalists
-        populateDatalist('iataCodeFromList', airportData);
-        populateDatalist('iataCodeToList', airportData);
-
-        // Initialize autocomplete
-        initializeAutocomplete();
-
-        // Initialize sliders
-        initializeSliders();
-
-        // Initialize Select2 for airlines dropdown
-        SELECTORS.excludeAirlinesSelect.select2({
-            placeholder: 'Select airlines to exclude',
-            allowClear: true
-        });
-
-        // Apply URL parameters after data is loaded
-        const queryParams = getQueryParams();
-        if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
-            SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
-        }
-
-        // Update currency and location based on IP
-        updateCurrencyAndLocation();
-
-        // Attach event listeners
-        attachEventListeners();
-    };
-
-    // ===========================
-    // Attach Event Listeners
-    // ===========================
-    const attachEventListeners = () => {
-        // Handle form submission
-        SELECTORS.searchForm.on('submit', handleFormSubmission);
-
-        // Handle checkbox interactions
-        SELECTORS.excludeAirlinesSelect.on('change', handleExcludedAirlinesChange);
-
-        // Toggle IATA codes
-        $('.switch-icon-container').on('click', switchIATACodes);
-
-        // One-way trip checkbox change
-        SELECTORS.oneWayTripCheckbox.on('change', handleOneWayTripChange);
-
-        // Direct flight checkbox change
-        SELECTORS.directFlightCheckbox.on('change', handleDirectFlightChange);
-
-        // Flexible dates checkbox change
-        SELECTORS.flexibleDatesCheckbox.on('change', handleFlexibleDatesChange);
-
-        // Airline mode switch change
-        SELECTORS.airlineModeSwitch.on('change', handleAirlineModeSwitchChange);
-
-        // Help button tooltip toggle
-        SELECTORS.helpBtn.on('click', toggleTooltip);
-
-        // Confirm hotel tracker button click
-        SELECTORS.confirmHotelTrackerBtn.on('click', handleConfirmHotelTracker);
+    const askForHotelTracking = () => {
+        console.log('Showing hotel tracking modal.');
+        $('#hotelTrackingModal').modal('show');
     };
 
     /**
-     * Update currency and location based on the user's IP.
+     * Handle the confirmation to track hotels.
      */
-    const updateCurrencyAndLocation = () => {
-        $.get(API_ENDPOINTS.ipGeo, function (response) {
-            console.log(response);
-
-            const currency = response.currency.code;
-            const latitude = response.latitude;
-            const longitude = response.longitude;
-
-            console.log('Setting the currency to:', currency);
-
-            // Update the currency based on the IP-response
-            SELECTORS.currencyInput.val(currency).trigger('change');
-
-            // Fetch the closest airport using coordinates
-            fetchClosestAirport(latitude, longitude);
-        }).fail(function (error) {
-            console.error("Error fetching IP-based location and currency:", error);
-        });
+    const handleConfirmHotelTracker = () => {
+        console.log('User confirmed hotel tracking.');
+        window.location.href = redirectUrl;
     };
+
+    // ===========================
+    // Backend Interaction Functions
+    // ===========================
 
     /**
      * Fetch the closest airport based on latitude and longitude via the backend API.
@@ -768,10 +713,190 @@ $(document).ready(function () {
         }
     };
 
+    /**
+     * Load airline data from a JSON file.
+     * @returns {Object} Airline data mapping airline codes to airline names.
+     */
+    const loadAirlineData = async () => {
+        try {
+            const response = await fetch(API_ENDPOINTS.readAirlinesData);
+            const data = await response.json();
+            const airlineDict = {};
+
+            data.forEach(airline => {
+                airlineDict[airline.code] = airline.name;
+            });
+
+            return airlineDict;
+        } catch (error) {
+            console.error('Error loading airline data:', error);
+            return {};
+        }
+    };
+
+    /**
+     * Load airport data from a text file.
+     * @returns {Object} Airport data mapping IATA codes to city names.
+     */
+    const loadAirportData = async () => {
+        try {
+            const response = await fetch(API_ENDPOINTS.readAirportsData);
+            const text = await response.text();
+            const data = {};
+
+            text.split('\n').forEach(line => {
+                const [iata, city] = line.split(' - ');
+                if (iata && city) {
+                    data[iata.trim()] = city.trim();
+                }
+            });
+
+            return data;
+        } catch (error) {
+            console.error('Error loading airport data:', error);
+            return {};
+        }
+    };
+
+    /**
+     * Populate the airlines dropdown with options.
+     * @param {Array} airlines 
+     */
+    const updateExcludedAirlinesDropdown = (airlines) => {
+        SELECTORS.excludeAirlinesSelect.empty();
+
+        airlines.forEach(code => {
+            const airlineName = airlinesDict[code] || code;
+            SELECTORS.excludeAirlinesSelect.append(new Option(airlineName, code));
+        });
+
+        // Reinitialize Select2 to update options
+        SELECTORS.excludeAirlinesSelect.select2({
+            placeholder: airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude',
+            allowClear: true
+        });
+    };
+
     // ===========================
-    // Final Initialization Call
+    // Utility Functions
     // ===========================
 
-    init(); // Start the initialization process
+    /**
+     * Get query parameters from the URL.
+     * @returns {Object} Query parameters as key-value pairs.
+     */
+    const getQueryParams = () => {
+        const params = new URLSearchParams(window.location.search);
+        const queryParams = {};
+        for (const [key, value] of params.entries()) {
+            queryParams[key] = value;
+        }
+        return queryParams;
+    };
+
+    /**
+     * Build form data from the current state.
+     * @returns {Object} Form data object.
+     */
+    const buildFormData = () => {
+        const outboundTimes = $(SELECTORS.outboundSlider).val();
+        let inboundTimes = ['', ''];
+        if (!SELECTORS.oneWayTripCheckbox.is(':checked')) {
+            inboundTimes = $(SELECTORS.inboundSlider).val();
+        }
+
+        return {
+            price: {
+                iataCodeFrom: extractIATACode('iataCodeFrom'),
+                iataCodeTo: extractIATACode('iataCodeTo'),
+                flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'one-way' : 'return',
+                maxPricePerPerson: $('#maxPricePerPerson').val(),
+                currency: SELECTORS.currencyInput.val(),
+                maxStops: parseInputValue(parseInt(SELECTORS.maxStopsInput.val())),
+                nbrPassengers: parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val())),
+                depDateFrom: depDate_From,
+                depDateTo: depDate_To,
+                returnDateFrom: returnDate_From,
+                returnDateTo: returnDate_To,
+                dtimeFrom: outboundTimes[0],
+                dtimeTo: outboundTimes[1],
+                retDtimeFrom: inboundTimes[0],
+                retDtimeTo: inboundTimes[1],
+                maxFlightDuration: parseInputValue(parseFloat(SELECTORS.maxFlightDurationInput.val())) || '',
+                excludedAirlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
+                exclude: !airlineSelectionMode, // Set based on the switch state
+                email: SELECTORS.emailInput.val(),
+                token: generateToken(),
+                lastFetchedPrice: 0,
+                lowestFetchedPrice: 'null'
+            }
+        };
+    };
+
+    /**
+     * Update currency and location based on the user's IP.
+     */
+    const updateCurrencyAndLocation = () => {
+        $.get(API_ENDPOINTS.ipGeo, function (response) {
+            console.log(response);
+
+            const currency = response.currency.code;
+            const latitude = response.latitude;
+            const longitude = response.longitude;
+
+            console.log('Setting the currency to:', currency);
+
+            // Update the currency based on the IP-response
+            SELECTORS.currencyInput.val(currency).trigger('change');
+
+            // Fetch the closest airport using coordinates
+            fetchClosestAirport(latitude, longitude);
+        }).fail(function (error) {
+            console.error("Error fetching IP-based location and currency:", error);
+        });
+    };
+
+    /**
+     * Initialize the application.
+     */
+    const init = async () => {
+        // Load airport and airline data
+        airportData = await loadAirportData();
+        airlinesDict = await loadAirlineData();
+
+        // Populate datalists
+        populateDatalist('iataCodeFromList', airportData);
+        populateDatalist('iataCodeToList', airportData);
+
+        // Initialize autocomplete
+        initializeAutocomplete();
+
+        // Initialize sliders
+        initializeSliders();
+
+        // Initialize date picker
+        initializeDatePicker();
+
+        // Initialize Select2 for airlines dropdown
+        SELECTORS.excludeAirlinesSelect.select2({
+            placeholder: 'Select airlines to exclude',
+            allowClear: true
+        });
+
+        // Apply URL parameters after data is loaded
+        const queryParams = getQueryParams();
+        if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
+            SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
+        }
+
+        // Update currency and location based on IP
+        updateCurrencyAndLocation();
+
+        // Attach event listeners
+        attachEventListeners();
+    };
+
+    // Start the initialization process
+    init();
 
 });
