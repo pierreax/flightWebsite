@@ -820,4 +820,84 @@ $(document).ready(function () {
      * @returns {Object} Form data object.
      */
     const buildFormData = () => {
-        const outboun
+        const outboundTimes = $(SELECTORS.outboundSlider).val();
+        let inboundTimes = ['', ''];
+        if (!SELECTORS.oneWayTripCheckbox.is(':checked')) {
+            inboundTimes = $(SELECTORS.inboundSlider).val();
+        }
+
+        return {
+            price: {
+                iataCodeFrom: extractIATACode('iataCodeFrom'),
+                iataCodeTo: extractIATACode('iataCodeTo'),
+                flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'one-way' : 'return',
+                maxPricePerPerson: SELECTORS.maxPricePerPerson.val(),
+                currency: SELECTORS.currencyInput.val(),
+                maxStops: parseInputValue(parseInt(SELECTORS.maxStopsInput.val())),
+                nbrPassengers: parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val())),
+                depDateFrom: depDate_From,
+                depDateTo: depDate_To,
+                returnDateFrom: returnDate_From,
+                returnDateTo: returnDate_To,
+                dtimeFrom: outboundTimes[0],
+                dtimeTo: outboundTimes[1],
+                retDtimeFrom: inboundTimes[0],
+                retDtimeTo: inboundTimes[1],
+                maxFlightDuration: parseInputValue(parseFloat(SELECTORS.maxFlightDurationInput.val())) || '',
+                excludedAirlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
+                exclude: !airlineSelectionMode, // Set based on the switch state
+                email: SELECTORS.emailInput.val(),
+                token: generateToken(),
+                lastFetchedPrice: 0,
+                lowestFetchedPrice: 'null'
+            }
+        };
+    };
+
+    /**
+     * Initialize the application.
+     */
+    const init = async () => {
+        try {
+            // Load airport and airline data
+            [airportData, airlinesDict] = await Promise.all([
+                loadData('readAirportsData', 'text'),
+                loadData('readAirlinesData', 'json')
+            ]);
+
+            // Populate datalists
+            populateDatalist('iataCodeFromList', airportData);
+            populateDatalist('iataCodeToList', airportData);
+
+            // Initialize autocomplete
+            initializeAutocomplete();
+
+            // Initialize sliders
+            initializeSliders();
+
+            // Initialize date picker
+            initializeDatePicker();
+
+            // Initialize Select2 for airlines dropdown
+            initializeSelect2('Select airlines to exclude');
+
+            // Apply URL parameters after data is loaded
+            const queryParams = getQueryParams();
+            if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
+                SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
+            }
+
+            // Update currency and location based on IP
+            await updateCurrencyAndLocation();
+
+            // Attach event listeners
+            attachAllEventListeners();
+        } catch (error) {
+            console.error('Initialization error:', error);
+        }
+    };
+
+    // Start the initialization process
+    init();
+
+});
