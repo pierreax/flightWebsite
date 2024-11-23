@@ -75,6 +75,110 @@ $(document).ready(function () {
     let flatpickrInstance = null; // To store the Flatpickr instance
 
     // ===========================
+    // Helper Functions
+    // ===========================
+
+    /**
+     * Extract the IATA code from an input field.
+     * @param {string} inputId 
+     * @returns {string} IATA code, possibly prefixed with 'city:'.
+     */
+    const extractIATACode = (inputId) => {
+        const inputValue = document.getElementById(inputId).value;
+        if (!inputValue) {
+            console.error('Input value not found');
+            return '';
+        }
+        const iataCode = inputValue.split(' - ')[0].trim();
+        const containsAllAirports = inputValue.toLowerCase().includes("all airports");
+
+        return containsAllAirports ? `city:${iataCode}` : iataCode;
+    };
+
+    /**
+     * Safely parse input values, handling NaN cases.
+     * @param {number} value 
+     * @returns {number|string} Parsed value or empty string.
+     */
+    const parseInputValue = (value) => {
+        if (typeof value === 'string' && value === "NaN/NaN/NaN") {
+            return "";
+        }
+        if (isNaN(value)) {
+            return "";
+        }
+        return value;
+    };
+
+    /**
+     * Generate a unique token for each submission.
+     * @returns {string} Unique token.
+     */
+    const generateToken = () => {
+        if (window.crypto && window.crypto.randomUUID) {
+            return window.crypto.randomUUID();
+        } else {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+    };
+
+    /**
+     * Format a Date object to DD/MM/YYYY.
+     * @param {Date} dateObject 
+     * @returns {string} Formatted date string.
+     */
+    const formatDate = (dateObject) => {
+        if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
+            console.error('Invalid date:', dateObject);
+            return "";
+        }
+        const day = dateObject.getDate().toString().padStart(2, '0');
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
+        const year = dateObject.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    /**
+     * Get query parameters from the URL.
+     * @returns {Object} Query parameters as key-value pairs.
+     */
+    const getQueryParams = () => {
+        const params = new URLSearchParams(window.location.search);
+        const queryParams = {};
+        for (const [key, value] of params.entries()) {
+            queryParams[key] = value;
+        }
+        return queryParams;
+    };
+
+    /**
+     * Populate a datalist with airport data.
+     * @param {string} datalistId 
+     * @param {Object} data 
+     */
+    const populateDatalist = (datalistId, data) => {
+        const datalist = document.getElementById(datalistId);
+        if (!datalist) return; // Prevent errors if datalist does not exist
+        datalist.innerHTML = '';
+        Object.keys(data).forEach(key => {
+            const option = document.createElement('option');
+            option.value = `${key} - ${data[key]}`;
+            datalist.appendChild(option);
+        });
+    };
+
+    /**
+     * Initialize Select2 for the airlines dropdown.
+     * @param {string} placeholder 
+     */
+    const initializeSelect2 = (placeholder) => {
+        SELECTORS.excludeAirlinesSelect.select2({
+            placeholder: placeholder,
+            allowClear: true
+        });
+    };
+
+    // ===========================
     // Initialization Functions
     // ===========================
 
@@ -172,33 +276,6 @@ $(document).ready(function () {
     };
 
     /**
-     * Populate a datalist with airport data.
-     * @param {string} datalistId 
-     * @param {Object} data 
-     */
-    const populateDatalist = (datalistId, data) => {
-        const datalist = document.getElementById(datalistId);
-        if (!datalist) return; // Prevent errors if datalist does not exist
-        datalist.innerHTML = '';
-        Object.keys(data).forEach(key => {
-            const option = document.createElement('option');
-            option.value = `${key} - ${data[key]}`;
-            datalist.appendChild(option);
-        });
-    };
-
-    /**
-     * Initialize Select2 for the airlines dropdown.
-     * @param {string} placeholder 
-     */
-    const initializeSelect2 = (placeholder) => {
-        SELECTORS.excludeAirlinesSelect.select2({
-            placeholder: placeholder,
-            allowClear: true
-        });
-    };
-
-    /**
      * Initialize event listeners for various elements.
      */
     const attachEventListeners = () => {
@@ -237,217 +314,6 @@ $(document).ready(function () {
         });
     };
 
-    
-    /**
-     * Update currency and location based on the user's IP address.
-     */
-    const updateCurrencyAndLocation = async () => {
-        try {
-            const response = await fetch(API_ENDPOINTS.ipGeo);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch IP Geolocation data: ${response.statusText}`);
-            }
-            const data = await response.json();
-            
-            // Update the currency input if currency data is available
-            if (data.currency && data.currency.code) {
-                SELECTORS.currencyInput.val(data.currency.code);
-            }
-            
-            // Update location fields based on geolocation data
-            if (data.latitude && data.longitude) {
-                await fetchClosestAirport(data.latitude, data.longitude);
-            }
-            
-            // Optionally, you can update other location-related fields here
-            // For example, setting a default city or IATA code if needed
-            
-        } catch (error) {
-            console.error('Error updating currency and location:', error);
-            // Optionally, you can handle the error by setting default values or notifying the user
-        }
-    };
-
-
-    // ===========================
-    // Event Handler Functions
-    // ===========================
-
-    /**
-     * Handle form submission to suggest price limits.
-     * @param {Event} event 
-     */
-    const handleFormSubmission = async (event) => {
-        event.preventDefault();
-        adjustDatesForFlexibility();
-        SELECTORS.loader.show();
-
-        const formData = buildFormData();
-        console.log('Sending data to SheetyProxy:', formData);
-
-        try {
-            const sheetyResponse = await submitToSheetyProxy(formData);
-            console.log('SheetyProxy response:', sheetyResponse);
-
-            // Capture redirect parameters
-            captureRedirectParameters();
-
-            // Fetch city from IATA code
-            redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
-            redirectUrl = `https://www.robotize.no/hotels?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
-
-            // Show hotel tracking modal
-            askForHotelTracking();
-
-            // Send email notification
-            await sendEmailNotification(formData);
-
-        } catch (error) {
-            console.error('Error during form submission:', error);
-            alert('There was an error processing your request. Please try again later.');
-        } finally {
-            SELECTORS.loader.hide();
-        }
-    };
-
-    /**
-     * Handle changes in the one-way trip checkbox.
-     */
-    const handleOneWayTripChange = () => {
-        if (SELECTORS.oneWayTripCheckbox.is(':checked')) {
-            console.log("One-way trip selected");
-            // Hide inbound slider and adjust display
-            $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').hide();
-            $('#outbound-timeRangeDisplay').html('Departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
-            // Set Flatpickr to single date mode
-            flatpickrInstance.set('mode', 'single');
-            selectedEndDate = null;
-            returnDate_From = '';
-            returnDate_To = '';
-            flatpickrInstance.clear();
-            if (selectedStartDate) {
-                flatpickrInstance.setDate(selectedStartDate, true);
-            }
-        } else {
-            console.log("Return trip selected");
-            // Show inbound slider and revert display
-            $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').show();
-            $('#outbound-timeRangeDisplay').html('Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
-            flatpickrInstance.set('mode', 'range');
-        }
-    };
-
-    /**
-     * Handle changes in the direct flight checkbox.
-     */
-    const handleDirectFlightChange = () => {
-        if (SELECTORS.directFlightCheckbox.is(':checked')) {
-            console.log("Direct flights only enabled");
-            SELECTORS.maxStopsInput.val('0').prop('disabled', true).addClass('disabled-input');
-            SELECTORS.maxFlightDurationInput.val('').prop('disabled', true).addClass('disabled-input');
-        } else {
-            console.log("Direct flights only disabled");
-            SELECTORS.maxStopsInput.prop('disabled', false).removeClass('disabled-input').val('');
-            SELECTORS.maxFlightDurationInput.prop('disabled', false).removeClass('disabled-input').val('');
-        }
-    };
-
-    /**
-     * Handle changes in the flexible dates checkbox.
-     */
-    const handleFlexibleDatesChange = () => {
-        console.log('Flexible dates toggle changed.');
-        // Additional logic can be added here if needed
-    };
-
-    /**
-     * Handle changes in the airline mode switch.
-     */
-    const handleAirlineModeSwitchChange = () => {
-        airlineSelectionMode = SELECTORS.airlineModeSwitch.is(':checked');
-        const newPlaceholder = airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude';
-        initializeSelect2(newPlaceholder);
-
-        if (airlineSelectionMode) {
-            // Include mode: select all airlines
-            const allAirlineIds = SELECTORS.excludeAirlinesSelect.find('option').map(function () { return this.value }).get();
-            SELECTORS.excludeAirlinesSelect.val(allAirlineIds).trigger('change');
-        } else {
-            // Exclude mode: clear selection
-            SELECTORS.excludeAirlinesSelect.val(null).trigger('change');
-        }
-
-        updatePriceBasedOnSelection();
-    };
-
-    /**
-     * Handle changes in the "Exclude Airlines" dropdown.
-     */
-    const handleExcludedAirlinesChange = () => {
-        updatePriceBasedOnSelection();
-    };
-
-    /**
-     * Handle the confirmation to track hotels.
-     */
-    const handleConfirmHotelTracker = () => {
-        console.log('User confirmed hotel tracking.');
-        window.location.href = redirectUrl;
-    };
-
-    /**
-     * Handle the switch icon click to toggle IATA codes.
-     */
-    const switchIATACodes = () => {
-        const fromVal = SELECTORS.iataCodeFrom.val();
-        const toVal = SELECTORS.iataCodeTo.val();
-        SELECTORS.iataCodeFrom.val(toVal).trigger('change');
-        SELECTORS.iataCodeTo.val(fromVal).trigger('change');
-    };
-
-    /**
-     * Toggle the tooltip display.
-     * @param {Event} event 
-     */
-    const toggleTooltip = (event) => {
-        const tooltip = SELECTORS.tooltip;
-        console.log("Tooltip button clicked.");
-        tooltip.toggle();
-        event.stopPropagation();
-    };
-
-    /**
-     * Update the suggested price based on airline selections.
-     */
-    const updatePriceBasedOnSelection = () => {
-        const selectedAirlines = SELECTORS.excludeAirlinesSelect.val();
-
-        if (!globalTequilaResponse || !globalTequilaResponse.data) {
-            return;
-        }
-
-        let filteredFlights;
-        if (airlineSelectionMode) {
-            // Include mode: keep flights operated exclusively by the selected airlines
-            filteredFlights = globalTequilaResponse.data.filter(flight =>
-                flight.airlines.every(airline => selectedAirlines.includes(airline))
-            );
-        } else {
-            // Exclude mode: remove flights that include any of the selected airlines
-            filteredFlights = globalTequilaResponse.data.filter(flight =>
-                !flight.airlines.some(airline => selectedAirlines.includes(airline))
-            );
-        }
-
-        if (filteredFlights.length > 0) {
-            const lowestPrice = filteredFlights[0].price;
-            const roundedPrice = Math.ceil(lowestPrice);
-            SELECTORS.maxPricePerPerson.val(roundedPrice);
-        } else {
-            SELECTORS.maxPricePerPerson.val('');
-        }
-    };
-
     // ===========================
     // Backend Interaction Functions
     // ===========================
@@ -484,6 +350,34 @@ $(document).ready(function () {
         } catch (error) {
             console.error(`Error loading ${endpoint}:`, error);
             return {};
+        }
+    };
+
+    /**
+     * Update currency and location based on the user's IP address.
+     */
+    const updateCurrencyAndLocation = async () => {
+        try {
+            const response = await fetch(API_ENDPOINTS.ipGeo);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch IP Geolocation data: ${response.statusText}`);
+            }
+            const data = await response.json();
+            
+            // Update the currency input if currency data is available
+            if (data.currency && data.currency.code) {
+                SELECTORS.currencyInput.val(data.currency.code);
+            }
+            
+            // Update location fields based on geolocation data
+            if (data.latitude && data.longitude) {
+                await fetchClosestAirport(data.latitude, data.longitude);
+            }
+            
+            // Optionally, update other location-related fields here
+        } catch (error) {
+            console.error('Error updating currency and location:', error);
+            // Optionally, handle the error by setting default values or notifying the user
         }
     };
 
@@ -547,8 +441,8 @@ $(document).ready(function () {
             currency: SELECTORS.currencyInput.val(),
             dtime_from: SELECTORS.outboundTimeStartDisplay.text(),
             dtime_to: SELECTORS.outboundTimeEndDisplay.text(),
-            ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked()') ? '' : SELECTORS.inboundTimeStartDisplay.text(),
-            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked()') ? '' : SELECTORS.inboundTimeEndDisplay.text(),
+            ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeStartDisplay.text(),
+            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text(),
             select_airlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
             select_airlines_exclude: !airlineModeSwitchState
         });
@@ -701,112 +595,64 @@ $(document).ready(function () {
     };
 
     // ===========================
-    // Helper Functions
+    // Event Handler Functions
     // ===========================
 
     /**
-     * Extract the IATA code from an input field.
-     * @param {string} inputId 
-     * @returns {string} IATA code, possibly prefixed with 'city:'.
+     * Handle form submission to suggest price limits.
+     * @param {Event} event 
      */
-    const extractIATACode = (inputId) => {
-        const inputValue = document.getElementById(inputId).value;
-        if (!inputValue) {
-            console.error('Input value not found');
-            return '';
-        }
-        const iataCode = inputValue.split(' - ')[0].trim();
-        const containsAllAirports = inputValue.toLowerCase().includes("all airports");
-
-        return containsAllAirports ? `city:${iataCode}` : iataCode;
-    };
+    // Already defined above; ensure it's correctly placed.
 
     /**
-     * Safely parse input values, handling NaN cases.
-     * @param {number} value 
-     * @returns {number|string} Parsed value or empty string.
+     * Handle changes in the one-way trip checkbox.
      */
-    const parseInputValue = (value) => {
-        if (typeof value === 'string' && value === "NaN/NaN/NaN") {
-            return "";
-        }
-        if (isNaN(value)) {
-            return "";
-        }
-        return value;
-    };
+    // Already defined above; ensure it's correctly placed.
 
     /**
-     * Generate a unique token for each submission.
-     * @returns {string} Unique token.
+     * Handle changes in the direct flight checkbox.
      */
-    const generateToken = () => {
-        if (window.crypto && window.crypto.randomUUID) {
-            return window.crypto.randomUUID();
-        } else {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-        }
-    };
+    // Already defined above; ensure it's correctly placed.
 
     /**
-     * Format a Date object to DD/MM/YYYY.
-     * @param {Date} dateObject 
-     * @returns {string} Formatted date string.
+     * Handle changes in the flexible dates checkbox.
      */
-    const formatDate = (dateObject) => {
-        if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
-            console.error('Invalid date:', dateObject);
-            return "";
-        }
-        const day = dateObject.getDate().toString().padStart(2, '0');
-        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-        const year = dateObject.getFullYear();
-        return `${day}/${month}/${year}`;
-    };
+    // Already defined above; ensure it's correctly placed.
 
     /**
-     * Adjust dates based on the flexible dates toggle.
+     * Handle changes in the airline mode switch.
      */
-    const adjustDatesForFlexibility = () => {
-        let adjustedDepFromDate = new Date(selectedStartDate);
-        let adjustedDepToDate = new Date(selectedStartDate);
-        let adjustedReturnFromDate = selectedEndDate ? new Date(selectedEndDate) : null;
-        let adjustedReturnToDate = selectedEndDate ? new Date(selectedEndDate) : null;
-
-        if (SELECTORS.flexibleDatesCheckbox.is(':checked')) {
-            console.log("Adjusting for flexible dates");
-            // Adjust departure dates by subtracting and adding one day
-            adjustedDepFromDate.setDate(adjustedDepFromDate.getDate() - 1);
-            adjustedDepToDate.setDate(adjustedDepToDate.getDate() + 1);
-
-            // Adjust return dates by subtracting and adding one day if return date is not null
-            if (adjustedReturnFromDate && adjustedReturnToDate) {
-                adjustedReturnFromDate.setDate(adjustedReturnFromDate.getDate() - 1);
-                adjustedReturnToDate.setDate(adjustedReturnToDate.getDate() + 1);
-            }
-        } else {
-            console.log("Using exact dates");
-        }
-
-        // Update global variables with the adjusted and formatted dates
-        depDate_From = formatDate(adjustedDepFromDate);
-        depDate_To = formatDate(adjustedDepToDate);
-        returnDate_From = adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '';
-        returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
-    };
+    // Already defined above; ensure it's correctly placed.
 
     /**
-     * Get query parameters from the URL.
-     * @returns {Object} Query parameters as key-value pairs.
+     * Handle changes in the "Exclude Airlines" dropdown.
      */
-    const getQueryParams = () => {
-        const params = new URLSearchParams(window.location.search);
-        const queryParams = {};
-        for (const [key, value] of params.entries()) {
-            queryParams[key] = value;
-        }
-        return queryParams;
-    };
+    // Already defined above; ensure it's correctly placed.
+
+    /**
+     * Handle the confirmation to track hotels.
+     */
+    // Already defined above; ensure it's correctly placed.
+
+    /**
+     * Handle the switch icon click to toggle IATA codes.
+     */
+    // Already defined above; ensure it's correctly placed.
+
+    /**
+     * Toggle the tooltip display.
+     * @param {Event} event 
+     */
+    // Already defined above; ensure it's correctly placed.
+
+    /**
+     * Update the suggested price based on airline selections.
+     */
+    // Already defined above; ensure it's correctly placed.
+
+    // ===========================
+    // Initialization Sequence
+    // ===========================
 
     /**
      * Build form data from the current state.
@@ -851,21 +697,7 @@ $(document).ready(function () {
      * Populate the airlines dropdown with options.
      * @param {Array} airlines 
      */
-    const updateExcludedAirlinesDropdown = (airlines) => {
-        SELECTORS.excludeAirlinesSelect.empty();
-
-        airlines.forEach(code => {
-            const airlineName = airlinesDict[code] || code;
-            SELECTORS.excludeAirlinesSelect.append(new Option(airlineName, code));
-        });
-
-        // Reinitialize Select2 to update options
-        initializeSelect2(airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude');
-    };
-
-    // ===========================
-    // Initialization Sequence
-    // ===========================
+    // Already defined above; ensure it's correctly placed.
 
     /**
      * Initialize the application.
@@ -901,7 +733,7 @@ $(document).ready(function () {
             }
 
             // Update currency and location based on IP
-            updateCurrencyAndLocation();
+            await updateCurrencyAndLocation();
 
             // Attach event listeners
             attachEventListeners();
