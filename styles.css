@@ -209,7 +209,7 @@ input, select {
     width: 100%; /* Ensures the div takes up the full width of its parent */
 }
   
-.form-group.switches .switch {
+.form-group.switches .switch .switch-container {
     position: relative;
     display: inline-block;
     width: 40px; /* Width of the switch */
