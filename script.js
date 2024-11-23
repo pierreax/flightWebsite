@@ -479,6 +479,7 @@ $(document).ready(function () {
             }
 
             const tequilaResponse = await response.json();
+            console.log('Raw response from Tequila API:', tequilaResponse);
             handleTequilaResponse(tequilaResponse);
 
         } catch (error) {
@@ -494,8 +495,6 @@ $(document).ready(function () {
      * @param {Object} tequilaResponse 
      */
     const handleTequilaResponse = (tequilaResponse) => {
-        console.log('Raw response from Tequila API:', tequilaResponse);
-
         globalTequilaResponse = tequilaResponse;
 
         if (tequilaResponse.data && tequilaResponse.data.length > 0) {

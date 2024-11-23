@@ -180,7 +180,8 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
         ret_dtime_from,
         ret_dtime_to,
         select_airlines,
-        select_airlines_exclude: select_airlines_exclude ? "1" : "0"
+        select_airlines_exclude: select_airlines_exclude ? "true" : "false",
+        sort: 'price'
     });
 
     try {
