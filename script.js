@@ -276,42 +276,34 @@ $(document).ready(function () {
     };
 
     /**
-     * Initialize event listeners for various elements.
+     * Adjust dates based on the flexible dates toggle.
      */
-    const attachEventListeners = () => {
-        // Handle form submission
-        SELECTORS.searchForm.on('submit', handleFormSubmission);
+    const adjustDatesForFlexibility = () => {
+        let adjustedDepFromDate = new Date(selectedStartDate);
+        let adjustedDepToDate = new Date(selectedStartDate);
+        let adjustedReturnFromDate = selectedEndDate ? new Date(selectedEndDate) : null;
+        let adjustedReturnToDate = selectedEndDate ? new Date(selectedEndDate) : null;
 
-        // Handle checkbox interactions
-        SELECTORS.excludeAirlinesSelect.on('change', handleExcludedAirlinesChange);
+        if (SELECTORS.flexibleDatesCheckbox.is(':checked')) {
+            console.log("Adjusting for flexible dates");
+            // Adjust departure dates by subtracting and adding one day
+            adjustedDepFromDate.setDate(adjustedDepFromDate.getDate() - 1);
+            adjustedDepToDate.setDate(adjustedDepToDate.getDate() + 1);
 
-        // Toggle IATA codes
-        $('.switch-icon-container').on('click', switchIATACodes);
-
-        // One-way trip checkbox change
-        SELECTORS.oneWayTripCheckbox.on('change', handleOneWayTripChange);
-
-        // Direct flight checkbox change
-        SELECTORS.directFlightCheckbox.on('change', handleDirectFlightChange);
-
-        // Flexible dates checkbox change
-        SELECTORS.flexibleDatesCheckbox.on('change', handleFlexibleDatesChange);
-
-        // Airline mode switch change
-        SELECTORS.airlineModeSwitch.on('change', handleAirlineModeSwitchChange);
-
-        // Help button tooltip toggle
-        SELECTORS.helpBtn.on('click', toggleTooltip);
-
-        // Confirm hotel tracker button click
-        SELECTORS.confirmHotelTrackerBtn.on('click', handleConfirmHotelTracker);
-
-        // Close tooltip when clicking outside
-        $(document).on('click', function (event) {
-            if (!$(event.target).closest('#helpBtn, #tooltip').length) {
-                SELECTORS.tooltip.hide();
+            // Adjust return dates by subtracting and adding one day if return date is not null
+            if (adjustedReturnFromDate && adjustedReturnToDate) {
+                adjustedReturnFromDate.setDate(adjustedReturnFromDate.getDate() - 1);
+                adjustedReturnToDate.setDate(adjustedReturnToDate.getDate() + 1);
             }
-        });
+        } else {
+            console.log("Using exact dates");
+        }
+
+        // Update global variables with the adjusted and formatted dates
+        depDate_From = formatDate(adjustedDepFromDate);
+        depDate_To = formatDate(adjustedDepToDate);
+        returnDate_From = adjustedReturnFromDate ? formatDate(adjustedReturnFromDate) : '';
+        returnDate_To = adjustedReturnToDate ? formatDate(adjustedReturnToDate) : '';
     };
 
     // ===========================
@@ -602,53 +594,222 @@ $(document).ready(function () {
      * Handle form submission to suggest price limits.
      * @param {Event} event 
      */
-    // Already defined above; ensure it's correctly placed.
+    const handleFormSubmission = async (event) => {
+        event.preventDefault();
+        adjustDatesForFlexibility();
+        SELECTORS.loader.show();
+
+        const formData = buildFormData();
+        console.log('Sending data to SheetyProxy:', formData);
+
+        try {
+            const sheetyResponse = await submitToSheetyProxy(formData);
+            console.log('SheetyProxy response:', sheetyResponse);
+
+            // Capture redirect parameters
+            captureRedirectParameters();
+
+            // Fetch city from IATA code
+            redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
+            redirectUrl = `https://www.robotize.no/hotels?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
+
+            // Show hotel tracking modal
+            askForHotelTracking();
+
+            // Send email notification
+            await sendEmailNotification(formData);
+
+        } catch (error) {
+            console.error('Error during form submission:', error);
+            alert('There was an error processing your request. Please try again later.');
+        } finally {
+            SELECTORS.loader.hide();
+        }
+    };
 
     /**
      * Handle changes in the one-way trip checkbox.
      */
-    // Already defined above; ensure it's correctly placed.
+    const handleOneWayTripChange = () => {
+        if (SELECTORS.oneWayTripCheckbox.is(':checked')) {
+            console.log("One-way trip selected");
+            // Hide inbound slider and adjust display
+            $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').hide();
+            $('#outbound-timeRangeDisplay').html('Departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
+            // Set Flatpickr to single date mode
+            flatpickrInstance.set('mode', 'single');
+            selectedEndDate = null;
+            returnDate_From = '';
+            returnDate_To = '';
+            flatpickrInstance.clear();
+            if (selectedStartDate) {
+                flatpickrInstance.setDate(selectedStartDate, true);
+            }
+        } else {
+            console.log("Return trip selected");
+            // Show inbound slider and revert display
+            $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').show();
+            $('#outbound-timeRangeDisplay').html('Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
+            flatpickrInstance.set('mode', 'range');
+        }
+    };
 
     /**
      * Handle changes in the direct flight checkbox.
      */
-    // Already defined above; ensure it's correctly placed.
+    const handleDirectFlightChange = () => {
+        if (SELECTORS.directFlightCheckbox.is(':checked')) {
+            console.log("Direct flights only enabled");
+            SELECTORS.maxStopsInput.val('0').prop('disabled', true).addClass('disabled-input');
+            SELECTORS.maxFlightDurationInput.val('').prop('disabled', true).addClass('disabled-input');
+        } else {
+            console.log("Direct flights only disabled");
+            SELECTORS.maxStopsInput.prop('disabled', false).removeClass('disabled-input').val('');
+            SELECTORS.maxFlightDurationInput.prop('disabled', false).removeClass('disabled-input').val('');
+        }
+    };
 
     /**
      * Handle changes in the flexible dates checkbox.
      */
-    // Already defined above; ensure it's correctly placed.
+    const handleFlexibleDatesChange = () => {
+        console.log('Flexible dates toggle changed.');
+        // Additional logic can be added here if needed
+    };
 
     /**
      * Handle changes in the airline mode switch.
      */
-    // Already defined above; ensure it's correctly placed.
+    const handleAirlineModeSwitchChange = () => {
+        airlineSelectionMode = SELECTORS.airlineModeSwitch.is(':checked');
+        const newPlaceholder = airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude';
+        initializeSelect2(newPlaceholder);
+
+        if (airlineSelectionMode) {
+            // Include mode: select all airlines
+            const allAirlineIds = SELECTORS.excludeAirlinesSelect.find('option').map(function () { return this.value }).get();
+            SELECTORS.excludeAirlinesSelect.val(allAirlineIds).trigger('change');
+        } else {
+            // Exclude mode: clear selection
+            SELECTORS.excludeAirlinesSelect.val(null).trigger('change');
+        }
+
+        updatePriceBasedOnSelection();
+    };
 
     /**
      * Handle changes in the "Exclude Airlines" dropdown.
      */
-    // Already defined above; ensure it's correctly placed.
+    const handleExcludedAirlinesChange = () => {
+        updatePriceBasedOnSelection();
+    };
 
     /**
      * Handle the confirmation to track hotels.
      */
-    // Already defined above; ensure it's correctly placed.
+    const handleConfirmHotelTracker = () => {
+        console.log('User confirmed hotel tracking.');
+        window.location.href = redirectUrl;
+    };
 
     /**
      * Handle the switch icon click to toggle IATA codes.
      */
-    // Already defined above; ensure it's correctly placed.
+    const switchIATACodes = () => {
+        const fromVal = SELECTORS.iataCodeFrom.val();
+        const toVal = SELECTORS.iataCodeTo.val();
+        SELECTORS.iataCodeFrom.val(toVal).trigger('change');
+        SELECTORS.iataCodeTo.val(fromVal).trigger('change');
+    };
 
     /**
      * Toggle the tooltip display.
      * @param {Event} event 
      */
-    // Already defined above; ensure it's correctly placed.
+    const toggleTooltip = (event) => {
+        const tooltip = SELECTORS.tooltip;
+        console.log("Tooltip button clicked.");
+        tooltip.toggle();
+        event.stopPropagation();
+    };
 
     /**
      * Update the suggested price based on airline selections.
      */
-    // Already defined above; ensure it's correctly placed.
+    const updatePriceBasedOnSelection = () => {
+        const selectedAirlines = SELECTORS.excludeAirlinesSelect.val();
+
+        if (!globalTequilaResponse || !globalTequilaResponse.data) {
+            return;
+        }
+
+        let filteredFlights;
+        if (airlineSelectionMode) {
+            // Include mode: keep flights operated exclusively by the selected airlines
+            filteredFlights = globalTequilaResponse.data.filter(flight =>
+                flight.airlines.every(airline => selectedAirlines.includes(airline))
+            );
+        } else {
+            // Exclude mode: remove flights that include any of the selected airlines
+            filteredFlights = globalTequilaResponse.data.filter(flight =>
+                !flight.airlines.some(airline => selectedAirlines.includes(airline))
+            );
+        }
+
+        if (filteredFlights.length > 0) {
+            const lowestPrice = filteredFlights[0].price;
+            const roundedPrice = Math.ceil(lowestPrice);
+            SELECTORS.maxPricePerPerson.val(roundedPrice);
+        } else {
+            SELECTORS.maxPricePerPerson.val('');
+        }
+    };
+
+    // ===========================
+    // Event Listener Attachment
+    // ===========================
+
+    /**
+     * Initialize event listeners for various elements.
+     */
+    const attachAllEventListeners = () => {
+        // Handle form submission
+        SELECTORS.searchForm.on('submit', handleFormSubmission);
+
+        // Handle checkbox interactions
+        SELECTORS.excludeAirlinesSelect.on('change', handleExcludedAirlinesChange);
+
+        // Toggle IATA codes
+        $('.switch-icon-container').on('click', switchIATACodes);
+
+        // One-way trip checkbox change
+        SELECTORS.oneWayTripCheckbox.on('change', handleOneWayTripChange);
+
+        // Direct flight checkbox change
+        SELECTORS.directFlightCheckbox.on('change', handleDirectFlightChange);
+
+        // Flexible dates checkbox change
+        SELECTORS.flexibleDatesCheckbox.on('change', handleFlexibleDatesChange);
+
+        // Airline mode switch change
+        SELECTORS.airlineModeSwitch.on('change', handleAirlineModeSwitchChange);
+
+        // Help button tooltip toggle
+        SELECTORS.helpBtn.on('click', toggleTooltip);
+
+        // Confirm hotel tracker button click
+        SELECTORS.confirmHotelTrackerBtn.on('click', handleConfirmHotelTracker);
+
+        // Attach event listener to suggestPriceBtn
+        SELECTORS.suggestPriceBtn.on('click', suggestPriceLimit);
+
+        // Close tooltip when clicking outside
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('#helpBtn, #tooltip').length) {
+                SELECTORS.tooltip.hide();
+            }
+        });
+    };
 
     // ===========================
     // Initialization Sequence
@@ -659,90 +820,4 @@ $(document).ready(function () {
      * @returns {Object} Form data object.
      */
     const buildFormData = () => {
-        const outboundTimes = $(SELECTORS.outboundSlider).val();
-        let inboundTimes = ['', ''];
-        if (!SELECTORS.oneWayTripCheckbox.is(':checked')) {
-            inboundTimes = $(SELECTORS.inboundSlider).val();
-        }
-
-        return {
-            price: {
-                iataCodeFrom: extractIATACode('iataCodeFrom'),
-                iataCodeTo: extractIATACode('iataCodeTo'),
-                flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'one-way' : 'return',
-                maxPricePerPerson: SELECTORS.maxPricePerPerson.val(),
-                currency: SELECTORS.currencyInput.val(),
-                maxStops: parseInputValue(parseInt(SELECTORS.maxStopsInput.val())),
-                nbrPassengers: parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val())),
-                depDateFrom: depDate_From,
-                depDateTo: depDate_To,
-                returnDateFrom: returnDate_From,
-                returnDateTo: returnDate_To,
-                dtimeFrom: outboundTimes[0],
-                dtimeTo: outboundTimes[1],
-                retDtimeFrom: inboundTimes[0],
-                retDtimeTo: inboundTimes[1],
-                maxFlightDuration: parseInputValue(parseFloat(SELECTORS.maxFlightDurationInput.val())) || '',
-                excludedAirlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
-                exclude: !airlineSelectionMode, // Set based on the switch state
-                email: SELECTORS.emailInput.val(),
-                token: generateToken(),
-                lastFetchedPrice: 0,
-                lowestFetchedPrice: 'null'
-            }
-        };
-    };
-
-    /**
-     * Populate the airlines dropdown with options.
-     * @param {Array} airlines 
-     */
-    // Already defined above; ensure it's correctly placed.
-
-    /**
-     * Initialize the application.
-     */
-    const init = async () => {
-        try {
-            // Load airport and airline data
-            [airportData, airlinesDict] = await Promise.all([
-                loadData('readAirportsData', 'text'),
-                loadData('readAirlinesData', 'json')
-            ]);
-
-            // Populate datalists
-            populateDatalist('iataCodeFromList', airportData);
-            populateDatalist('iataCodeToList', airportData);
-
-            // Initialize autocomplete
-            initializeAutocomplete();
-
-            // Initialize sliders
-            initializeSliders();
-
-            // Initialize date picker
-            initializeDatePicker();
-
-            // Initialize Select2 for airlines dropdown
-            initializeSelect2('Select airlines to exclude');
-
-            // Apply URL parameters after data is loaded
-            const queryParams = getQueryParams();
-            if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
-                SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
-            }
-
-            // Update currency and location based on IP
-            await updateCurrencyAndLocation();
-
-            // Attach event listeners
-            attachEventListeners();
-        } catch (error) {
-            console.error('Initialization error:', error);
-        }
-    };
-
-    // Start the initialization process
-    init();
-
-});
+        const outboun
