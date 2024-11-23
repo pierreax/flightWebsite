@@ -22,7 +22,6 @@ $(document).ready(function () {
         flexibleDatesCheckbox: $('#flexibleDates'),
         excludeAirlinesSelect: $('#excludeAirlines'),
         airlineModeSwitch: $('#airlineModeSwitch'),
-        advancedSettingsToggle: $('#advancedSettingsToggle'),
         advancedSettingsIcon: $('#advancedSettingsIcon'),
         advancedSettings: $('#advancedSettings'),
         suggestPriceBtn: $('#suggestPriceBtn'),
