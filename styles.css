@@ -74,7 +74,7 @@ a.destinations-link:active {
 /* Form styles */
 form {
     position: relative;
-    max-width: 300px;
+    max-width: 600px; /* Increased width for better layout */
     margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
@@ -197,14 +197,30 @@ input, select {
 /* Centering switch labels and switches horizontally */
 .form-group.switches {
     display: flex;
-    flex-direction: row; /* Change from column to row for horizontal distribution */
-    align-items: center; /* Align switches vertically centered */
-    gap: 20px; /* Space between switches */
+    flex-direction: column; /* Arrange labels and switches in columns */
+    align-items: center; /* Center items horizontally */
+    gap: 10px; /* Space between rows */
     padding-top: 10px;
-    justify-content: center; /* Center the switches within the container */
 }
 
-/* Removed redundant rules for .form-group.switches > div */
+/* Row for Labels */
+.switches-labels {
+    display: flex;
+    gap: 60px; /* Adjust spacing between labels */
+    margin-bottom: 5px; /* Space between labels and switches */
+}
+
+.switch-label {
+    font-size: 14px;
+    color: var(--text-color);
+    text-align: center;
+}
+
+/* Row for Switches */
+.switches-row {
+    display: flex;
+    gap: 20px; /* Space between switches */
+}
 
 /* Updated Airline Mode Switch Label Adjustment */
 .form-check.form-switch .form-check-label {
@@ -530,7 +546,63 @@ input[type="submit"]:active {
     border-top-color: var(--button-bg) !important;
 }
 
-/* Removed redundant custom switch styles */
+/* Updated noUiSlider Styles to Match Color Pattern */
+.noUi-target {
+    background: var(--slider-bg) !important; /* Background color of the slider */
+}
+
+.noUi-base {
+    background-color: var(--slider-bg) !important; /* Background color of the slider base */
+}
+
+.noUi-connect {
+    background-color: var(--background-color) !important; /* Color of the active (selected) range */
+}
+
+.noUi-handle {
+    border-radius: 50% !important; /* Makes the handle circular */
+    background-color: var(--button-bg) !important; /* Use the button background color for consistency */
+    border: none !important; /* Removes default border */
+    box-shadow: 0 0 8px rgba(0,0,0,0.3) !important; /* Adds a shadow for a more lifted look */
+    cursor: pointer !important; /* Changes cursor to pointer to indicate it's draggable */
+}
+
+.noUi-handle:before, .noUi-handle:after {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 14px;
+    width: 1px;
+    left: 14px;
+    background-color: var(--button-bg) !important; /* Use the button background color for consistency */
+    top: 6px;
+}
+
+.noUi-horizontal .noUi-handle-lower {
+    width: 25px !important;
+    height: 21px !important;
+    right: -10px !important;
+    top: -3px !important;
+}
+
+.noUi-horizontal .noUi-handle-upper {
+    width: 25px !important;
+    height: 21px !important;
+    right: -16px !important;
+    top: -3px !important;
+}
+
+/* Touch area styles */
+.noUi-touch-area {
+    cursor: pointer !important; /* Ensures the cursor changes to pointer in the touch area */
+}
+
+/* Rounded sliders */
+.noUi-handle.round {
+    border-radius: 50% !important;
+}
+
+/* Remove redundant custom switch styles */
 /* Since Bootstrap handles switches, these are no longer needed */
 /*
 .switch {
@@ -593,12 +665,3 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 */
-
-/* Remove duplicated .form-group rules */
-/* The earlier .form-group is sufficient */
-
-/* Cleaned up any other duplicated or conflicting rules */
-
-/* Ensure that the switch-icon styles remain untouched */
-
-/* Other necessary styles remain intact */

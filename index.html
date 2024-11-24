@@ -81,24 +81,29 @@
         </div>
 
         <!-- One-Way Trip, Flexible Dates and Direct flight Toggle Switch Group -->
-        <!-- Removed 'd-flex flex-column align-items-start' to allow CSS to handle layout -->
         <div class="form-group switches">
-            <!-- One-Way Trip Switch -->
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="oneWayTrip" name="oneWayTrip">
-                <label class="form-check-label" for="oneWayTrip">One-Way Trip</label>
+            <!-- Row for Labels -->
+            <div class="switches-labels">
+                <span class="switch-label">One-Way Trip</span>
+                <span class="switch-label">+/- 1 day</span>
+                <span class="switch-label">Direct Flights Only</span>
             </div>
-            
-            <!-- Flexible Dates Switch -->
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="flexibleDates" name="flexibleDates">
-                <label class="form-check-label" for="flexibleDates">+/- 1 day</label>
-            </div>
-            
-            <!-- Direct Flight Switch -->
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="directFlight" name="directFlight">
-                <label class="form-check-label" for="directFlight">Direct Flights Only</label>
+            <!-- Row for Switches -->
+            <div class="switches-row">
+                <!-- One-Way Trip Switch -->
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="oneWayTrip" name="oneWayTrip">
+                </div>
+                
+                <!-- Flexible Dates Switch -->
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="flexibleDates" name="flexibleDates">
+                </div>
+                
+                <!-- Direct Flight Switch -->
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="directFlight" name="directFlight">
+                </div>
             </div>
         </div>
 
