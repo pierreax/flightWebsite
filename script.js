@@ -22,7 +22,7 @@ $(document).ready(function () {
         flexibleDatesCheckbox: $('#flexibleDates'),
         excludeAirlinesSelect: $('#excludeAirlines'),
         airlineModeSwitch: $('#airlineModeSwitch'),
-        advancedSettingsIcon: $('#advancedSettingsIcon'),
+        advancedSettingsToggle: $('#advancedSettingsToggle'),
         advancedSettings: $('#advancedSettings'),
         suggestPriceBtn: $('#suggestPriceBtn'),
         outboundSlider: $('#outbound-timeRangeSlider')[0],
@@ -725,16 +725,6 @@ $(document).ready(function () {
         updatePriceBasedOnSelection();
     };
 
-    /**
-     * Rotate the arrow icon based on collapse state.
-     */
-       const handleAdvancedSettingsCollapse = () => {
-        if (SELECTORS.advancedSettings.hasClass('show')) {
-            SELECTORS.advancedSettingsIcon.html('&#9650;'); // Up arrow
-        } else {
-            SELECTORS.advancedSettingsIcon.html('&#9660;'); // Down arrow
-        }
-    };
 
     /**
      * Handle changes in the "Exclude Airlines" dropdown.
@@ -847,10 +837,6 @@ $(document).ready(function () {
         // Airline mode switch change
         SELECTORS.airlineModeSwitch.on('change', handleAirlineModeSwitchChange);
 
-        // Bootstrap Collapse Events for Advanced Settings
-        SELECTORS.advancedSettings.on('shown.bs.collapse', handleAdvancedSettingsCollapse);
-        SELECTORS.advancedSettings.on('hidden.bs.collapse', handleAdvancedSettingsCollapse);
-
         // Help button tooltip toggle
         SELECTORS.helpBtn.on('click', toggleTooltip);
 
@@ -870,6 +856,29 @@ $(document).ready(function () {
             }
         });
     };
+
+
+    // Hide the Advanced Settings toggle initially
+    $j('#advancedSettingsToggle').hide();
+
+    // Advanced settings section
+    document.getElementById('advancedSettingsToggle').addEventListener('click', function() {
+        var advancedSettings = document.getElementById('advancedSettings');
+        var toggleButton = document.getElementById('advancedSettingsToggle');
+
+        if (advancedSettings.style.display === 'none' || !advancedSettings.style.display) {
+            advancedSettings.style.display = 'block';
+            toggleButton.classList.add('expanded'); // Add the 'expanded' class
+            $j('#excludeAirlines').select2({
+                placeholder: 'Select airlines to exclude',
+                allowClear: true
+            });
+
+        } else {
+            advancedSettings.style.display = 'none';
+            toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
+        }
+    });
 
     // Handle airlineModeSwitch
     document.getElementById('airlineModeSwitch').addEventListener('change', function () {
