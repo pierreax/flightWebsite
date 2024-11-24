@@ -89,6 +89,80 @@ app.post('/api/getClosestAirport', async (req, res) => {
     }
 });
 
+// Route for Airport and City Autocomplete
+app.get('/api/airport-suggestions', async (req, res) => {
+    const { term, location_types, limit } = req.query;
+
+    if (!term || term.length < 3) {
+        return res.status(400).json({ error: 'Search term is too short' });
+    }
+
+    try {
+        // Log the request data for debugging
+        console.log(`Searching for term: ${term}`);
+
+        // Construct the Tequila API URL with query parameters
+        const url = new URL('https://tequila-api.kiwi.com/locations/query');
+        const params = {
+            term: term,
+            location_types: 'airport,city', // Include both airport and city
+            limit: limit || 10
+        };
+
+        // Append query parameters to the URL
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+        // Make the GET request to Tequila API
+        const tequilaResponse = await fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'apikey': process.env.TEQUILA_API_KEY
+            }
+        });
+
+        // Parse the response data once
+        const data = await tequilaResponse.json();
+
+        // Log the parsed Tequila API response for debugging
+        console.log('Tequila API Response:', data);
+
+        // Check if the response is successful
+        if (!tequilaResponse.ok) {
+            console.error(`Tequila API error: ${tequilaResponse.status} - ${JSON.stringify(data)}`);
+            return res.status(tequilaResponse.status).json({ error: 'Failed to fetch suggestions', details: data });
+        }
+
+        // Structure suggestions to include location type
+        const suggestions = data.locations.map(location => ({
+            label: `${location.name} (${location.code}) - ${location.type}`, // e.g., "London Heathrow (LHR) - airport"
+            value: `${location.type}:${location.code} - ${location.name}`,   // e.g., "airport:LHR - London Heathrow"
+            type: location.type  // 'airport' or 'city'
+        }));
+
+        // Return the structured suggestions
+        res.json({ locations: suggestions });
+
+    } catch (error) {
+        console.error('Error fetching suggestions from Tequila API:', error);
+
+        // Provide more detailed error logging
+        if (error.response) {
+            // Log the response from the Tequila API
+            console.error('Tequila API response error:', error.response.data);
+            res.status(500).json({ error: 'Tequila API response error', details: error.response.data });
+        } else if (error.request) {
+            // Log request issues (network, etc.)
+            console.error('Tequila API request error:', error.request);
+            res.status(500).json({ error: 'Tequila API request error' });
+        } else {
+            // Log unexpected errors
+            console.error('Unexpected error:', error.message);
+            res.status(500).json({ error: 'Unexpected error' });
+        }
+    }
+});
+
+
 
 // Route for Suggesting Price Limit using Tequila Search API
 app.get('/api/suggestPriceLimit', async (req, res) => {
