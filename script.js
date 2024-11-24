@@ -265,16 +265,55 @@ $(document).ready(function () {
     const initializeAutocomplete = () => {
         $(".autocomplete-iata").autocomplete({
             source: function (request, response) {
-                const results = $.map(airportData, function (value, key) {
-                    if (key.toLowerCase().startsWith(request.term.toLowerCase()) || value.toLowerCase().includes(request.term.toLowerCase())) {
-                        return { label: `${key} - ${value}`, value: `${key} - ${value}` };
+                const term = request.term; // The input value
+                if (term.length < 3) {
+                    return; // Only search for terms that are 3 characters or longer
+                }
+    
+                $.ajax({
+                    url: TEQUILA_API_URL,
+                    method: 'GET',
+                    headers: {
+                        'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
+                    },
+                    data: {
+                        term: term,
+                        location_types: 'airport', // Only search for airports
+                        limit: 10 // Limit the number of suggestions
+                    },
+                    success: function (data) {
+                        if (data.locations && data.locations.length) {
+                            const airports = data.locations.map(location => ({
+                                label: `${location.name} (${location.code})`,
+                                value: `${location.code} - ${location.name}`
+                            }));
+                            response(airports);
+                        } else {
+                            response([]); // No suggestions found
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error fetching data from Tequila API:', error);
+                        response([]); // Return empty suggestions on error
                     }
                 });
-                response(results.slice(0, 10)); // Limit to top 10 matches
             },
-            minLength: 2
+            minLength: 3, // Trigger search after 3 characters are typed
+            select: function (event, ui) {
+                const selectedValue = ui.item.value;
+                const selectedCode = selectedValue.split(' - ')[0];
+                $(this).val(selectedValue); // Populate the input field with selected value
+                // Optionally, you can update the IATA code field directly
+                // For example:
+                if ($(this).attr('id') === 'iataCodeFrom') {
+                    SELECTORS.iataCodeFrom.val(selectedCode);
+                } else if ($(this).attr('id') === 'iataCodeTo') {
+                    SELECTORS.iataCodeTo.val(selectedCode);
+                }
+            }
         });
     };
+    
 
     /**
      * Adjust dates based on the flexible dates toggle.
