@@ -220,6 +220,7 @@ input, select {
 .switches-row {
     display: flex;
     gap: 20px; /* Space between switches */
+    justify-content: center; /* Center switches within the row */
 }
 
 /* Updated Airline Mode Switch Label Adjustment */
