@@ -90,6 +90,39 @@ app.post('/api/getClosestAirport', async (req, res) => {
 });
 
 
+// Route for Airport Autocomplete
+
+// Endpoint to handle airport suggestions
+
+app.get('/api/airport-suggestions', async (req, res) => {
+    const { term, location_types, limit } = req.query;
+
+    if (!term || term.length < 3) {
+        return res.status(400).json({ error: 'Search term is too short' });
+    }
+
+    try {
+        // Make the request to Tequila API
+        const response = await axios.get('https://tequila-api.kiwi.com/locations/query', {
+            headers: {
+                'apikey': TEQUILA_API_KEY
+            },
+            params: {
+                term: term,
+                location_types: location_types || 'airport',
+                limit: limit || 10
+            }
+        });
+
+        // Send the response from Tequila back to the frontend
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error fetching data from Tequila API:', error);
+        res.status(500).json({ error: 'Error fetching airport suggestions' });
+    }
+});
+
+
 // Route for Sheety Proxy
 app.post('/api/sheetyProxy', async (req, res) => {
     const formData = req.body;

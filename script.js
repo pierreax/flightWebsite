@@ -269,16 +269,13 @@ $(document).ready(function () {
                 if (term.length < 3) {
                     return; // Only search for terms that are 3 characters or longer
                 }
-    
+
                 $.ajax({
-                    url: 'https://tequila-api.kiwi.com/locations/query',
+                    url: '/api/airport-suggestions', // Call your backend endpoint
                     method: 'GET',
-                    headers: {
-                        'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
-                    },
                     data: {
-                        term: term,
-                        location_types: 'airport', // Only search for airports
+                        term: term, // Pass search term to backend
+                        location_types: 'airport',
                         limit: 10 // Limit the number of suggestions
                     },
                     success: function (data) {
@@ -293,7 +290,7 @@ $(document).ready(function () {
                         }
                     },
                     error: function (error) {
-                        console.error('Error fetching data from Tequila API:', error);
+                        console.error('Error fetching data from backend:', error);
                         response([]); // Return empty suggestions on error
                     }
                 });
@@ -304,7 +301,6 @@ $(document).ready(function () {
                 const selectedCode = selectedValue.split(' - ')[0];
                 $(this).val(selectedValue); // Populate the input field with selected value
                 // Optionally, you can update the IATA code field directly
-                // For example:
                 if ($(this).attr('id') === 'iataCodeFrom') {
                     SELECTORS.iataCodeFrom.val(selectedCode);
                 } else if ($(this).attr('id') === 'iataCodeTo') {
@@ -313,6 +309,7 @@ $(document).ready(function () {
             }
         });
     };
+
     
 
     /**
