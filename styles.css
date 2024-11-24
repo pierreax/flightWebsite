@@ -202,12 +202,16 @@ input, select {
     gap: 10px; /* Adds some space between each switch */
 }
   
-.form-group.switches > div {
+/* Centering switch labels and switches horizontally */
+.form-group.switches {
     display: flex;
-    flex-direction: column;
-    align-items: center; /* Centers the content (both label and switch) vertically */
-    width: 100%; /* Ensures the div takes up the full width of its parent */
+    flex-direction: row; /* Changed from column to row for horizontal distribution */
+    align-items: center; /* Align switches vertically centered */
+    gap: 20px; /* Increased space between switches for better readability */
+    padding-top: 10px;
+    justify-content: center; /* Center the switches within the container */
 }
+
   
 .form-group.switches .switch {
     position: relative;
