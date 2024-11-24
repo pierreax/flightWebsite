@@ -121,20 +121,19 @@ app.get('/api/airport-suggestions', async (req, res) => {
             }
         });
 
-        // Log the raw Tequila API response for debugging
-        console.log('Tequila API Response:', await tequilaResponse.json());
+        // Parse the response data once
+        const data = await tequilaResponse.json();
+
+        // Log the parsed Tequila API response for debugging
+        console.log('Tequila API Response:', data);
 
         // Check if the response is successful
         if (!tequilaResponse.ok) {
-            const errorText = await tequilaResponse.text();
-            console.error(`Tequila API error: ${tequilaResponse.status} - ${errorText}`);
-            return res.status(tequilaResponse.status).json({ error: 'Failed to fetch airport suggestions' });
+            console.error(`Tequila API error: ${tequilaResponse.status} - ${JSON.stringify(data)}`);
+            return res.status(tequilaResponse.status).json({ error: 'Failed to fetch airport suggestions', details: data });
         }
 
-        // Parse the response data
-        const data = await tequilaResponse.json();
-
-        // Return the entire response data
+        // Return the parsed response data
         res.json(data);
 
     } catch (error) {
@@ -156,6 +155,7 @@ app.get('/api/airport-suggestions', async (req, res) => {
         }
     }
 });
+
 
 
 
