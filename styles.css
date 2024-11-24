@@ -537,15 +537,15 @@ input[type="submit"]:active {
   border-radius: 50%; /* Circular shape for the slider */
 }
   
-input:checked + .slider {
+input:checked {
   background-color: var(--slider-active-bg) !important; /* Color when the switch is active/checked */
 }
   
-input:focus + .slider {
+input:focus {
   box-shadow: 0 0 1px var(--slider-active-bg); /* Optional: add a box-shadow when the switch is focused */
 }
   
-input:checked + .slider:before {
+input:checked {
   transform: translateX(20px); /* Slide the circle to the right on check */
 }
   
