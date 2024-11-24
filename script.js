@@ -90,18 +90,24 @@ $(document).ready(function () {
             console.error('Input value not found');
             return '';
         }
-    
-        // Extract the type and code
-        const typePrefixMatch = inputValue.match(/^(airport|city):([A-Z]{3}) - .+$/i);
-        if (typePrefixMatch) {
-            const type = typePrefixMatch[1].toLowerCase();
-            const code = typePrefixMatch[2].trim();
-            return `${type}:${code}`;
+
+        // Extract the IATA code (first three letters before the '-')
+        const iataCodeMatch = inputValue.match(/^([A-Za-z]{3}) -/);
+        if (iataCodeMatch) {
+            const iataCode = iataCodeMatch[1].toUpperCase();
+
+            // Check if "All Airports" is present in the string
+            if (inputValue.includes("All Airports")) {
+                return `city:${iataCode}`; // Prepend 'city:' if it includes "All Airports"
+            }
+            console.log(iataCode);
+            return iataCode; // Just return the IATA code
         }
-    
+
         console.error('Invalid input format:', inputValue);
         return '';
     };
+
     
 
 
