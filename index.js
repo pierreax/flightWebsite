@@ -102,23 +102,40 @@ app.get('/api/airport-suggestions', async (req, res) => {
         // Log the request data for debugging
         console.log(`Searching for term: ${term}`);
 
-        // Make the request to Tequila API
-        const response = await fetch('https://tequila-api.kiwi.com/locations/query', {
+        // Construct the Tequila API URL with query parameters
+        const url = new URL('https://tequila-api.kiwi.com/locations/query');
+        const params = {
+            term: term,
+            location_types: location_types || 'airport',
+            limit: limit || 10
+        };
+
+        // Append query parameters to the URL
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+        // Make the GET request to Tequila API
+        const tequilaResponse = await fetch(url.toString(), {
+            method: 'GET',
             headers: {
                 'apikey': process.env.TEQUILA_API_KEY
-            },
-            params: {
-                term: term,
-                location_types: location_types || 'airport',
-                limit: limit || 10
             }
         });
 
         // Log the raw Tequila API response for debugging
-        console.log('Tequila API Response:', response.data);
+        console.log('Tequila API Response:', await tequilaResponse.json());
 
-        // Return the entire Tequila API response to the frontend
-        res.json(response.data);
+        // Check if the response is successful
+        if (!tequilaResponse.ok) {
+            const errorText = await tequilaResponse.text();
+            console.error(`Tequila API error: ${tequilaResponse.status} - ${errorText}`);
+            return res.status(tequilaResponse.status).json({ error: 'Failed to fetch airport suggestions' });
+        }
+
+        // Parse the response data
+        const data = await tequilaResponse.json();
+
+        // Return the entire response data
+        res.json(data);
 
     } catch (error) {
         console.error('Error fetching data from Tequila API:', error);
@@ -139,6 +156,7 @@ app.get('/api/airport-suggestions', async (req, res) => {
         }
     }
 });
+
 
 
 
