@@ -858,9 +858,6 @@ $(document).ready(function () {
     };
 
 
-    // Hide the Advanced Settings toggle initially
-    SELECTORS.advancedSettingsToggle.hide();
-
     // Advanced settings section
     document.getElementById('advancedSettingsToggle').addEventListener('click', function() {
         var advancedSettings = document.getElementById('advancedSettings');
@@ -972,6 +969,10 @@ $(document).ready(function () {
 
             // Attach event listeners
             attachAllEventListeners();
+
+            // Hide the Advanced Settings toggle initially
+            SELECTORS.advancedSettingsToggle.hide();
+            
         } catch (error) {
             console.error('Initialization error:', error);
         }
