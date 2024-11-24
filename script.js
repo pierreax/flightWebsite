@@ -334,8 +334,6 @@ $(document).ready(function () {
             }            
         });
     };
-
-
     
 
     /**
