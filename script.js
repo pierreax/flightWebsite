@@ -886,7 +886,7 @@ $(document).ready(function () {
             advancedSettings.style.display = 'none';
             toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
         }
-    };|    
+    };   
 
     // ===========================
     // Initialization Sequence
@@ -971,7 +971,7 @@ $(document).ready(function () {
             attachAllEventListeners();
 
             // Hide the Advanced Settings toggle initially
-            SELECTORS.advancedSettingsToggle.hide();
+            //SELECTORS.advancedSettingsToggle.hide();
 
         } catch (error) {
             console.error('Initialization error:', error);
