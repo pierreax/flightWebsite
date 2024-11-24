@@ -315,13 +315,14 @@ $(document).ready(function () {
             
                 let formattedValue;
                 if (type === 'city') {
-                    formattedValue = `city:${code}`; // e.g., "city:HAMBURG"
+                    formattedValue = `${code} - All Airports`; // e.g., "city:HAMBURG"
                 } else if (type === 'airport') {
-                    formattedValue = `airport:${code} - ${name}`; // e.g., "airport:HAM - Hamburg Airport"
+                    formattedValue = `${code} - ${name}`; // e.g., "airport:HAM - Hamburg Airport"
                 }
             
                 $(this).val(formattedValue); // Set the input value with type prefix
-            
+                
+                console.log('Formatted value:',formattedValue);
                 // Optionally, you can update the IATA code field directly
                 if ($(this).attr('id') === 'iataCodeFrom') {
                     SELECTORS.iataCodeFrom.val(formattedValue);
