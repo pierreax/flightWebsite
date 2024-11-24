@@ -204,7 +204,6 @@ $(document).ready(function () {
      * @param {Object} instance 
      */
     function handleDateChange(selectedDates, dateStr, instance) {
-        console.log(selectedDates, dateStr);
         // Update the selected start and end dates
         selectedStartDate = selectedDates[0];
         depDate_From = formatDate(selectedStartDate);
