@@ -98,6 +98,7 @@ $(document).ready(function () {
 
             // Check if "All Airports" is present in the string
             if (inputValue.includes("All Airports")) {
+                console.log(`city:${iataCode}`);
                 return `city:${iataCode}`; // Prepend 'city:' if it includes "All Airports"
             }
             console.log(iataCode);
