@@ -886,19 +886,7 @@ $(document).ready(function () {
             advancedSettings.style.display = 'none';
             toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
         }
-    };
-
-
-    // Handle airlineModeSwitch
-    document.getElementById('airlineModeSwitch').addEventListener('change', function () {
-        const label = document.querySelector('label[for="airlineModeSwitch"]');
-        if (this.checked) {
-            label.textContent = 'Include only Airlines';
-        } else {
-            label.textContent = 'Exclude Airlines';
-        }
-    });
-    
+    };|    
 
     // ===========================
     // Initialization Sequence
