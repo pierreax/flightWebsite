@@ -241,23 +241,15 @@ input, select {
 /* Row for Switches */
 .switches-row {
     display: flex;
-    gap: 40px; /* Adjust spacing between Swiches */
+    gap: 60px; /* Adjust spacing between Swiches */
     margin-bottom: 5px; /* Space between labels and select dates */
     padding-left: 20px;
     padding-right: 20px;
 }
 
 .switch-label {
-    font-size: 14px;
     color: var(--text-color);
     text-align: center;
-}
-
-/* Row for Switches */
-.switches-row {
-    display: flex;
-    gap: 20px; /* Space between switches */
-    justify-content: center; /* Center switches within the row */
 }
 
 /* Updated Airline Mode Switch Label Adjustment */
