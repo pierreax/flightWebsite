@@ -92,7 +92,7 @@ app.post('/api/getClosestAirport', async (req, res) => {
 
 // Route for Airport and City Autocomplete
 app.get('/api/airport-suggestions', async (req, res) => {
-    const { term, location_types, limit } = req.query;
+    const { term, limit } = req.query;
 
     if (!term || term.length < 3) {
         return res.status(400).json({ error: 'Search term is too short' });
