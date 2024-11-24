@@ -271,7 +271,7 @@ $(document).ready(function () {
                 }
     
                 $.ajax({
-                    url: TEQUILA_API_URL,
+                    url: 'https://tequila-api.kiwi.com/locations/query',
                     method: 'GET',
                     headers: {
                         'apikey': 'mzfTu9SKWJUZBoKYr_u5sDGp6CxqWk7v'
