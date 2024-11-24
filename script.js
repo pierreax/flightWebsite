@@ -720,7 +720,7 @@ $(document).ready(function () {
      */
     const handleDirectFlightChange = () => {
         if (SELECTORS.directFlightCheckbox.is(':checked')) {
-            console.log("Direct flights only enabled");
+            console.log("Direct flights only enabled!");
 
             // Disable the inputs and add the 'disabled-input' class
             SELECTORS.maxStopsInput.val('0').prop('disabled', true).addClass('disabled-input');
@@ -731,7 +731,7 @@ $(document).ready(function () {
             SELECTORS.maxFlightDurationInput.prop('required', false);
 
         } else {
-            console.log("Direct flights only disabled");
+            console.log("Direct flights only disabled!");
 
             // Enable the inputs and remove the 'disabled-input' class
             SELECTORS.maxStopsInput.prop('disabled', false).removeClass('disabled-input').val('');
