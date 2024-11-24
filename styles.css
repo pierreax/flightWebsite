@@ -74,7 +74,7 @@ a.destinations-link:active {
 /* Form styles */
 form {
     position: relative; /* Set relative positioning to contain absolute elements */
-    max-width: 600px; /* Increased width for better layout */
+    max-width: 400px; /* Increased width for better layout */
     margin: 20px auto;
     padding: 20px;
     border-radius: 10px;
@@ -192,6 +192,15 @@ input, select {
     color: var(--text-color);
     padding: 0px;
     font-size: 8px; /* Adjust font size for initial state */
+}
+
+#inbound-timeRangeDisplay,
+#outbound-timeRangeDisplay {
+    font-size: 12px;
+    font-family: 'Avenir Light', sans-serif;
+    text-align: center; /* Center the text */
+    width: 100%; /* Ensure the divs take up the full width */
+    margin: 10px 0; /* Add some margin for better spacing */
 }
 
 /* Adjustments for the switch icon container */
