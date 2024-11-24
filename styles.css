@@ -258,6 +258,12 @@ input, select {
     text-align: center;
 }
 
+/* Ensure the switch container aligns with the other switches */
+.switch-container {
+    display: inline-block;
+    width: 100%; /* Ensure the switch container fills its parent */
+}
+
  
 /* Adjustments for the switch icon container */
 .switch-icon-container {
@@ -370,16 +376,21 @@ input, select {
     background: none !important;
 }
   
+/* Add flexbox alignment to switch-row in the Advanced Settings */
 .switch-row {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between; /* Align items with space between */
+    gap: 10px; /* Add gap to space the labels and switches */
 }
   
+/* Ensure the switch labels are aligned with the switches */
 .switch-label {
-    flex-grow: 1;
-    text-align: center;
     font-size: 10px;
+    color: var(--text-color);
+    text-align: center;
+    flex-grow: 1; /* Ensures labels are evenly spaced */
+    margin-top: 5px;
 }
   
 .form-group {
@@ -496,12 +507,13 @@ input[type="submit"]:active {
   
 /* Toggle switch styles */
 /* The switch - the box around the slider */
+/* Adjust the size and style of the Exclude Airlines switch to match the other switches */
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 18px; /* Width of the switch */
-  height: 4px; /* Height of the switch */
-  margin: 5px 0; /* Provide some margin around the switch */
+    position: relative;
+    display: inline-block;
+    width: 40px; /* Increase width of the switch to match other switches */
+    height: 20px; /* Increase height of the switch */
+    margin: 5px 0; /* Provide consistent margin around the switch */
 }
   
 /* Hide default HTML checkbox */
@@ -539,15 +551,13 @@ input[type="submit"]:active {
   
 input:checked {
   background-color: var(--slider-active-bg) !important; /* Color when the switch is active/checked */
+  transform: translateX(20px); /* Slide the circle to the right on check */
 }
   
 input:focus {
   box-shadow: 0 0 1px var(--slider-active-bg); /* Optional: add a box-shadow when the switch is focused */
 }
   
-input:checked {
-  transform: translateX(20px); /* Slide the circle to the right on check */
-}
   
 /* Rounded sliders */
 .slider.round {
