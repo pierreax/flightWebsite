@@ -269,7 +269,7 @@ $(document).ready(function () {
                 if (term.length < 3) {
                     return; // Only search for terms that are 3 characters or longer
                 }
-
+                console.log('Autcomplete triggered:',term);
                 $.ajax({
                     url: '/api/airport-suggestions', // Call your backend endpoint
                     method: 'GET',
