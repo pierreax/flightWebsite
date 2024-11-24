@@ -73,7 +73,7 @@ a.destinations-link:active {
 
 /* Form styles */
 form {
-    position: relative;
+    position: relative; /* Set relative positioning to contain absolute elements */
     max-width: 600px; /* Increased width for better layout */
     margin: 20px auto;
     padding: 20px;
@@ -192,6 +192,23 @@ input, select {
     color: var(--text-color);
     padding: 0px;
     font-size: 8px; /* Adjust font size for initial state */
+}
+
+/* Adjustments for the switch icon container */
+.switch-icon-container {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    right: 15%; /* Positions the icon exactly between the two fields */
+    transform: translateX(50%) translateY(-50%); /* Adjust horizontally and vertically */
+    z-index: 2; /* Ensures the icon is clickable */
+}
+  
+.switch-icon {
+    cursor: pointer;
+    width: 20px; /* Adjust based on your icon's size */
+    height: auto;
+    left: 10px; /* Adjust as necessary, depending on padding */
 }
 
 /* Centering switch labels and switches horizontally */
