@@ -482,6 +482,9 @@ $(document).ready(function () {
             console.log('Raw response from Tequila API:', tequilaResponse);
             handleTequilaResponse(tequilaResponse);
 
+            // Show the Advanced Settings toggle after successful request
+            SELECTORS.advancedSettingsToggle.show();
+
         } catch (error) {
             console.error('Error fetching data:', error);
             alert('There was an error processing your request. Please try again later.');
@@ -972,7 +975,7 @@ $(document).ready(function () {
 
             // Hide the Advanced Settings toggle initially
             SELECTORS.advancedSettingsToggle.hide();
-            
+
         } catch (error) {
             console.error('Initialization error:', error);
         }
