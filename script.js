@@ -80,7 +80,7 @@ $(document).ready(function () {
     // ===========================
 
     /**
-     * Extract the IATA code or city identifier from a hidden input field.
+     * Extract the IATA code or city identifier from an input field.
      * @param {string} inputId 
      * @returns {string} Formatted identifier with type prefix if necessary.
      */
@@ -90,9 +90,20 @@ $(document).ready(function () {
             console.error('Input value not found');
             return '';
         }
-
-        return inputValue; // 'LHR' or 'city:LON'
+    
+        // Extract the type and code
+        const typePrefixMatch = inputValue.match(/^(airport|city):([A-Z]{3}) - .+$/i);
+        if (typePrefixMatch) {
+            const type = typePrefixMatch[1].toLowerCase();
+            const code = typePrefixMatch[2].trim();
+            return `${type}:${code}`;
+        }
+    
+        console.error('Invalid input format:', inputValue);
+        return '';
     };
+    
+
 
     /**
      * Safely parse input values, handling NaN cases.
@@ -204,6 +215,7 @@ $(document).ready(function () {
      * @param {Object} instance 
      */
     function handleDateChange(selectedDates, dateStr, instance) {
+        console.log(selectedDates, dateStr);
         // Update the selected start and end dates
         selectedStartDate = selectedDates[0];
         depDate_From = formatDate(selectedStartDate);
@@ -261,84 +273,68 @@ $(document).ready(function () {
     const initializeAutocomplete = () => {
         $(".autocomplete-iata").autocomplete({
             source: function (request, response) {
-                const term = request.term;
+                const term = request.term; // The input value
                 if (term.length < 3) {
-                    return;
+                    return; // Only search for terms that are 3 characters or longer
                 }
                 console.log('Autocomplete triggered:', term);
                 $.ajax({
-                    url: '/api/airport-suggestions',
+                    url: '/api/airport-suggestions', // Call your backend endpoint
                     method: 'GET',
                     data: {
-                        term: term,
-                        limit: 10
+                        term: term, // Pass search term to backend
+                        limit: 10 // Limit the number of suggestions
                     },
                     success: function (data) {
-                        console.log('Autocomplete success response:', data);
+                        console.log('Autocomplete success response:', data); // Log the entire response
                         if (data.locations && data.locations.length) {
-                            const suggestions = data.locations.map(location => {
-                                if (location.type === "airport") {
-                                    return {
-                                        label: `${location.code} - ${location.name}`, // "LHR - Heathrow"
-                                        value: location.code, // "LHR"
-                                        type: location.type
-                                    };
-                                } else if (location.type === "city") {
-                                    return {
-                                        label: `${location.name} - All Airports`, // "London - All Airports"
-                                        value: `city:${location.code}`, // "city:LON"
-                                        type: location.type
-                                    };
-                                } else {
-                                    return {
-                                        label: `${location.name} (${location.type})`,
-                                        value: `${location.type}:${location.code}`, // "someType:CODE"
-                                        type: location.type
-                                    };
-                                }
-                            });
-                            console.log('Formatted suggestions:', suggestions);
+                            const suggestions = data.locations.map(location => ({
+                                label: `${location.name} (${location.code}) - ${location.type}`, // e.g., "London Heathrow (LHR) - airport"
+                                value: `${location.type}:${location.code} - ${location.name}`,   // e.g., "airport:LHR - London Heathrow"
+                                type: location.type // 'airport' or 'city'
+                            }));
+                            console.log('Formatted suggestions:', suggestions); // Log formatted suggestions
                             response(suggestions);
                         } else {
                             console.log('No suggestions found for the term.');
-                            response([]);
+                            response([]); // No suggestions found
                         }
                     },
                     error: function (error) {
                         console.error('Error fetching data from backend:', error);
-                        response([]);
+                        response([]); // Return empty suggestions on error
                     }                    
                 });
             },
-            minLength: 3,
+            minLength: 3, // Trigger search after 3 characters are typed
             select: function (event, ui) {
-                event.preventDefault();
-
-                if (ui.item.type === "airport") {
-                    // Display format: "LHR - Heathrow"
-                    $(this).val(ui.item.label);
-                    // Set hidden field to IATA code only (e.g., "LHR")
-                    if ($(this).attr('id') === 'origin') {
-                        SELECTORS.iataCodeFrom.val(ui.item.value); // "LHR"
-                    } else if ($(this).attr('id') === 'destination') {
-                        SELECTORS.iataCodeTo.val(ui.item.value); // "JFK"
-                    }
-                } else if (ui.item.type === "city") {
-                    // Display format: "London - All Airports"
-                    $(this).val(ui.item.label);
-                    // Set hidden field to "city:IATA" (e.g., "city:LON")
-                    if ($(this).attr('id') === 'origin') {
-                        SELECTORS.iataCodeFrom.val(ui.item.value); // "city:LON"
-                    } else if ($(this).attr('id') === 'destination') {
-                        SELECTORS.iataCodeTo.val(ui.item.value); // "city:NYC"
-                    }
+                const selectedValue = ui.item.value; // e.g., "airport:HAM - Hamburg Airport"
+                const [typeAndCode, ...nameParts] = selectedValue.split(' - ');
+                const [type, code] = typeAndCode.split(':');
+                const name = nameParts.join(' - ');
+            
+                let formattedValue;
+                if (type === 'city') {
+                    formattedValue = `city:${code}`; // e.g., "city:HAMBURG"
+                } else if (type === 'airport') {
+                    formattedValue = `airport:${code} - ${name}`; // e.g., "airport:HAM - Hamburg Airport"
                 }
-
-                // Optionally, trigger a change event or any other logic here
-            }
+            
+                $(this).val(formattedValue); // Set the input value with type prefix
+            
+                // Optionally, you can update the IATA code field directly
+                if ($(this).attr('id') === 'iataCodeFrom') {
+                    SELECTORS.iataCodeFrom.val(formattedValue);
+                } else if ($(this).attr('id') === 'iataCodeTo') {
+                    SELECTORS.iataCodeTo.val(formattedValue);
+                }
+            
+                // Prevent default behavior
+                return false;
+            }            
         });
     };
-
+    
 
     /**
      * Adjust dates based on the flexible dates toggle.
@@ -472,10 +468,8 @@ $(document).ready(function () {
 
                 console.log(`Closest Airport: ${airportIATA} - ${airportName}, ${cityName}, ${countryName}`);
 
-                // Update the IATA Code From hidden field
-                SELECTORS.iataCodeFrom.val(airportIATA).trigger('change'); // "LHR"
-                // Update the visible input field
-                $('#origin').val(`${airportIATA} - ${airportName}`).trigger('change');
+                // Update the IATA Code From field in the UI
+                SELECTORS.iataCodeFrom.val(`${airportIATA} - ${airportName}`).trigger('change');
             } else {
                 console.log('No airport data found in the response.');
                 alert('No nearby airports found based on your location. Please select your departure airport manually.');
@@ -485,6 +479,8 @@ $(document).ready(function () {
             alert('There was an error determining your closest airport. Please select your departure airport manually.');
         }
     };
+
+
 
     /**
      * Populate the airlines dropdown with options.
@@ -504,14 +500,15 @@ $(document).ready(function () {
         initializeSelect2(airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude');
     };
 
+
     /**
      * Suggest price limit by querying the backend API.
      */
     const suggestPriceLimit = async () => {
         SELECTORS.loader.show(); // Show the loading icon
         const params = new URLSearchParams({
-            origin: extractIATACode('iataCodeFrom'), // "LHR" or "city:LON"
-            destination: extractIATACode('iataCodeTo'), // "JFK" or "city:NYC"
+            origin: extractIATACode('iataCodeFrom'),
+            destination: extractIATACode('iataCodeTo'),
             dateFrom: depDate_From,
             dateTo: depDate_To,
             returnFrom: returnDate_From,
@@ -525,7 +522,7 @@ $(document).ready(function () {
             ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeStartDisplay.text(),
             ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text()
         });
-        console.log("Sending Current Price request with params:", params.toString());
+        console.log("Sending Current Price request with params:",params);
         try {
             const response = await fetch(`/api/suggestPriceLimit?${params.toString()}`, {
                 method: 'GET'
@@ -556,7 +553,7 @@ $(document).ready(function () {
      */
     const handleTequilaResponse = (tequilaResponse) => {
         globalTequilaResponse = tequilaResponse;
-        console.log('Tequila response:', globalTequilaResponse);
+        console.log('Tequila response:',globalTequilaResponse);
 
         if (tequilaResponse.data && tequilaResponse.data.length > 0) {
             const lowestPriceFlight = tequilaResponse.data[0];
@@ -606,7 +603,7 @@ $(document).ready(function () {
         redirectEmail = encodeURIComponent(SELECTORS.emailInput.val());
         redirectCurrency = encodeURIComponent(SELECTORS.currencyInput.val());
         const iataCodeToValue = SELECTORS.iataCodeTo.val();
-        redirectIataCodeTo = iataCodeToValue ? iataCodeToValue.split(':')[1] : ''; // Extract "LON" from "city:LON"
+        redirectIataCodeTo = iataCodeToValue ? iataCodeToValue.split(' - ')[0] : '';
         console.log('Redirect IATA Code To:', redirectIataCodeTo);
     };
 
@@ -834,12 +831,6 @@ $(document).ready(function () {
         const toVal = SELECTORS.iataCodeTo.val();
         SELECTORS.iataCodeFrom.val(toVal).trigger('change');
         SELECTORS.iataCodeTo.val(fromVal).trigger('change');
-
-        // Additionally, update the visible input fields
-        const fromLabel = $('#origin').val();
-        const toLabel = $('#destination').val();
-        $('#origin').val(toLabel).trigger('change');
-        $('#destination').val(fromLabel).trigger('change');
     };
 
     /**
@@ -858,7 +849,7 @@ $(document).ready(function () {
      */
     const updatePriceBasedOnSelection = () => {
         const selectedAirlines = SELECTORS.excludeAirlinesSelect.val();
-        console.log('Selected Airlines: ', selectedAirlines);
+        console.log('Selected Airlines: ',selectedAirlines);
 
         if (!globalTequilaResponse || !globalTequilaResponse.data) {
             return;
@@ -881,7 +872,7 @@ $(document).ready(function () {
             const lowestPrice = filteredFlights[0].price;
             const roundedPrice = Math.ceil(lowestPrice);
             SELECTORS.maxPricePerPerson.val(roundedPrice);
-            console.log('Updated the price to:', roundedPrice);
+            console.log('Updated the price to:',roundedPrice);
         } else {
             SELECTORS.maxPricePerPerson.val('');
             console.log('Updated the price to nothing');
@@ -954,7 +945,7 @@ $(document).ready(function () {
             advancedSettings.style.display = 'block';
             toggleButton.classList.add('expanded'); // Add the 'expanded' class
 
-            // Initialize Select2 on the exclude airlines dropdown
+            // Initialize select2 on the exclude airlines dropdown
             $('#excludeAirlines').select2({
                 placeholder: 'Select airlines to exclude',
                 allowClear: true
@@ -988,8 +979,8 @@ $(document).ready(function () {
 
         return {
             price: {
-                fly_from: extractIATACode('iataCodeFrom'), // "LHR" or "city:LON"
-                fly_to: extractIATACode('iataCodeTo'),     // "JFK" or "city:NYC"
+                iataCodeFrom: extractIATACode('iataCodeFrom'), // e.g., "airport:LHR" or "city:LON"
+                iataCodeTo: extractIATACode('iataCodeTo'),     // e.g., "airport:JFK" or "city:NYC"
                 flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'one-way' : 'return',
                 maxPricePerPerson: SELECTORS.maxPricePerPerson.val(),
                 currency: SELECTORS.currencyInput.val(),
@@ -1013,6 +1004,8 @@ $(document).ready(function () {
             }
         };
     };
+
+
 
     /**
      * Initialize the application.
@@ -1044,8 +1037,7 @@ $(document).ready(function () {
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
             if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
-                // Assuming 'iataCodeToList' is a datalist for the destination input
-                $('#destination').val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
+                SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
             }
 
             // Update currency and location based on IP
