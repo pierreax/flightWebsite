@@ -1,5 +1,8 @@
+// Import required modules
 const express = require('express');
 const path = require('path');
+const fetch = require('node-fetch'); // Ensure you have node-fetch installed
+require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -14,8 +17,6 @@ app.use(express.static(path.join(__dirname)));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
-
-
 
 // Route to fetch the closest airport using Tequila API
 app.post('/api/getClosestAirport', async (req, res) => {
@@ -77,7 +78,6 @@ app.post('/api/getClosestAirport', async (req, res) => {
                 longitude: nearestAirport.longitude,
                 // Include other necessary fields if required
             };
-            
 
             return res.json(responseData);
         } else {
@@ -95,75 +95,79 @@ app.get('/api/airport-suggestions', async (req, res) => {
     const { term, limit } = req.query;
 
     if (!term || term.length < 3) {
+        console.log('Search term too short:', term);
         return res.status(400).json({ error: 'Search term is too short' });
     }
 
     try {
-        // Log the request data for debugging
-        console.log(`Searching for term: ${term}`);
+        // Log the search term
+        console.log(`Searching for term: "${term}" with limit: ${limit || 10}`);
 
-        // Construct the Tequila API URL with query parameters
-        const url = new URL('https://tequila-api.kiwi.com/locations/query');
-        const params = {
-            term: term,
-            location_types: 'airport,city', // Include both airport and city
-            limit: limit || 10
-        };
-
-        // Append query parameters to the URL
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
-        // Make the GET request to Tequila API
-        const tequilaResponse = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'apikey': process.env.TEQUILA_API_KEY
-            }
-        });
-
-        // Parse the response data once
-        const data = await tequilaResponse.json();
-
-        // Log the parsed Tequila API response for debugging
-        console.log('Tequila API Response:', data);
-
-        // Check if the response is successful
-        if (!tequilaResponse.ok) {
-            console.error(`Tequila API error: ${tequilaResponse.status} - ${JSON.stringify(data)}`);
-            return res.status(tequilaResponse.status).json({ error: 'Failed to fetch suggestions', details: data });
+        const apiKey = process.env.TEQUILA_API_KEY;
+        if (!apiKey) {
+            console.error('Tequila API key is not set in environment variables.');
+            return res.status(500).json({ error: 'Server configuration error.' });
         }
 
+        // Define location types to query separately
+        const locationTypes = ['airport', 'city'];
+
+        // Function to fetch data for a single location type
+        const fetchLocations = async (type) => {
+            const url = new URL('https://tequila-api.kiwi.com/locations/query');
+            const params = {
+                term: term,
+                location_types: type, // Single location type per request
+                limit: limit || 10
+            };
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+            const response = await fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                    'apikey': apiKey
+                }
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Tequila API error for type "${type}": ${response.status} - ${errorText}`);
+                throw new Error(`Failed to fetch suggestions for type "${type}".`);
+            }
+
+            const data = await response.json();
+            return data.locations || [];
+        };
+
+        // Fetch data for both location types concurrently
+        const [airportLocations, cityLocations] = await Promise.all(
+            locationTypes.map(type => fetchLocations(type))
+        );
+
+        // Combine the results
+        const combinedLocations = [...airportLocations, ...cityLocations];
+
+        // Log the combined response
+        console.log('Combined Tequila API Response:', JSON.stringify(combinedLocations, null, 2));
+
         // Structure suggestions to include location type
-        const suggestions = data.locations.map(location => ({
-            label: `${location.name} (${location.code}) - ${location.type}`, // e.g., "London Heathrow (LHR) - airport"
-            value: `${location.type}:${location.code} - ${location.name}`,   // e.g., "airport:LHR - London Heathrow"
+        const suggestions = combinedLocations.map(location => ({
+            label: `${location.name} (${location.code}) - ${location.type}`, // e.g., "Hamburg Airport (HAM) - airport"
+            value: `${location.type}:${location.code} - ${location.name}`,   // e.g., "airport:HAM - Hamburg Airport"
             type: location.type  // 'airport' or 'city'
         }));
+
+        // Log the structured suggestions
+        console.log('Structured Suggestions:', JSON.stringify(suggestions, null, 2));
 
         // Return the structured suggestions
         res.json({ locations: suggestions });
 
     } catch (error) {
-        console.error('Error fetching suggestions from Tequila API:', error);
-
-        // Provide more detailed error logging
-        if (error.response) {
-            // Log the response from the Tequila API
-            console.error('Tequila API response error:', error.response.data);
-            res.status(500).json({ error: 'Tequila API response error', details: error.response.data });
-        } else if (error.request) {
-            // Log request issues (network, etc.)
-            console.error('Tequila API request error:', error.request);
-            res.status(500).json({ error: 'Tequila API request error' });
-        } else {
-            // Log unexpected errors
-            console.error('Unexpected error:', error.message);
-            res.status(500).json({ error: 'Unexpected error' });
-        }
+        console.error('Error fetching suggestions from Tequila API:', error.message);
+        res.status(500).json({ error: 'Failed to fetch suggestions', details: error.message });
     }
 });
-
-
 
 // Route for Suggesting Price Limit using Tequila Search API
 app.get('/api/suggestPriceLimit', async (req, res) => {
@@ -228,8 +232,6 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
     }
 });
 
-
-
 /**
  * Resolve the location type for a given term.
  * @param {string} term 
@@ -237,60 +239,17 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
  */
 const resolveLocationType = async (term) => {
     // Check if term already has type prefix
-    const typePrefixMatch = term.match(/^(airport|city|country|metro|region|subdivision|continent|special):(.+)$/i);
+    const typePrefixMatch = term.match(/^(airport|city):([A-Z]{3}) - .+$/i);
     if (typePrefixMatch) {
         const type = typePrefixMatch[1].toLowerCase();
-        const code = typePrefixMatch[2];
+        const code = typePrefixMatch[2].trim();
         return `${type}:${code}`;
     }
 
-    // If no prefix, query the Tequila API to determine the type
-    const apiKey = process.env.TEQUILA_API_KEY;
-    if (!apiKey) {
-        console.error('Tequila API key is not set in environment variables.');
-        throw new Error('Server configuration error.');
-    }
-
-    const url = new URL('https://tequila-api.kiwi.com/locations/query');
-    const params = {
-        term: term,
-        location_types: 'airport,city', // Limit to airport and city for relevance
-        limit: 1
-    };
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
-    const tequilaResponse = await fetch(url.toString(), {
-        method: 'GET',
-        headers: {
-            'apikey': apiKey
-        }
-    });
-
-    if (!tequilaResponse.ok) {
-        const errorText = await tequilaResponse.text();
-        console.error(`Tequila API error while resolving location type: ${tequilaResponse.status} - ${errorText}`);
-        throw new Error('Failed to resolve location type.');
-    }
-
-    const data = await tequilaResponse.json();
-
-    if (data.locations && data.locations.length > 0) {
-        const location = data.locations[0];
-        // Use the first location's type
-        const type = location.type; // 'airport' or 'city'
-        const code = location.code;
-        return `${type}:${code}`;
-    } else {
-        console.error('No location found for term:', term);
-        throw new Error('No location found.');
-    }
+    // If no prefix, assume it's an airport code (fallback)
+    const iataCode = term.split(' - ')[0].trim();
+    return `airport:${iataCode}`;
 };
-
-
-
-
-
-
 
 // Route for Sheety Proxy
 app.post('/api/sheetyProxy', async (req, res) => {
@@ -344,9 +303,23 @@ app.get('/api/getCityByIATA', async (req, res) => {
     const { iataCode } = req.query;
 
     try {
-        const response = await fetch(`https://tequila-api.kiwi.com/locations/query?term=${encodeURIComponent(iataCode)}&location_types=city&limit=1`, {
+        const apiKey = process.env.TEQUILA_API_KEY;
+        if (!apiKey) {
+            console.error('Tequila API key is not set in environment variables.');
+            return res.status(500).json({ error: 'Server configuration error.' });
+        }
+
+        const url = new URL('https://tequila-api.kiwi.com/locations/query');
+        const params = {
+            term: iataCode,
+            location_types: 'city',
+            limit: 1
+        };
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+        const response = await fetch(url.toString(), {
             method: 'GET',
-            headers: { 'apikey': process.env.TEQUILA_API_KEY }
+            headers: { 'apikey': apiKey }
         });
 
         const data = await response.json();
@@ -356,49 +329,6 @@ app.get('/api/getCityByIATA', async (req, res) => {
         res.status(500).json({ error: "Failed to fetch city by IATA code" });
     }
 });
-
-// Route to suggest price limit using Tequila API
-app.get('/api/suggestPriceLimit', async (req, res) => {
-    const {
-        origin, destination, dateFrom, dateTo, returnFrom, returnTo,
-        maxStops, maxFlyDuration, flightType, currency, dtime_from,
-        dtime_to, ret_dtime_from, ret_dtime_to
-    } = req.query;
-
-    const queryParams = new URLSearchParams({
-        fly_from: origin,
-        fly_to: destination,
-        date_from: dateFrom,
-        date_to: dateTo,
-        return_from: returnFrom,
-        return_to: returnTo,
-        max_sector_stopovers: maxStops,
-        max_fly_duration: maxFlyDuration,
-        flight_type: flightType,
-        curr: currency,
-        dtime_from,
-        dtime_to,
-        ret_dtime_from,
-        ret_dtime_to,
-        sort: 'price'
-    });
-
-    try {
-        const response = await fetch(`https://tequila-api.kiwi.com/v2/search?${queryParams.toString()}`, {
-            method: 'GET',
-            headers: {
-                'apikey': process.env.TEQUILA_API_KEY
-            }
-        });
-
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error("Error suggesting price limit:", error);
-        res.status(500).json({ error: "Failed to suggest price limit" });
-    }
-});
-
 
 // Microsoft Graph setup for sending emails
 const EMAIL_TENANT_ID = process.env.EMAIL_TENANT_ID;
@@ -419,7 +349,7 @@ app.post('/api/sendEmail', async (req, res) => {
         // Get access token for Microsoft Graph API
         const token = await getAccessToken();
 
-        // Log the token to verify it
+        // Log the token to verify it (Consider removing in production)
         console.log("Access Token:", token);
 
         // Send the email via Microsoft Graph API
@@ -457,14 +387,12 @@ async function getAccessToken() {
     }
 
     const data = await response.json();
-    console.log('Access Token:', data.access_token); // Log to verify the token
+    console.log('Access Token:', data.access_token); // Log to verify the token (Consider removing in production)
     return data.access_token;
 }
 
-
-
 async function sendEmail(subject, body, recipientEmail, token) {
-    const SENDMAIL_ENDPOINT = `https://graph.microsoft.com/v1.0/users/pierre@robotize.no/sendMail`;
+    const SENDMAIL_ENDPOINT = `https://graph.microsoft.com/v1.0/users/${encodeURIComponent(recipientEmail)}/sendMail`;
 
     const message = {
         message: {
@@ -476,7 +404,7 @@ async function sendEmail(subject, body, recipientEmail, token) {
             toRecipients: [
                 {
                     emailAddress: {
-                        address: 'pierre@robotize.no'
+                        address: recipientEmail // Use recipientEmail variable
                     }
                 }
             ],

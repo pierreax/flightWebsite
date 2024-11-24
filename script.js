@@ -90,19 +90,19 @@ $(document).ready(function () {
             console.error('Input value not found');
             return '';
         }
-
-        // Check if the input starts with a type prefix
-        const typePrefixMatch = inputValue.match(/^(airport|city):(.+) - .+$/i);
+    
+        // Extract the type and code
+        const typePrefixMatch = inputValue.match(/^(airport|city):([A-Z]{3}) - .+$/i);
         if (typePrefixMatch) {
             const type = typePrefixMatch[1].toLowerCase();
             const code = typePrefixMatch[2].trim();
             return `${type}:${code}`;
         }
-
-        // If no type prefix, assume it's an airport code
-        const iataCode = inputValue.split(' - ')[0].trim();
-        return iataCode;
+    
+        console.error('Invalid input format:', inputValue);
+        return '';
     };
+    
 
 
     /**
@@ -308,31 +308,30 @@ $(document).ready(function () {
             },
             minLength: 3, // Trigger search after 3 characters are typed
             select: function (event, ui) {
-                const selectedValue = ui.item.value; // e.g., "airport:LHR - London Heathrow"
+                const selectedValue = ui.item.value; // e.g., "airport:HAM - Hamburg Airport"
                 const [typeAndCode, ...nameParts] = selectedValue.split(' - ');
                 const [type, code] = typeAndCode.split(':');
                 const name = nameParts.join(' - ');
-
+            
                 let formattedValue;
                 if (type === 'city') {
-                    formattedValue = `city:${code}`; // e.g., "city:LON"
+                    formattedValue = `city:${code}`; // e.g., "city:HAMBURG"
                 } else if (type === 'airport') {
-                    formattedValue = `airport:${code} - ${name}`; // e.g., "airport:LHR - London Heathrow"
+                    formattedValue = `airport:${code} - ${name}`; // e.g., "airport:HAM - Hamburg Airport"
                 }
-                    
-
-                $(this).val(formattedValue); // Set the input value with type prefix if city
-
+            
+                $(this).val(formattedValue); // Set the input value with type prefix
+            
                 // Optionally, you can update the IATA code field directly
                 if ($(this).attr('id') === 'iataCodeFrom') {
                     SELECTORS.iataCodeFrom.val(formattedValue);
                 } else if ($(this).attr('id') === 'iataCodeTo') {
                     SELECTORS.iataCodeTo.val(formattedValue);
                 }
-
+            
                 // Prevent default behavior
                 return false;
-            }
+            }            
         });
     };
 
