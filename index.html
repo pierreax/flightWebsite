@@ -61,7 +61,7 @@
         <!-- From Field with Icon -->
         <div class="form-group iata-field">
             <img src="airplaneLift.png" alt="From" class="airplane-icon">
-            <input list="iataCodeFromList" id="iataCodeFrom" name="iataCodeFrom" placeholder="Where are you travelling from?" autocomplete="off" required>
+            <input type="text" id="iataCodeFrom" class="autocomplete-iata" placeholder="Enter Departure Airport">
             <datalist id="iataCodeFromList">
                 <!-- Options will be populated dynamically using JavaScript -->
             </datalist>
@@ -75,7 +75,7 @@
         <!-- To Field with Icon -->
         <div class="form-group iata-field">
             <img src="airplaneLand.png" alt="To" class="airplane-icon">
-            <input list="iataCodeToList" id="iataCodeTo" name="iataCodeTo" placeholder="Where do you want to travel?" autocomplete="off" required>
+            <input type="text" id="iataCodeTo" class="autocomplete-iata" placeholder="Enter Destination Airport">
             <datalist id="iataCodeToList">
                 <!-- Options will be populated dynamically using JavaScript -->
             </datalist>
