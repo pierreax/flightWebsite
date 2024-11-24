@@ -852,6 +852,9 @@ $(document).ready(function () {
         // Attach event listener to suggestPriceBtn
         SELECTORS.suggestPriceBtn.on('click', suggestPriceLimit);
 
+        // Attach event listener to advancedSettingsToggle
+        SELECTORS.advancedSettingsToggle.on('click', handleAdvancedSettingsToggle);
+
         // Close tooltip when clicking outside
         $(document).on('click', function (event) {
             if (!$(event.target).closest('#helpBtn, #tooltip').length) {
@@ -861,14 +864,19 @@ $(document).ready(function () {
     };
 
 
-    // Advanced settings section
-    document.getElementById('advancedSettingsToggle').addEventListener('click', function() {
-        var advancedSettings = document.getElementById('advancedSettings');
-        var toggleButton = document.getElementById('advancedSettingsToggle');
+    /**
+     * Handle the toggle of the advanced settings section.
+     */
+    const handleAdvancedSettingsToggle = () => {
+        const advancedSettings = document.getElementById('advancedSettings');
+        const toggleButton = document.getElementById('advancedSettingsToggle');
 
+        // Toggle the display of the advanced settings section
         if (advancedSettings.style.display === 'none' || !advancedSettings.style.display) {
             advancedSettings.style.display = 'block';
             toggleButton.classList.add('expanded'); // Add the 'expanded' class
+
+            // Initialize select2 on the exclude airlines dropdown
             $j('#excludeAirlines').select2({
                 placeholder: 'Select airlines to exclude',
                 allowClear: true
@@ -878,7 +886,8 @@ $(document).ready(function () {
             advancedSettings.style.display = 'none';
             toggleButton.classList.remove('expanded'); // Remove the 'expanded' class
         }
-    });
+    };
+
 
     // Handle airlineModeSwitch
     document.getElementById('airlineModeSwitch').addEventListener('change', function () {
