@@ -721,14 +721,28 @@ $(document).ready(function () {
     const handleDirectFlightChange = () => {
         if (SELECTORS.directFlightCheckbox.is(':checked')) {
             console.log("Direct flights only enabled");
+
+            // Disable the inputs and add the 'disabled-input' class
             SELECTORS.maxStopsInput.val('0').prop('disabled', true).addClass('disabled-input');
             SELECTORS.maxFlightDurationInput.val('').prop('disabled', true).addClass('disabled-input');
+
+            // Remove the 'required' attribute when disabled
+            SELECTORS.maxStopsInput.prop('required', false);
+            SELECTORS.maxFlightDurationInput.prop('required', false);
+
         } else {
             console.log("Direct flights only disabled");
+
+            // Enable the inputs and remove the 'disabled-input' class
             SELECTORS.maxStopsInput.prop('disabled', false).removeClass('disabled-input').val('');
             SELECTORS.maxFlightDurationInput.prop('disabled', false).removeClass('disabled-input').val('');
+
+            // Add the 'required' attribute when enabled
+            SELECTORS.maxStopsInput.prop('required', true);
+            SELECTORS.maxFlightDurationInput.prop('required', true);
         }
     };
+
 
     /**
      * Handle changes in the flexible dates checkbox.
