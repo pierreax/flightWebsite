@@ -105,7 +105,7 @@ app.get('/api/airport-suggestions', async (req, res) => {
         // Make the request to Tequila API
         const response = await axios.get('https://tequila-api.kiwi.com/locations/query', {
             headers: {
-                'apikey': TEQUILA_API_KEY
+                'apikey': process.env.TEQUILA_API_KEY
             },
             params: {
                 term: term,
