@@ -231,8 +231,7 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
     const {
         origin, destination, dateFrom, dateTo, returnFrom, returnTo,
         maxStops, maxFlyDuration, flightType, currency, dtime_from,
-        dtime_to, ret_dtime_from, ret_dtime_to, select_airlines,
-        select_airlines_exclude
+        dtime_to, ret_dtime_from, ret_dtime_to
     } = req.query;
 
     const queryParams = new URLSearchParams({
