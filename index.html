@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -41,7 +40,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
         <!-- Custom JavaScript for app-specific functionality -->
-        <script src="script.js"></script>
+        <script src="script.js" defer></script> <!-- Added 'defer' to ensure script runs after HTML is parsed -->
     </head>
     
 <body>
@@ -61,146 +60,143 @@
         <!-- From Field with Icon -->
         <div class="form-group iata-field">
             <img src="airplaneLift.png" alt="From" class="airplane-icon">
-            <input type="text" id="iataCodeFrom" class="autocomplete-iata" placeholder="Enter Departure Airport">
+            <input type="text" id="origin" class="autocomplete-iata form-control" placeholder="Enter Departure Airport" required>
+            <input type="hidden" id="iataCodeFrom" name="iataCodeFrom">
             <datalist id="iataCodeFromList">
                 <!-- Options will be populated dynamically using JavaScript -->
             </datalist>
         </div>
 
         <!-- Switch Icon, positioned to float above the select fields -->
-        <div class="switch-icon-container">
+        <div class="switch-icon-container" style="cursor: pointer;">
             <img src="up-down.png" alt="Switch" class="switch-icon">
         </div>
 
         <!-- To Field with Icon -->
         <div class="form-group iata-field">
             <img src="airplaneLand.png" alt="To" class="airplane-icon">
-            <input type="text" id="iataCodeTo" class="autocomplete-iata" placeholder="Enter Destination Airport">
+            <input type="text" id="destination" class="autocomplete-iata form-control" placeholder="Enter Destination Airport" required>
+            <input type="hidden" id="iataCodeTo" name="iataCodeTo">
             <datalist id="iataCodeToList">
                 <!-- Options will be populated dynamically using JavaScript -->
             </datalist>
         </div>
 
         <!-- One-Way Trip, Flexible Dates and Direct flight Toggle Switch Group -->
-        <div class="form-group switches">
+        <div class="form-group switches d-flex justify-content-between my-3">
             <!-- One-Way Trip Switch -->
-            <div>
-                <label for="oneWayTrip">One-Way Trip:</label>
-                <label class="switch">
-                    <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
-                    <span class="slider round"></span>
-                </label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="oneWayTrip" name="oneWayTrip">
+                <label class="form-check-label" for="oneWayTrip">One-Way Trip</label>
             </div>
             
             <!-- Flexible Dates Switch -->
-            <div>
-                <label for="flexibleDates">+/- 1 day:</label>
-                <label class="switch">
-                    <input type="checkbox" id="flexibleDates" name="flexibleDates">
-                    <span class="slider round"></span>
-                </label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexibleDates" name="flexibleDates">
+                <label class="form-check-label" for="flexibleDates">+/- 1 day</label>
             </div>
             
             <!-- Direct Flight Switch -->
-            <div>
-                <label for="directFlight">Direct flights only:</label>
-                <label class="switch">
-                    <input type="checkbox" id="directFlight" name="directFlight">
-                    <span class="slider round"></span>
-                </label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="directFlight" name="directFlight">
+                <label class="form-check-label" for="directFlight">Direct flights only</label>
             </div>
         </div>
 
         <!-- Date Field using Flatpickr -->
-        <div class="date-field">
-            <input type="text" id="dateField" placeholder="Select Dates" required>
+        <div class="form-group date-field mb-3">
+            <input type="text" id="dateField" class="form-control" placeholder="Select Dates" required>
         </div>
 
         <!-- Grouped input fields -->
-        <div class="input-group">
+        <div class="input-group mb-3">
             <!-- Stops -->
-            <div class="form-group small-input-row floating-label">
-                <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="1" required>
-                <label for="maxStops" class="small-label">Stops (max)</label>
+            <div class="form-group me-3">
+                <label for="maxStops" class="form-label">Stops (max)</label>
+                <input type="number" id="maxStops" name="maxStops" class="form-control" min="0" max="9" value="1" required>
             </div>
 
-            <!-- Travel time -->
-            <div class="form-group small-input-row floating-label">
-                <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="50" value="8" required>
-                <label for="maxFlightDuration" class="small-label">Flight duration</label>
+            <!-- Flight Duration -->
+            <div class="form-group me-3">
+                <label for="maxFlightDuration" class="form-label">Flight duration (hours)</label>
+                <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="form-control" min="0" max="50" value="8" required>
             </div>
 
             <!-- Passengers -->
-            <div class="form-group small-input-row floating-label">
-                <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
-                <label for="nbrPassengers" class="small-label">Passengers</label>
+            <div class="form-group me-3">
+                <label for="nbrPassengers" class="form-label">Passengers</label>
+                <input type="number" id="nbrPassengers" name="nbrPassengers" class="form-control" min="1" max="9" value="1" required>
             </div>
 
             <!-- Currency Dropdown -->
-            <div class="form-group small-input-row floating-label">
-                <select id="currency" name="currency" class="small-input" required>
+            <div class="form-group">
+                <label for="currency" class="form-label">Currency</label>
+                <select id="currency" name="currency" class="form-select" required>
                     <option value="NOK" selected>NOK</option>
                     <option value="SEK">SEK</option>
                     <option value="EUR">EUR</option>
                     <option value="USD">USD</option>
                     <option value="DKK">DKK</option>
                 </select>
-                <label for="currency" class="small-label">Currency</label>
             </div>
         </div>
 
         <!-- Outbound Slider Options -->
-        <div id="outbound-timeRangeDisplay">Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span></div>
-        <div id="outbound-timeRangeSlider" class="time-slider"></div>
+        <div id="outbound-timeRangeDisplay" class="mb-2">Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span></div>
+        <div id="outbound-timeRangeSlider" class="time-slider mb-4"></div>
 
         <!-- Inbound Slider Options -->
-        <div id="inbound-timeRangeDisplay">Inbound departure time: <span id="inboundTimeStartDisplay"></span> - <span id="inboundTimeEndDisplay"></span></div>
-        <div id="inbound-timeRangeSlider" class="time-slider"></div>
+        <div id="inbound-timeRangeDisplay" class="mb-2">Inbound departure time: <span id="inboundTimeStartDisplay"></span> - <span id="inboundTimeEndDisplay"></span></div>
+        <div id="inbound-timeRangeSlider" class="time-slider mb-4"></div>
 
         <!-- Suggest Price Button and Help Button -->
-        <button type="button" id="suggestPriceBtn">
-            1. Check availability
+        <div class="d-flex align-items-center mb-3">
+            <button type="button" id="suggestPriceBtn" class="btn btn-primary me-2">
+                1. Check availability
+            </button>
             <!-- Help Button -->
-            <div id="helpBtn">?</div>
-        </button>
+            <div id="helpBtn" class="btn btn-secondary" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">?</div>
+        </div>
         <!-- Tooltip -->
-        <div id="tooltip" style="display:none;">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
+        <div id="tooltip" class="alert alert-info" style="display:none;">
+            Click the "Check availability" button to find available flights and get the current lowest price (per person) based on your preferences.
+        </div>
 
         <!-- Advanced Settings Section -->
-        <div id="advancedSettingsToggle" role="button" tabindex="0">Advanced Settings</div>
-        <div id="advancedSettings" style="display:none;">
-            <div class="airline-selection-container">
-                <div class="switch-row">
-                    <div class="switch-label">Exclude Airlines</div>
-                    <div class="switch-container">
-                        <label class="switch">
-                            <input type="checkbox" id="airlineModeSwitch">
-                            <span class="slider round"></span>
-                        </label>
+        <div class="mb-3">
+            <button type="button" id="advancedSettingsToggle" class="btn btn-link">Advanced Settings</button>
+            <div id="advancedSettings" style="display:none; margin-top:10px;">
+                <div class="airline-selection-container">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="me-2">Exclude Airlines</span>
+                        <div class="form-check form-switch me-4">
+                            <input class="form-check-input" type="checkbox" id="airlineModeSwitch">
+                            <label class="form-check-label" for="airlineModeSwitch">Include only Airlines</label>
+                        </div>
                     </div>
-                    <div class="switch-label">Include only Airlines</div>
-                </div>
-                <!-- Airline Exclusion -->
-                <div class="form-group">
-                    <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple"></select>
+                    <!-- Airline Exclusion -->
+                    <div class="form-group">
+                        <label for="excludeAirlines" class="form-label">Select Airlines:</label>
+                        <select id="excludeAirlines" name="excludeAirlines[]" class="form-select" multiple="multiple"></select>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Price Limit Field and Label -->
-        <div class="form-group floating-label">
-            <label class="price-limit-label" for="maxPricePerPerson">Price limit per person:</label>
-            <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
+        <div class="form-group mb-3">
+            <label for="maxPricePerPerson" class="form-label">Price limit per person:</label>
+            <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" class="form-control" required>
         </div>
 
         <!-- Email Field and Label -->
-        <div class="form-group floating-label">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+        <div class="form-group mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required>
         </div>
 
         <!-- Submit Button -->
-        <input type="submit" id="submitFormButton" value="2. Submit" disabled>
+        <input type="submit" id="submitFormButton" class="btn btn-success" value="2. Submit" disabled>
     </form>
 
     <!-- Modal for Hotel Tracker Confirmation -->
@@ -221,7 +217,6 @@
             </div>
         </div>
     </div>
-
 
 </body>
 </html>
