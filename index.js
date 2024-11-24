@@ -90,71 +90,127 @@ app.post('/api/getClosestAirport', async (req, res) => {
 });
 
 
-// Route for Airport Autocomplete
-app.get('/api/airport-suggestions', async (req, res) => {
-    const { term, location_types, limit } = req.query;
-
-    if (!term || term.length < 3) {
-        return res.status(400).json({ error: 'Search term is too short' });
-    }
+// Route for Suggesting Price Limit using Tequila Search API
+app.get('/api/suggestPriceLimit', async (req, res) => {
+    const {
+        origin, destination, dateFrom, dateTo, returnFrom, returnTo,
+        maxStops, maxFlyDuration, flightType, currency, dtime_from,
+        dtime_to, ret_dtime_from, ret_dtime_to
+    } = req.query;
 
     try {
-        // Log the request data for debugging
-        console.log(`Searching for term: ${term}`);
+        // Resolve 'fly_from' and 'fly_to' with type prefixes
+        const fly_from = await resolveLocationType(origin);
+        const fly_to = await resolveLocationType(destination);
 
-        // Construct the Tequila API URL with query parameters
-        const url = new URL('https://tequila-api.kiwi.com/locations/query');
-        const params = {
-            term: term,
-            location_types: location_types || 'airport',
-            limit: limit || 10
-        };
+        // Construct query parameters for Tequila Search API
+        const queryParams = new URLSearchParams({
+            fly_from: fly_from,
+            fly_to: fly_to,
+            date_from: dateFrom,
+            date_to: dateTo,
+            return_from: returnFrom,
+            return_to: returnTo,
+            max_sector_stopovers: maxStops,
+            max_fly_duration: maxFlyDuration,
+            flight_type: flightType,
+            curr: currency,
+            dtime_from,
+            dtime_to,
+            ret_dtime_from,
+            ret_dtime_to,
+            sort: 'price'
+        });
 
-        // Append query parameters to the URL
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        // Log the search parameters for debugging
+        console.log(`Searching flights with parameters: ${queryParams.toString()}`);
 
-        // Make the GET request to Tequila API
-        const tequilaResponse = await fetch(url.toString(), {
+        // Make the GET request to Tequila Search API
+        const response = await fetch(`https://tequila-api.kiwi.com/v2/search?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
                 'apikey': process.env.TEQUILA_API_KEY
             }
         });
 
-        // Parse the response data once
-        const data = await tequilaResponse.json();
-
-        // Log the parsed Tequila API response for debugging
-        console.log('Tequila API Response:', data);
-
         // Check if the response is successful
-        if (!tequilaResponse.ok) {
-            console.error(`Tequila API error: ${tequilaResponse.status} - ${JSON.stringify(data)}`);
-            return res.status(tequilaResponse.status).json({ error: 'Failed to fetch airport suggestions', details: data });
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Tequila Search API error: ${response.status} - ${errorText}`);
+            return res.status(response.status).json({ error: 'Failed to fetch flight data.' });
         }
 
-        // Return the parsed response data
+        const data = await response.json();
+
+        // Log the response data for debugging
+        console.log('Tequila Search API Response:', data);
+
+        // Return the flight data to the frontend
         res.json(data);
-
     } catch (error) {
-        console.error('Error fetching data from Tequila API:', error);
-
-        // Provide more detailed error logging
-        if (error.response) {
-            // Log the response from the Tequila API
-            console.error('Tequila API response error:', error.response.data);
-            res.status(500).json({ error: 'Tequila API response error', details: error.response.data });
-        } else if (error.request) {
-            // Log request issues (network, etc.)
-            console.error('Tequila API request error:', error.request);
-            res.status(500).json({ error: 'Tequila API request error' });
-        } else {
-            // Log unexpected errors
-            console.error('Unexpected error:', error.message);
-            res.status(500).json({ error: 'Unexpected error' });
-        }
+        console.error("Error suggesting price limit:", error);
+        res.status(500).json({ error: "Failed to suggest price limit", details: error.message });
     }
 });
+
+
+
+/**
+ * Resolve the location type for a given term.
+ * @param {string} term 
+ * @returns {string} Resolved term with type prefix (e.g., 'city:LON', 'airport:LHR')
+ */
+const resolveLocationType = async (term) => {
+    // Check if term already has type prefix
+    const typePrefixMatch = term.match(/^(airport|city|country|metro|region|subdivision|continent|special):(.+)$/i);
+    if (typePrefixMatch) {
+        const type = typePrefixMatch[1].toLowerCase();
+        const code = typePrefixMatch[2];
+        return `${type}:${code}`;
+    }
+
+    // If no prefix, query the Tequila API to determine the type
+    const apiKey = process.env.TEQUILA_API_KEY;
+    if (!apiKey) {
+        console.error('Tequila API key is not set in environment variables.');
+        throw new Error('Server configuration error.');
+    }
+
+    const url = new URL('https://tequila-api.kiwi.com/locations/query');
+    const params = {
+        term: term,
+        location_types: 'airport,city', // Limit to airport and city for relevance
+        limit: 1
+    };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+    const tequilaResponse = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+            'apikey': apiKey
+        }
+    });
+
+    if (!tequilaResponse.ok) {
+        const errorText = await tequilaResponse.text();
+        console.error(`Tequila API error while resolving location type: ${tequilaResponse.status} - ${errorText}`);
+        throw new Error('Failed to resolve location type.');
+    }
+
+    const data = await tequilaResponse.json();
+
+    if (data.locations && data.locations.length > 0) {
+        const location = data.locations[0];
+        // Use the first location's type
+        const type = location.type; // 'airport' or 'city'
+        const code = location.code;
+        return `${type}:${code}`;
+    } else {
+        console.error('No location found for term:', term);
+        throw new Error('No location found.');
+    }
+};
+
 
 
 

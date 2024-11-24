@@ -80,9 +80,9 @@ $(document).ready(function () {
     // ===========================
 
     /**
-     * Extract the IATA code from an input field.
+     * Extract the IATA code or city identifier from an input field.
      * @param {string} inputId 
-     * @returns {string} IATA code, possibly prefixed with 'city:'.
+     * @returns {string} Formatted identifier with type prefix if necessary.
      */
     const extractIATACode = (inputId) => {
         const inputValue = document.getElementById(inputId).value;
@@ -90,11 +90,20 @@ $(document).ready(function () {
             console.error('Input value not found');
             return '';
         }
-        const iataCode = inputValue.split(' - ')[0].trim();
-        const containsAllAirports = inputValue.toLowerCase().includes("all airports");
 
-        return containsAllAirports ? `city:${iataCode}` : iataCode;
+        // Check if the input starts with a type prefix
+        const typePrefixMatch = inputValue.match(/^(airport|city):(.+) - .+$/i);
+        if (typePrefixMatch) {
+            const type = typePrefixMatch[1].toLowerCase();
+            const code = typePrefixMatch[2].trim();
+            return `${type}:${code}`;
+        }
+
+        // If no type prefix, assume it's an airport code
+        const iataCode = inputValue.split(' - ')[0].trim();
+        return iataCode;
     };
+
 
     /**
      * Safely parse input values, handling NaN cases.
@@ -259,7 +268,7 @@ $(document).ready(function () {
     };
 
     /**
-     * Initialize the autocomplete functionality for IATA code fields.
+     * Initialize the autocomplete functionality for IATA code and City fields.
      */
     const initializeAutocomplete = () => {
         $(".autocomplete-iata").autocomplete({
@@ -268,22 +277,22 @@ $(document).ready(function () {
                 if (term.length < 3) {
                     return; // Only search for terms that are 3 characters or longer
                 }
-                console.log('Autcomplete triggered:',term);
+                console.log('Autocomplete triggered:', term);
                 $.ajax({
                     url: '/api/airport-suggestions', // Call your backend endpoint
                     method: 'GET',
                     data: {
                         term: term, // Pass search term to backend
-                        location_types: 'airport',
                         limit: 10 // Limit the number of suggestions
                     },
                     success: function (data) {
                         if (data.locations && data.locations.length) {
-                            const airports = data.locations.map(location => ({
-                                label: `${location.name} (${location.code})`,
-                                value: `${location.code} - ${location.name}`
+                            const suggestions = data.locations.map(location => ({
+                                label: `${location.name} (${location.code}) - ${location.type}`, // e.g., "London Heathrow (LHR) - airport"
+                                value: `${location.type}:${location.code} - ${location.name}`,   // e.g., "airport:LHR - London Heathrow"
+                                type: location.type // 'airport' or 'city'
                             }));
-                            response(airports);
+                            response(suggestions);
                         } else {
                             response([]); // No suggestions found
                         }
@@ -296,18 +305,33 @@ $(document).ready(function () {
             },
             minLength: 3, // Trigger search after 3 characters are typed
             select: function (event, ui) {
-                const selectedValue = ui.item.value;
-                const selectedCode = selectedValue.split(' - ')[0];
-                $(this).val(selectedValue); // Populate the input field with selected value
+                const selectedValue = ui.item.value; // e.g., "airport:LHR - London Heathrow"
+                const [typeAndCode, ...nameParts] = selectedValue.split(' - ');
+                const [type, code] = typeAndCode.split(':');
+                const name = nameParts.join(' - ');
+
+                let formattedValue;
+                if (type === 'city') {
+                    formattedValue = `city:${code}`; // e.g., "city:LON"
+                } else if (type === 'airport') {
+                    formattedValue = `${code} - ${name}`; // e.g., "LHR - London Heathrow"
+                }
+
+                $(this).val(formattedValue); // Set the input value with type prefix if city
+
                 // Optionally, you can update the IATA code field directly
                 if ($(this).attr('id') === 'iataCodeFrom') {
-                    SELECTORS.iataCodeFrom.val(selectedCode);
+                    SELECTORS.iataCodeFrom.val(formattedValue);
                 } else if ($(this).attr('id') === 'iataCodeTo') {
-                    SELECTORS.iataCodeTo.val(selectedCode);
+                    SELECTORS.iataCodeTo.val(formattedValue);
                 }
+
+                // Prevent default behavior
+                return false;
             }
         });
     };
+
 
     
 
@@ -942,7 +966,7 @@ $(document).ready(function () {
      */
     const buildFormData = () => {
         // Retrieve slider values using noUiSlider's API
-        const outboundTimes = SELECTORS.outboundSlider.noUiSlider.get();
+        const outboundTimes = SELECTORS.outboundSlider.noUiSlider.get(); // Returns an array [start, end]
         let inboundTimes = ['', ''];
         if (!SELECTORS.oneWayTripCheckbox.is(':checked')) {
             inboundTimes = SELECTORS.inboundSlider.noUiSlider.get();
@@ -954,8 +978,8 @@ $(document).ready(function () {
 
         return {
             price: {
-                iataCodeFrom: extractIATACode('iataCodeFrom'),
-                iataCodeTo: extractIATACode('iataCodeTo'),
+                iataCodeFrom: extractIATACode('iataCodeFrom'), // e.g., "airport:LHR" or "city:LON"
+                iataCodeTo: extractIATACode('iataCodeTo'),     // e.g., "airport:JFK" or "city:NYC"
                 flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'one-way' : 'return',
                 maxPricePerPerson: SELECTORS.maxPricePerPerson.val(),
                 currency: SELECTORS.currencyInput.val(),
@@ -965,8 +989,8 @@ $(document).ready(function () {
                 depDateTo: depDate_To,
                 returnDateFrom: returnDate_From,
                 returnDateTo: returnDate_To,
-                dtimeFrom: outboundTimes[0],
-                dtimeTo: outboundTimes[1],
+                dtimeFrom: outboundTimes[0], // Correctly retrieved
+                dtimeTo: outboundTimes[1],   // Correctly retrieved
                 retDtimeFrom: inboundTimes[0],
                 retDtimeTo: inboundTimes[1],
                 maxFlightDuration: parseInputValue(parseFloat(SELECTORS.maxFlightDurationInput.val())) || '',
@@ -979,6 +1003,7 @@ $(document).ready(function () {
             }
         };
     };
+
 
 
     /**
