@@ -68,15 +68,16 @@ app.post('/api/getClosestAirport', async (req, res) => {
 
             // Structure the response data as needed
             const responseData = {
-                code: nearestAirport.code,       // IATA code (e.g., "OSL")
-                icao: nearestAirport.icao,       // ICAO code (e.g., "ENGM")
-                name: nearestAirport.name,       // Airport name (if available)
-                city: nearestAirport.city,       // City name (if available)
-                country: nearestAirport.country, // Country name (if available)
+                code: nearestAirport.code, // IATA code (e.g., "OSL")
+                icao: nearestAirport.icao, // ICAO code (e.g., "ENGM")
+                name: nearestAirport.name, // Airport name (if available)
+                city: nearestAirport.city ? nearestAirport.city.name : 'Unknown City', // Extract city name
+                country: nearestAirport.country ? nearestAirport.country.name : 'Unknown Country', // Extract country name
                 latitude: nearestAirport.latitude,
                 longitude: nearestAirport.longitude,
                 // Include other necessary fields if required
             };
+            
 
             return res.json(responseData);
         } else {

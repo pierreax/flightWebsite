@@ -286,21 +286,24 @@ $(document).ready(function () {
                         limit: 10 // Limit the number of suggestions
                     },
                     success: function (data) {
+                        console.log('Autocomplete success response:', data); // Log the entire response
                         if (data.locations && data.locations.length) {
                             const suggestions = data.locations.map(location => ({
                                 label: `${location.name} (${location.code}) - ${location.type}`, // e.g., "London Heathrow (LHR) - airport"
                                 value: `${location.type}:${location.code} - ${location.name}`,   // e.g., "airport:LHR - London Heathrow"
                                 type: location.type // 'airport' or 'city'
                             }));
+                            console.log('Formatted suggestions:', suggestions); // Log formatted suggestions
                             response(suggestions);
                         } else {
+                            console.log('No suggestions found for the term.');
                             response([]); // No suggestions found
                         }
                     },
                     error: function (error) {
                         console.error('Error fetching data from backend:', error);
                         response([]); // Return empty suggestions on error
-                    }
+                    }                    
                 });
             },
             minLength: 3, // Trigger search after 3 characters are typed
@@ -314,8 +317,9 @@ $(document).ready(function () {
                 if (type === 'city') {
                     formattedValue = `city:${code}`; // e.g., "city:LON"
                 } else if (type === 'airport') {
-                    formattedValue = `${code} - ${name}`; // e.g., "LHR - London Heathrow"
+                    formattedValue = `airport:${code} - ${name}`; // e.g., "airport:LHR - London Heathrow"
                 }
+                    
 
                 $(this).val(formattedValue); // Set the input value with type prefix if city
 
