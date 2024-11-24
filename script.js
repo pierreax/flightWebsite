@@ -877,7 +877,7 @@ $(document).ready(function () {
             toggleButton.classList.add('expanded'); // Add the 'expanded' class
 
             // Initialize select2 on the exclude airlines dropdown
-            $j('#excludeAirlines').select2({
+            $('#excludeAirlines').select2({
                 placeholder: 'Select airlines to exclude',
                 allowClear: true
             });
