@@ -480,11 +480,7 @@ $(document).ready(function () {
      * Suggest price limit by querying the backend API.
      */
     const suggestPriceLimit = async () => {
-        console.log("Sending Current Price request");
         SELECTORS.loader.show(); // Show the loading icon
-
-        const airlineModeSwitchState = SELECTORS.airlineModeSwitch.is(':checked');
-
         const params = new URLSearchParams({
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
@@ -499,11 +495,9 @@ $(document).ready(function () {
             dtime_from: SELECTORS.outboundTimeStartDisplay.text(),
             dtime_to: SELECTORS.outboundTimeEndDisplay.text(),
             ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeStartDisplay.text(),
-            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text(),
-            select_airlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
-            select_airlines_exclude: !airlineModeSwitchState
+            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text()
         });
-
+        console.log("Sending Current Price request with params:",params);
         try {
             const response = await fetch(`/api/suggestPriceLimit?${params.toString()}`, {
                 method: 'GET'
@@ -534,6 +528,7 @@ $(document).ready(function () {
      */
     const handleTequilaResponse = (tequilaResponse) => {
         globalTequilaResponse = tequilaResponse;
+        console.log('Tequila response:',globalTequilaResponse);
 
         if (tequilaResponse.data && tequilaResponse.data.length > 0) {
             const lowestPriceFlight = tequilaResponse.data[0];

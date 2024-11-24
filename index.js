@@ -242,7 +242,7 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
         date_to: dateTo,
         return_from: returnFrom,
         return_to: returnTo,
-        max_stopovers: maxStops,
+        max_sector_stopovers: maxStops,
         max_fly_duration: maxFlyDuration,
         flight_type: flightType,
         curr: currency,
@@ -250,8 +250,6 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
         dtime_to,
         ret_dtime_from,
         ret_dtime_to,
-        select_airlines,
-        select_airlines_exclude: select_airlines_exclude ? "true" : "false",
         sort: 'price'
     });
 
