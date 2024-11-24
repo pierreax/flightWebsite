@@ -932,11 +932,16 @@ $(document).ready(function () {
      * @returns {Object} Form data object.
      */
     const buildFormData = () => {
-        const outboundTimes = $(SELECTORS.outboundSlider).val();
+        // Retrieve slider values using noUiSlider's API
+        const outboundTimes = SELECTORS.outboundSlider.noUiSlider.get();
         let inboundTimes = ['', ''];
         if (!SELECTORS.oneWayTripCheckbox.is(':checked')) {
-            inboundTimes = $(SELECTORS.inboundSlider).val();
+            inboundTimes = SELECTORS.inboundSlider.noUiSlider.get();
         }
+
+        // Log the retrieved times for debugging
+        console.log('Outbound Times:', outboundTimes);
+        console.log('Inbound Times:', inboundTimes);
 
         return {
             price: {
@@ -965,6 +970,7 @@ $(document).ready(function () {
             }
         };
     };
+
 
     /**
      * Initialize the application.
