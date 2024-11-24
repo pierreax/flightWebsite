@@ -230,10 +230,19 @@ input, select {
 }
 
 /* Row for Labels */
-.switches-labels .switches-row{
+.switches-labels {
     display: flex;
     gap: 40px; /* Adjust spacing between labels */
     margin-bottom: 5px; /* Space between labels and switches */
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Row for Switches */
+.switches-row {
+    display: flex;
+    gap: 40px; /* Adjust spacing between Swiches */
+    margin-bottom: 5px; /* Space between labels and select dates */
     padding-left: 20px;
     padding-right: 20px;
 }
