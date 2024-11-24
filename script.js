@@ -859,7 +859,7 @@ $(document).ready(function () {
 
 
     // Hide the Advanced Settings toggle initially
-    $j('#advancedSettingsToggle').hide();
+    SELECTORS.advancedSettingsToggle.hide();
 
     // Advanced settings section
     document.getElementById('advancedSettingsToggle').addEventListener('click', function() {
