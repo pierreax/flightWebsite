@@ -91,9 +91,6 @@ app.post('/api/getClosestAirport', async (req, res) => {
 
 
 // Route for Airport Autocomplete
-
-// Endpoint to handle airport suggestions
-
 app.get('/api/airport-suggestions', async (req, res) => {
     const { term, location_types, limit } = req.query;
 
@@ -102,6 +99,9 @@ app.get('/api/airport-suggestions', async (req, res) => {
     }
 
     try {
+        // Log the request data for debugging
+        console.log(`Searching for term: ${term}`);
+
         // Make the request to Tequila API
         const response = await axios.get('https://tequila-api.kiwi.com/locations/query', {
             headers: {
@@ -114,13 +114,38 @@ app.get('/api/airport-suggestions', async (req, res) => {
             }
         });
 
-        // Send the response from Tequila back to the frontend
-        res.json(response.data);
+        // Log the raw Tequila API response for debugging
+        console.log('Tequila API Response:', response.data);
+
+        // Check if the response contains 'locations' and handle it accordingly
+        if (response.data.locations && response.data.locations.length > 0) {
+            // Send the response from Tequila back to the frontend
+            res.json(response.data);
+        } else {
+            // Handle case where no locations are found
+            res.status(404).json({ error: 'No airports found for the given search term' });
+        }
+
     } catch (error) {
         console.error('Error fetching data from Tequila API:', error);
-        res.status(500).json({ error: 'Error fetching airport suggestions' });
+
+        // Provide more detailed error logging
+        if (error.response) {
+            // Log the response from the Tequila API
+            console.error('Tequila API response error:', error.response.data);
+            res.status(500).json({ error: 'Tequila API response error', details: error.response.data });
+        } else if (error.request) {
+            // Log request issues (network, etc.)
+            console.error('Tequila API request error:', error.request);
+            res.status(500).json({ error: 'Tequila API request error' });
+        } else {
+            // Log unexpected errors
+            console.error('Unexpected error:', error.message);
+            res.status(500).json({ error: 'Unexpected error' });
+        }
     }
 });
+
 
 
 // Route for Sheety Proxy
