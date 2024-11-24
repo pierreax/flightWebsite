@@ -130,7 +130,6 @@ $(document).ready(function () {
      */
     const formatDate = (dateObject) => {
         if (!dateObject || !(dateObject instanceof Date) || isNaN(dateObject.getTime())) {
-            console.error('Invalid date:', dateObject);
             return "";
         }
         const day = dateObject.getDate().toString().padStart(2, '0');
