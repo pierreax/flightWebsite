@@ -117,14 +117,8 @@ app.get('/api/airport-suggestions', async (req, res) => {
         // Log the raw Tequila API response for debugging
         console.log('Tequila API Response:', response.data);
 
-        // Check if the response contains 'locations' and handle it accordingly
-        if (response.data.locations && response.data.locations.length > 0) {
-            // Send the response from Tequila back to the frontend
-            res.json(response.data);
-        } else {
-            // Handle case where no locations are found
-            res.status(404).json({ error: 'No airports found for the given search term' });
-        }
+        // Return the entire Tequila API response to the frontend
+        res.json(response.data);
 
     } catch (error) {
         console.error('Error fetching data from Tequila API:', error);
@@ -145,6 +139,7 @@ app.get('/api/airport-suggestions', async (req, res) => {
         }
     }
 });
+
 
 
 
