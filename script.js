@@ -489,7 +489,7 @@ $(document).ready(function () {
             // Check if required fields are present
             if (tequilaData.code) {
                 const airportIATA = tequilaData.code;
-                const airportName = tequilaData.name; || 'Unknown Airport';
+                const airportName = tequilaData.name || 'Unknown Airport';
                 const cityName = tequilaData.city || 'Unknown City';
                 const countryName = tequilaData.country || 'Unknown Country';
 
