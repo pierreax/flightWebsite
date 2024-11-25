@@ -295,11 +295,20 @@ $(document).ready(function () {
                     success: function (data) {
                         console.log('Autocomplete success response:', data); // Log the entire response
                         if (data.locations && data.locations.length) {
-                            const suggestions = data.locations.map(location => ({
-                                label: `${location.code}`, // e.g., "LHR"
-                                value: `${location.name}`,   // e.g., "London Heathrow"
-                                type: location.type // 'airport' or 'city'
-                            }));
+                            const suggestions = data.locations.map(location => {
+                                const [type, code] = [location.type, location.code];
+                                let formattedValue;
+                                if (type === 'city') {
+                                    formattedValue = `${code} - All Airports`; // e.g., "Hamburg - All Airports"
+                                } else if (type === 'airport') {
+                                    formattedValue = `${code} - ${location.name}`; // e.g., "HAM - Hamburg Airport"
+                                }
+                                return {
+                                    label: formattedValue, // Display formatted value in dropdown
+                                    value: `${type}:${code} - ${location.name}`, // Return the raw value (e.g., "airport:HAM - Hamburg Airport")
+                                    type: location.type // 'airport' or 'city'
+                                };
+                            });
                             console.log('Formatted suggestions:', suggestions); // Log formatted suggestions
                             response(suggestions);
                         } else {
@@ -319,29 +328,29 @@ $(document).ready(function () {
                 const [typeAndCode, ...nameParts] = selectedValue.split(' - ');
                 const [type, code] = typeAndCode.split(':');
                 const name = nameParts.join(' - ');
-            
+
                 let formattedValue;
                 if (type === 'city') {
                     formattedValue = `${code} - All Airports`; // e.g., "Hamburg - All Airports"
                 } else if (type === 'airport') {
-                    formattedValue = `${code} - ${name}`; // e.g.,"HAM - Hamburg Airport"
+                    formattedValue = `${code} - ${name}`; // e.g., "HAM - Hamburg Airport"
                 }
-            
+
                 $(this).val(formattedValue); // Set the input value with type prefix
                 
-                console.log('Formatted value:',formattedValue);
+                console.log('Formatted value:', formattedValue);
                 // Optionally, you can update the IATA code field directly
                 if ($(this).attr('id') === 'iataCodeFrom') {
                     SELECTORS.iataCodeFrom.val(formattedValue);
                 } else if ($(this).attr('id') === 'iataCodeTo') {
                     SELECTORS.iataCodeTo.val(formattedValue);
                 }
-            
                 // Prevent default behavior
                 return false;
             }            
         });
     };
+
     
 
     /**
