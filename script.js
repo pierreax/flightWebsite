@@ -295,6 +295,7 @@ $(document).ready(function () {
                     success: function (data) {
                         console.log('Autocomplete success response:', data); // Log the entire response
                         if (data.locations && data.locations.length) {
+                            // Map the locations and format them for display
                             const suggestions = data.locations.map(location => {
                                 const [type, code] = [location.type, location.code];
                                 let formattedValue;
@@ -309,8 +310,13 @@ $(document).ready(function () {
                                     type: location.type // 'airport' or 'city'
                                 };
                             });
-                            console.log('Formatted suggestions:', suggestions); // Log formatted suggestions
-                            response(suggestions);
+
+                            // Remove duplicates based on the label value (formatted value)
+                            const uniqueSuggestions = Array.from(new Set(suggestions.map(a => a.label)))
+                                .map(label => suggestions.find(suggestion => suggestion.label === label));
+
+                            console.log('Formatted and unique suggestions:', uniqueSuggestions); // Log formatted suggestions
+                            response(uniqueSuggestions); // Pass the unique suggestions to the dropdown
                         } else {
                             console.log('No suggestions found for the term.');
                             response([]); // No suggestions found
@@ -350,6 +356,7 @@ $(document).ready(function () {
             }            
         });
     };
+
 
     
 
