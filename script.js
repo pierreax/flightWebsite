@@ -296,8 +296,8 @@ $(document).ready(function () {
                         console.log('Autocomplete success response:', data); // Log the entire response
                         if (data.locations && data.locations.length) {
                             const suggestions = data.locations.map(location => ({
-                                label: `${location.name} (${location.code}) - ${location.type}`, // e.g., "London Heathrow (LHR) - airport"
-                                value: `${location.type}:${location.code} - ${location.name}`,   // e.g., "airport:LHR - London Heathrow"
+                                label: `${location.code}`, // e.g., "LHR"
+                                value: `${location.name}`,   // e.g., "London Heathrow"
                                 type: location.type // 'airport' or 'city'
                             }));
                             console.log('Formatted suggestions:', suggestions); // Log formatted suggestions
@@ -322,9 +322,9 @@ $(document).ready(function () {
             
                 let formattedValue;
                 if (type === 'city') {
-                    formattedValue = `${code} - All Airports`; // e.g., "city:HAMBURG"
+                    formattedValue = `${code} - All Airports`; // e.g., "Hamburg - All Airports"
                 } else if (type === 'airport') {
-                    formattedValue = `${code} - ${name}`; // e.g., "airport:HAM - Hamburg Airport"
+                    formattedValue = `${code} - ${name}`; // e.g.,"HAM - Hamburg Airport"
                 }
             
                 $(this).val(formattedValue); // Set the input value with type prefix
