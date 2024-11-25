@@ -300,7 +300,7 @@ $(document).ready(function () {
                                 const [type, code] = [location.type, location.code];
                                 let formattedValue;
                                 if (type === 'city') {
-                                    formattedValue = `${code} - All Airports`; // e.g., "Hamburg - All Airports"
+                                    formattedValue = `${code} - ${location.name} All Airports`; // e.g., "Hamburg - All Airports"
                                 } else if (type === 'airport') {
                                     formattedValue = `${code} - ${location.name}`; // e.g., "HAM - Hamburg Airport"
                                 }
@@ -339,7 +339,7 @@ $(document).ready(function () {
 
                 let formattedValue;
                 if (type === 'city') {
-                    formattedValue = `${code} - All Airports`; // e.g., "Hamburg - All Airports"
+                    formattedValue = `${code} - ${location.name} All Airports`; // e.g., "Hamburg - All Airports"
                 } else if (type === 'airport') {
                     formattedValue = `${code} - ${name}`; // e.g., "HAM - Hamburg Airport"
                 }
