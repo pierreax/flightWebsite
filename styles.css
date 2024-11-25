@@ -70,6 +70,55 @@ a.destinations-link:active {
 #maxPricePerPerson {
     margin-top: 5px;
 }
+
+/* IATA FIELD DROPDOWNS */
+
+/* Custom styles for the autocomplete dropdown */
+.ui-autocomplete {
+    background-color: var(--input-background); /* Matches form input background */
+    border: 1px solid var(--border-color); /* Consistent with form input borders */
+    border-radius: 5px; /* Match input border radius */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow to match the form */
+    max-height: 200px; /* Limit the height of the dropdown */
+    overflow-y: auto; /* Enable scrolling if there are too many results */
+    font-family: 'Avenir Light', sans-serif; /* Consistent font */
+    color: var(--text-color); /* Text color */
+    z-index: 9999; /* Ensure it's above other content */
+}
+
+/* Style for individual items in the dropdown */
+.ui-autocomplete li {
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size for readability */
+}
+
+/* Change the background when hovering over an item */
+.ui-autocomplete li:hover {
+    background-color: var(--accent-color); /* Accent color on hover */
+    color: black; /* Ensure text is readable on hover */
+}
+
+/* Style the highlighted item when selected */
+.ui-state-focus {
+    background-color: var(--button-bg); /* Matches button background */
+    color: white; /* Ensure text is visible on hover */
+}
+
+/* Style for the scrollbar */
+.ui-autocomplete::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ui-autocomplete::-webkit-scrollbar-thumb {
+    background-color: var(--border-color); /* Same color as borders */
+    border-radius: 4px;
+}
+
+.ui-autocomplete::-webkit-scrollbar-track {
+    background-color: var(--background-color); /* Matches the input background */
+}
+
   
 /* Form styles */
 form {
