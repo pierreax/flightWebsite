@@ -280,79 +280,53 @@ $(document).ready(function () {
     const initializeAutocomplete = () => {
         $(".autocomplete-iata").autocomplete({
             source: function (request, response) {
-                const term = request.term; // The input value
-                if (term.length < 3) {
-                    return; // Only search for terms that are 3 characters or longer
-                }
-                console.log('Autocomplete triggered:', term);
+                const term = request.term;
+                if (term.length < 3) return; // Trigger only after 3 or more characters
+
                 $.ajax({
-                    url: '/api/airport-suggestions', // Call your backend endpoint
+                    url: '/api/airport-suggestions',
                     method: 'GET',
-                    data: {
-                        term: term, // Pass search term to backend
-                        limit: 10 // Limit the number of suggestions
-                    },
+                    data: { term, limit: 10 },
                     success: function (data) {
-                        console.log('Autocomplete success response:', data); // Log the entire response
                         if (data.locations && data.locations.length) {
-                            // Map the locations and format them for display
-                            const suggestions = data.locations.map(location => {
-                                const [type, code, name] = [location.type, location.code, location.name];
-                                let formattedValue;
-                                if (type === 'city') {
-                                    formattedValue = `${code} - ${name} All Airports`; // e.g., "HAM - Hamburg All Airports"
-                                } else if (type === 'airport') {
-                                    formattedValue = `${code} - ${name}`; // e.g., "HAM - Hamburg Airport"
-                                }
-                                return {
-                                    label: formattedValue, // Display formatted value in dropdown
-                                    type: location.type // 'airport' or 'city'
-                                };
-                            });
+                            const suggestions = data.locations.map(({ type, code, name }) => ({
+                                label: type === 'city' 
+                                    ? `${code} - ${name} All Airports` 
+                                    : `${code} - ${name}`, 
+                                type
+                            }));
 
-                            // Remove undefined labels and duplicate values based on label
-                            const filteredSuggestions = suggestions.filter(suggestion => suggestion.label !== undefined);
-
-                            const uniqueSuggestions = Array.from(new Set(filteredSuggestions.map(a => a.label)))
-                                .map(label => filteredSuggestions.find(suggestion => suggestion.label === label));
-
-                            console.log('Formatted and unique suggestions:', uniqueSuggestions); // Log filtered and unique suggestions
-                            response(uniqueSuggestions); // Pass the unique suggestions to the dropdown
+                            // Remove duplicates and undefined labels
+                            const uniqueSuggestions = [...new Map(suggestions.map(s => [s.label, s])).values()];
+                            console.log('Unique suggestions:',uniqueSuggestions);
+                            response(uniqueSuggestions); // Return unique suggestions
                         } else {
-                            console.log('No suggestions found for the term.');
                             response([]); // No suggestions found
                         }
                     },
-                    error: function (error) {
-                        console.error('Error fetching data from backend:', error);
-                        response([]); // Return empty suggestions on error
-                    }                    
+                    error: () => response([]) // Handle error
                 });
             },
-            minLength: 3, // Trigger search after 3 characters are typed
+            minLength: 3,
             select: function (event, ui) {
-                const formattedValue = ui.item.value; // e.g., "HAM - Hamburg Airport"
-                let formattedValue;
-                if (type === 'city') {
-                    formattedValue = `${code} - ${name} All Airports`; // e.g., "Hamburg - All Airports"
-                } else if (type === 'airport') {
-                    formattedValue = `${code} - ${name}`; // e.g., "HAM - Hamburg Airport"
-                }
+                const { label, type } = ui.item;
+                const formattedValue = type === 'city' 
+                    ? `${label} All Airports` 
+                    : label;
 
-                $(this).val(formattedValue); // Set the input value with type prefix
-                
-                console.log('Formatted value:', formattedValue);
-                // Optionally, you can update the IATA code field directly
-                if ($(this).attr('id') === 'iataCodeFrom') {
-                    SELECTORS.iataCodeFrom.val(formattedValue);
-                } else if ($(this).attr('id') === 'iataCodeTo') {
-                    SELECTORS.iataCodeTo.val(formattedValue);
-                }
-                // Prevent default behavior
-                return false;
-            }            
+                $(this).val(formattedValue);
+                console.log('Formatted value:',formattedValue);
+                // Update the IATA code field based on the input ID
+                const iataCodeField = $(this).attr('id') === 'iataCodeFrom' 
+                    ? SELECTORS.iataCodeFrom 
+                    : SELECTORS.iataCodeTo;
+
+                iataCodeField.val(formattedValue);
+                return false; // Prevent default selection behavior
+            }
         });
     };
+
 
 
 
