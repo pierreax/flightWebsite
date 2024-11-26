@@ -297,16 +297,15 @@ $(document).ready(function () {
                         if (data.locations && data.locations.length) {
                             // Map the locations and format them for display
                             const suggestions = data.locations.map(location => {
-                                const [type, code] = [location.type, location.code];
+                                const [type, code, name] = [location.type, location.code, location.name];
                                 let formattedValue;
                                 if (type === 'city') {
-                                    formattedValue = `${code} - ${location.name} All Airports`; // e.g., "HAM - Hamburg All Airports"
+                                    formattedValue = `${code} - ${name} All Airports`; // e.g., "HAM - Hamburg All Airports"
                                 } else if (type === 'airport') {
-                                    formattedValue = `${code} - ${location.name}`; // e.g., "HAM - Hamburg Airport"
+                                    formattedValue = `${code} - ${name}`; // e.g., "HAM - Hamburg Airport"
                                 }
                                 return {
                                     label: formattedValue, // Display formatted value in dropdown
-                                    value: `${type}:${code} - ${location.name}`, // Return the raw value (e.g., "airport:HAM - Hamburg Airport")
                                     type: location.type // 'airport' or 'city'
                                 };
                             });
@@ -332,16 +331,12 @@ $(document).ready(function () {
             },
             minLength: 3, // Trigger search after 3 characters are typed
             select: function (event, ui) {
-                const selectedValue = ui.item.value; // e.g., "airport:HAM - Hamburg Airport"
-                const [typeAndCode, ...nameParts] = selectedValue.split(' - ');
-                const [type, code] = typeAndCode.split(':');
-                const name = nameParts.join(' - ');
-
+                const formattedValue = ui.item.value; // e.g., "HAM - Hamburg Airport"
                 let formattedValue;
                 if (type === 'city') {
-                    formattedValue = `${code} - ${location.name} All Airports`; // e.g., "Hamburg - All Airports"
+                    formattedValue = `${code} - ${name} All Airports`; // e.g., "Hamburg - All Airports"
                 } else if (type === 'airport') {
-                    formattedValue = `${code} - ${location.name}`; // e.g., "HAM - Hamburg Airport"
+                    formattedValue = `${code} - ${name}`; // e.g., "HAM - Hamburg Airport"
                 }
 
                 $(this).val(formattedValue); // Set the input value with type prefix
