@@ -298,7 +298,7 @@ $(document).ready(function () {
 
                             // Remove duplicates and undefined labels
                             const uniqueSuggestions = [...new Map(suggestions.map(s => [s.label, s])).values()];
-                            console.log('Unique suggestions:',uniqueSuggestions);
+
                             response(uniqueSuggestions); // Return unique suggestions
                         } else {
                             response([]); // No suggestions found
@@ -309,23 +309,26 @@ $(document).ready(function () {
             },
             minLength: 3,
             select: function (event, ui) {
-                const { label, type } = ui.item;
-                const formattedValue = type === 'city' 
-                    ? `${label} All Airports` 
-                    : label;
+                let { label, type } = ui.item;
 
-                $(this).val(formattedValue);
-                console.log('Formatted value:',formattedValue);
+                // Append "All Airports" only if it's a city and not already in the label
+                if (type === 'city' && !label.includes('All Airports')) {
+                    label = `${label} All Airports`;
+                }
+
+                $(this).val(label);
+
                 // Update the IATA code field based on the input ID
                 const iataCodeField = $(this).attr('id') === 'iataCodeFrom' 
                     ? SELECTORS.iataCodeFrom 
                     : SELECTORS.iataCodeTo;
 
-                iataCodeField.val(formattedValue);
+                iataCodeField.val(label);
                 return false; // Prevent default selection behavior
             }
         });
     };
+
 
 
 
