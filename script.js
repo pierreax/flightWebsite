@@ -300,7 +300,7 @@ $(document).ready(function () {
                                 const [type, code] = [location.type, location.code];
                                 let formattedValue;
                                 if (type === 'city') {
-                                    formattedValue = `${code} - ${location.name} All Airports`; // e.g., "Hamburg - All Airports"
+                                    formattedValue = `${code} - ${location.name} All Airports`; // e.g., "HAM - Hamburg All Airports"
                                 } else if (type === 'airport') {
                                     formattedValue = `${code} - ${location.name}`; // e.g., "HAM - Hamburg Airport"
                                 }
@@ -341,7 +341,7 @@ $(document).ready(function () {
                 if (type === 'city') {
                     formattedValue = `${code} - ${location.name} All Airports`; // e.g., "Hamburg - All Airports"
                 } else if (type === 'airport') {
-                    formattedValue = `${code} - ${name}`; // e.g., "HAM - Hamburg Airport"
+                    formattedValue = `${code} - ${location.name}`; // e.g., "HAM - Hamburg Airport"
                 }
 
                 $(this).val(formattedValue); // Set the input value with type prefix
