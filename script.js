@@ -298,7 +298,7 @@ $(document).ready(function () {
 
                             // Remove duplicates and undefined labels
                             const uniqueSuggestions = [...new Map(suggestions.map(s => [s.label, s])).values()];
-                            console.log('Unique suggestions,'uniqueSuggestions);
+                            console.log('Unique suggestions',uniqueSuggestions);
 
                             response(uniqueSuggestions); // Return unique suggestions
                         } else {
