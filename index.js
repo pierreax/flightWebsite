@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const NodeCache = require('node-cache');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -90,6 +91,9 @@ app.post('/api/getClosestAirport', async (req, res) => {
     }
 });
 
+// Create a cache instance with a TTL of 30 days (2592000 seconds)
+const cache = new NodeCache({ stdTTL: 2592000, checkperiod: 120 });
+
 // Route for Airport and City Autocomplete
 app.get('/api/airport-suggestions', async (req, res) => {
     const { term, limit } = req.query;
@@ -103,6 +107,15 @@ app.get('/api/airport-suggestions', async (req, res) => {
         // Log the search term
         console.log(`Searching for term: "${term}" with limit: ${limit || 10}`);
 
+        // Check the cache first
+        const cacheKey = `${term}:${limit || 10}`;
+        const cachedData = cache.get(cacheKey);
+
+        if (cachedData) {
+            console.log('Returning cached data');
+            return res.json(cachedData); // Return cached data
+        }
+
         const apiKey = process.env.TEQUILA_API_KEY;
         if (!apiKey) {
             console.error('Tequila API key is not set in environment variables.');
@@ -114,7 +127,6 @@ app.get('/api/airport-suggestions', async (req, res) => {
         const params = {
             term: term,
             limit: limit || 10
-            // No location_types specified
         };
 
         // Append query parameters to the URL
@@ -140,6 +152,9 @@ app.get('/api/airport-suggestions', async (req, res) => {
         // Log the full response from Tequila API
         console.log('Tequila API Response:', JSON.stringify(data, null, 2));
 
+        // Cache the response data with a 30-day TTL
+        cache.set(cacheKey, data);
+
         // Return the full response to the frontend
         res.json(data);
 
@@ -147,6 +162,11 @@ app.get('/api/airport-suggestions', async (req, res) => {
         console.error('Error fetching suggestions from Tequila API:', error.message);
         res.status(500).json({ error: 'Failed to fetch suggestions', details: error.message });
     }
+});
+
+// Start the server
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
 });
 
 // Route for Sheety Proxy
