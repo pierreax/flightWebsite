@@ -113,7 +113,7 @@ app.get('/api/airport-suggestions', async (req, res) => {
 
         if (cachedData) {
             console.log('Cache hit: Returning cached data');
-            return res.json(cachedData); // Return cached data
+            return res.json({ source: 'Cached', data: cachedData }); // Include 'source' in the response
         } else {
             console.log('Cache miss: Fetching data from Tequila API');
         }
@@ -158,14 +158,15 @@ app.get('/api/airport-suggestions', async (req, res) => {
         cache.set(cacheKey, data);
         console.log('Cache updated: Data stored in cache');
 
-        // Return the full response to the frontend
-        res.json(data);
+        // Return the full response to the frontend, including the source information
+        res.json({ source: 'Fetched', data: data });
 
     } catch (error) {
         console.error('Error fetching suggestions from Tequila API:', error.message);
         res.status(500).json({ error: 'Failed to fetch suggestions', details: error.message });
     }
 });
+
 
 
 // Route for Sheety Proxy

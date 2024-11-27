@@ -288,9 +288,12 @@ $(document).ready(function () {
                     method: 'GET',
                     data: { term, limit: 10 },
                     success: function (data) {
-                        if (data.locations && data.locations.length) {
+                        if (data.data && data.data.locations && data.data.locations.length) {
+                            // Log whether the data is cached or fetched
+                            console.log('Data Source:', data.source);  // 'Cached' or 'Fetched'
+
                             // Filter to only keep items with type 'city' or 'airport'
-                            const filteredLocations = data.locations.filter(location => location.type === 'city' || location.type === 'airport');
+                            const filteredLocations = data.data.locations.filter(location => location.type === 'city' || location.type === 'airport');
 
                             // Map the filtered data to the desired structure
                             const suggestions = filteredLocations.map(({ type, code, name }) => ({
@@ -333,6 +336,7 @@ $(document).ready(function () {
             }
         });
     };
+
 
 
 
