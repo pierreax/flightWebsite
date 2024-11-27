@@ -768,8 +768,8 @@ $(document).ready(function () {
             console.log("Direct flights only disabled!");
 
             // Enable the inputs and remove the 'disabled-input' class
-            SELECTORS.maxStopsInput.val('1').prop('disabled', false).removeClass('disabled-input').val('');
-            SELECTORS.maxFlightDurationInput.val('8').prop('disabled', false).removeClass('disabled-input').val('');
+            SELECTORS.maxStopsInput.val('1').prop('disabled', false).removeClass('disabled-input');
+            SELECTORS.maxFlightDurationInput.val('8').prop('disabled', false).removeClass('disabled-input');
 
             // Add the 'required' attribute when enabled
             SELECTORS.maxStopsInput.prop('required', true);
