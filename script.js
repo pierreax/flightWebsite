@@ -289,16 +289,20 @@ $(document).ready(function () {
                     data: { term, limit: 10 },
                     success: function (data) {
                         if (data.locations && data.locations.length) {
-                            const suggestions = data.locations.map(({ type, code, name }) => ({
+                            // Filter to only keep items with type 'city' or 'airport'
+                            const filteredLocations = data.locations.filter(location => location.type === 'city' || location.type === 'airport');
+
+                            // Map the filtered data to the desired structure
+                            const suggestions = filteredLocations.map(({ type, code, name }) => ({
                                 label: type === 'city' 
                                     ? `${code} - ${name} All Airports` 
                                     : `${code} - ${name}`, 
                                 type
                             }));
 
-                            // Remove duplicates and undefined labels
+                            // Remove duplicates based on the label and return unique suggestions
                             const uniqueSuggestions = [...new Map(suggestions.map(s => [s.label, s])).values()];
-                            console.log('Unique suggestions',uniqueSuggestions);
+                            console.log('Unique suggestions', uniqueSuggestions);
 
                             response(uniqueSuggestions); // Return unique suggestions
                         } else {
@@ -329,6 +333,7 @@ $(document).ready(function () {
             }
         });
     };
+
 
 
 
