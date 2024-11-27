@@ -112,8 +112,10 @@ app.get('/api/airport-suggestions', async (req, res) => {
         const cachedData = cache.get(cacheKey);
 
         if (cachedData) {
-            console.log('Returning cached data');
+            console.log('Cache hit: Returning cached data');
             return res.json(cachedData); // Return cached data
+        } else {
+            console.log('Cache miss: Fetching data from Tequila API');
         }
 
         const apiKey = process.env.TEQUILA_API_KEY;
@@ -154,6 +156,7 @@ app.get('/api/airport-suggestions', async (req, res) => {
 
         // Cache the response data with a 30-day TTL
         cache.set(cacheKey, data);
+        console.log('Cache updated: Data stored in cache');
 
         // Return the full response to the frontend
         res.json(data);
@@ -164,10 +167,6 @@ app.get('/api/airport-suggestions', async (req, res) => {
     }
 });
 
-// Start the server
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
 
 // Route for Sheety Proxy
 app.post('/api/sheetyProxy', async (req, res) => {
