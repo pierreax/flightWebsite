@@ -819,7 +819,7 @@ $(document).ready(function () {
      */
     const handleConfirmHotelTracker = () => {
         console.log('User confirmed hotel tracking.');
-        window.location.href = redirectUrl;
+        window.open(redirectUrl, '_blank');    
     };
 
 
