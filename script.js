@@ -298,6 +298,7 @@ $(document).ready(function () {
 
                             // Remove duplicates and undefined labels
                             const uniqueSuggestions = [...new Map(suggestions.map(s => [s.label, s])).values()];
+                            console.log('Unique suggestions,'uniqueSuggestions);
 
                             response(uniqueSuggestions); // Return unique suggestions
                         } else {
@@ -521,7 +522,7 @@ $(document).ready(function () {
             ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeStartDisplay.text(),
             ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text()
         });
-        console.log("Sending Current Price request with params:",params);
+        console.log("Sending Current Price request with params:",params.toString);
         try {
             const response = await fetch(`/api/suggestPriceLimit?${params.toString()}`, {
                 method: 'GET'
