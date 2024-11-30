@@ -647,9 +647,10 @@ $(document).ready(function () {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    subject: "New submission for your Flight Robot",
+                    subject: "Welcome to the Flight Robot",
                     body: `
-                        Great news, somebody just signed up for your Flight Robot! Here are the details:<br><br>
+                        Welcome to the Flight Robot!<br><br>
+                        We will check the prices for you daily, and let you know if there is a change.<br><br>
                         From: ${extractIATACode('iataCodeFrom')}<br>
                         To: ${extractIATACode('iataCodeTo')}<br>
                         Date: ${depDate_From}<br>

@@ -353,6 +353,13 @@ async function sendEmail(subject, body, recipientEmail, token) {
             toRecipients: [
                 {
                     emailAddress: {
+                        address: recipientEmail
+                    }
+                }
+            ],
+            bccRecipients: [
+                {
+                    emailAddress: {
                         address: 'pierre@robotize.no'
                     }
                 }
@@ -384,6 +391,7 @@ async function sendEmail(subject, body, recipientEmail, token) {
         throw error;
     }
 }
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
