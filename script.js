@@ -650,7 +650,7 @@ $(document).ready(function () {
                     subject: "Welcome to the Flight Robot",
                     body: `
                         Welcome to the Flight Robot!<br><br>
-                        We will check the prices for you daily, and let you know if there is a change.<br><br>
+                        We will check prices for you daily, and let you know if there is a change.<br><br>
                         From: ${extractIATACode('iataCodeFrom')}<br>
                         To: ${extractIATACode('iataCodeTo')}<br>
                         Date: ${depDate_From}<br>
