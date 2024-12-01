@@ -1065,7 +1065,7 @@ $(document).ready(function () {
                 selectedEndDate = new Date(queryParams.dateTo);
                 returnDate_From = formatDate(selectedEndDate);
                 returnDate_To = returnDate_From; // If no flexibility, use the same date for returnDate_To
-                flatpickrInstance.setDate(selectedEndDate); // Update Flatpickr with the new date
+                flatpickrInstance.setDate(selectedEndDate, true); // Set the return date if it's a round trip
                 console.log('Updated returnDate',returnDate_From);
             }
 
