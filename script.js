@@ -1057,12 +1057,14 @@ $(document).ready(function () {
                 selectedStartDate = new Date(queryParams.dateFrom);
                 depDate_From = formatDate(selectedStartDate);
                 depDate_To = depDate_From; // If it's a one-way trip, use the same date for depDate_To
+                console.log('Updated depDate',depDate_From);
             }
 
             if (queryParams.dateTo) {
                 selectedEndDate = new Date(queryParams.dateTo);
                 returnDate_From = formatDate(selectedEndDate);
                 returnDate_To = returnDate_From; // If no flexibility, use the same date for returnDate_To
+                console.log('Updated returnDate',returnDate_From);
             }
 
             // Update currency and location based on IP
