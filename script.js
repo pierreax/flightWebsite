@@ -1047,6 +1047,7 @@ $(document).ready(function () {
 
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
+            console.log(queryParams);
             if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
                 SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
             }
