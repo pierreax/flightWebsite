@@ -1052,6 +1052,19 @@ $(document).ready(function () {
                 SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
             }
 
+            // Check if dateFrom and dateTo are in the URL and assign them
+            if (queryParams.dateFrom) {
+                selectedStartDate = new Date(queryParams.dateFrom);
+                depDate_From = formatDate(selectedStartDate);
+                depDate_To = depDate_From; // If it's a one-way trip, use the same date for depDate_To
+            }
+
+            if (queryParams.dateTo) {
+                selectedEndDate = new Date(queryParams.dateTo);
+                returnDate_From = formatDate(selectedEndDate);
+                returnDate_To = returnDate_From; // If no flexibility, use the same date for returnDate_To
+            }
+
             // Update currency and location based on IP
             await updateCurrencyAndLocation();
 
