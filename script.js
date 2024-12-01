@@ -1057,6 +1057,7 @@ $(document).ready(function () {
                 selectedStartDate = new Date(queryParams.dateFrom);
                 depDate_From = formatDate(selectedStartDate);
                 depDate_To = depDate_From; // If it's a one-way trip, use the same date for depDate_To
+                flatpickrInstance.setDate(selectedStartDate); // Update Flatpickr with the new date
                 console.log('Updated depDate',depDate_From);
             }
 
@@ -1064,6 +1065,7 @@ $(document).ready(function () {
                 selectedEndDate = new Date(queryParams.dateTo);
                 returnDate_From = formatDate(selectedEndDate);
                 returnDate_To = returnDate_From; // If no flexibility, use the same date for returnDate_To
+                flatpickrInstance.setDate(selectedEndDate); // Update Flatpickr with the new date
                 console.log('Updated returnDate',returnDate_From);
             }
 
