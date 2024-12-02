@@ -65,6 +65,7 @@ $(document).ready(function () {
     let returnDate_From = '';
     let returnDate_To = '';
     let globalTequilaResponse = null;
+    let currency = '';
     let city = '';
     let redirectEmail = '';
     let redirectIataCodeTo = '';
@@ -415,9 +416,9 @@ $(document).ready(function () {
     };
 
     /**
-     * Update currency and location based on the user's IP address.
+    * Get location info based on the user's IP address.
      */
-    const updateCurrencyAndLocation = async () => {
+    const getLocationInfo = async () => {
         try {
             const response = await fetch(API_ENDPOINTS.ipGeo);
             if (!response.ok) {
@@ -425,19 +426,18 @@ $(document).ready(function () {
             }
             const data = await response.json();
             
-            // Update the currency input if currency data is available
+            // Store the currency if currency data is available
             if (data.currency && data.currency.code) {
-                SELECTORS.currencyInput.val(data.currency.code);
+                currency = data.currency.code;  // Store the currency in the global variable
             }
-            
+    
             // Update location fields based on geolocation data
             if (data.latitude && data.longitude) {
-                await fetchClosestAirport(data.latitude, data.longitude);
+                await fetchClosestAirport(data.latitude, data.longitude);  // Optional: Use latitude and longitude for location
             }
-            
-            // Optionally, update other location-related fields here
+    
         } catch (error) {
-            console.error('Error updating currency and location:', error);
+            console.error('Error getting location info:', error);
             // Optionally, handle the error by setting default values or notifying the user
         }
     };
@@ -1096,17 +1096,24 @@ $(document).ready(function () {
                 console.log('Date parameters are missing in the URL');
             }
 
+           // Fetch location info if currency is missing in the URL
+            await getLocationInfo();  // Fetch geolocation data and store currency
 
             // Check if currency is already in the URL
             if (!queryParams.currency) {
                 console.log("Currency not in the URL, updating from IP...");
-                // Update currency and location based on IP
-                await updateCurrencyAndLocation();
+
+                // If currency is fetched from IP, set it in the input
+                if (currency) {
+                    console.log("Currency fetched from IP:", currency);
+                    SELECTORS.currencyInput.val(currency).trigger('change');  // Set the currency input if needed
+                }
             } else {
                 console.log("Currency is already in the URL, skipping IP update...");
-                // Update the currency input based on the URL
+                // Set the currency input based on the URL
                 SELECTORS.currencyInput.val(queryParams.currency).trigger('change');
             }
+
 
             // Check if email is already in the URL
             if (queryParams.email) {
