@@ -1050,7 +1050,7 @@ $(document).ready(function () {
                 console.log("City from URL:", cityName);
 
                 // Send a request to your backend API with the city name
-                fetch(`/api/airport-suggestions?term=${cityName}&limit=1`) // Adjust limit to 1 if you want just the first result
+                fetch(`/api/airport-suggestions?term=${cityName}&limit=10`)
                     .then(response => response.json())
                     .then(data => {
                         console.log('Backend Response:', data);
