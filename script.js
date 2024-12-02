@@ -706,6 +706,7 @@ $(document).ready(function () {
             // Fetch city from IATA code
             redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
             redirectUrl = `https://www.robotize.no/hotels?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
+            console.log('Redirect URL:', redirectUrl);
 
             // Send email notification
             await sendEmailNotification(formData);
@@ -1077,9 +1078,6 @@ $(document).ready(function () {
             }
 
 
-
-
-
             // Check if both dateFrom and dateTo are in the URL and assign them
             if (queryParams.dateFrom && queryParams.dateTo) {
                 selectedStartDate = new Date(queryParams.dateFrom);
@@ -1099,14 +1097,32 @@ $(document).ready(function () {
             }
 
 
-            // Update currency and location based on IP
-            await updateCurrencyAndLocation();
+            // Check if currency is already in the URL
+            if (!queryParams.currency) {
+                console.log("Currency not in the URL, updating from IP...");
+                // Update currency and location based on IP
+                await updateCurrencyAndLocation();
+            } else {
+                console.log("Currency is already in the URL, skipping IP update...");
+                // Update the currency input based on the URL
+                SELECTORS.currencyInput.val(queryParams.currency).trigger('change');
+            }
+
+            // Check if email is already in the URL
+            if (queryParams.email) {
+                console.log("Email is in the URL, setting it in the email input...");
+                // Set the email input based on the URL
+                SELECTORS.emailInput.val(queryParams.email);
+            } else {
+                console.log("Email is not in the URL");
+            }
+
 
             // Attach event listeners
             attachAllEventListeners();
 
             // Hide the Advanced Settings toggle initially
-            //SELECTORS.advancedSettingsToggle.hide();
+            SELECTORS.advancedSettingsToggle.hide();
 
         } catch (error) {
             console.error('Initialization error:', error);
