@@ -57,7 +57,6 @@ $(document).ready(function () {
     // ===========================
     // Global Variables
     // ===========================
-    let airportData = {};
     let airlinesDict = {};
     let selectedStartDate = '';
     let selectedEndDate = '';
@@ -1024,14 +1023,10 @@ $(document).ready(function () {
     const init = async () => {
         try {
             // Load airport and airline data
-            [airportData, airlinesDict] = await Promise.all([
-                loadData('readAirportsData', 'text'),
+            [airlinesDict] = await Promise.all([
                 loadData('readAirlinesData', 'json')
             ]);
 
-            // Populate datalists
-            populateDatalist('iataCodeFromList', airportData);
-            populateDatalist('iataCodeToList', airportData);
 
             // Initialize autocomplete
             initializeAutocomplete();
@@ -1048,9 +1043,36 @@ $(document).ready(function () {
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
             console.log(queryParams);
-            if (queryParams.iataCodeTo && airportData[queryParams.iataCodeTo]) {
-                SELECTORS.iataCodeTo.val(`${queryParams.iataCodeTo} - ${airportData[queryParams.iataCodeTo]}`).trigger('change');
+
+            // Check if a city is provided in the URL and fetch suggestions from the backend
+            if (queryParams.city) {
+                const cityName = queryParams.city; // Get the city from the query parameters
+                console.log("City from URL:", cityName);
+
+                // Send a request to your backend API with the city name
+                fetch(`/api/airport-suggestions?term=${cityName}&limit=1`) // Adjust limit to 1 if you want just the first result
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.data && data.data.length > 0) {
+                            // Find the first item with type = 'city'
+                            const cityData = data.data.find(item => item.type === 'city');
+                            
+                            if (cityData) {
+                                // Update the iataCodeTo field with the city data (formatted correctly)
+                                SELECTORS.iataCodeTo.val(`${cityData.code} - ${cityData.name} All Airports`).trigger('change');
+                                console.log('Updated city:', cityData.name);
+                            } else {
+                                console.log('No city data found');
+                            }
+                        } else {
+                            console.log('No data returned from the backend');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching city data:', error);
+                    });
             }
+
 
             // Check if both dateFrom and dateTo are in the URL and assign them
             if (queryParams.dateFrom && queryParams.dateTo) {
