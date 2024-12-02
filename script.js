@@ -1054,25 +1054,28 @@ $(document).ready(function () {
                     .then(response => response.json())
                     .then(data => {
                         console.log('Backend Response:', data);
-                        if (data && data.data && data.data.length > 0) {
+                        
+                        // Check if the response contains locations and filter by type = 'city'
+                        if (data && data.locations && data.locations.length > 0) {
                             // Find the first item with type = 'city'
-                            const cityData = data.data.find(item => item.type === 'city');
+                            const cityData = data.locations.find(item => item.type === 'city');
                             
                             if (cityData) {
                                 // Update the iataCodeTo field with the city data (formatted correctly)
                                 SELECTORS.iataCodeTo.val(`${cityData.code} - ${cityData.name} All Airports`).trigger('change');
                                 console.log('Updated city:', cityData.name);
                             } else {
-                                console.log('No city data found');
+                                console.log('No city data found in the locations.');
                             }
                         } else {
-                            console.log('No data returned from the backend');
+                            console.log('No locations returned from the backend');
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching city data:', error);
                     });
             }
+
 
 
             // Check if both dateFrom and dateTo are in the URL and assign them
