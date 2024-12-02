@@ -1055,7 +1055,7 @@ $(document).ready(function () {
                     .then(data => {
                         console.log('Backend Response:', data);
                         
-                        // Check if the response contains locations and filter by type = 'city'
+                        // Ensure the response contains locations in the correct structure
                         if (data && data.locations && data.locations.length > 0) {
                             // Find the first item with type = 'city'
                             const cityData = data.locations.find(item => item.type === 'city');
@@ -1075,6 +1075,7 @@ $(document).ready(function () {
                         console.error('Error fetching city data:', error);
                     });
             }
+
 
 
 
