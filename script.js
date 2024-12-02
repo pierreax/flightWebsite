@@ -1,5 +1,3 @@
-const { response } = require("express");
-
 // Use jQuery in noConflict mode to avoid conflicts
 const $ = jQuery.noConflict();
 
