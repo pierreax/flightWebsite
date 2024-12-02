@@ -1056,9 +1056,9 @@ $(document).ready(function () {
                         console.log('Backend Response:', data);
                         
                         // Ensure the response contains locations in the correct structure
-                        if (data && data.locations && data.locations.length > 0) {
+                        if (data && data.data && data.data.locations && data.data.locations.length > 0) {
                             // Find the first item with type = 'city'
-                            const cityData = data.locations.find(item => item.type === 'city');
+                            const cityData = data.data.locations.find(item => item.type === 'city');
                             
                             if (cityData) {
                                 // Update the iataCodeTo field with the city data (formatted correctly)
@@ -1075,6 +1075,7 @@ $(document).ready(function () {
                         console.error('Error fetching city data:', error);
                     });
             }
+
 
 
 
