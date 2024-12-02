@@ -1054,8 +1054,8 @@ $(document).ready(function () {
                 // Send a request to your backend API with the city name
                 fetch(`/api/airport-suggestions?term=${cityName}&limit=1`) // Adjust limit to 1 if you want just the first result
                     .then(response => response.json())
-                    console.log(response);
                     .then(data => {
+                        console.log('Backend Response:', data);
                         if (data && data.data && data.data.length > 0) {
                             // Find the first item with type = 'city'
                             const cityData = data.data.find(item => item.type === 'city');
