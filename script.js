@@ -81,6 +81,14 @@ $(document).ready(function () {
     // Helper Functions
     // ===========================
 
+
+    // Function to send iframe height to parent
+    const scrollToTop = () => {
+        // Send a message to request scrolling to top
+        window.parent.postMessage({ action: 'scrollToTop' }, "https://www.robotize.no");
+        console.log('Sending Scroll to Top to Wix');
+    };
+
     /**
      * Extract the IATA code or city identifier from an input field.
      * @param {string} inputId 
@@ -725,6 +733,10 @@ $(document).ready(function () {
 
             // Send email notification
             await sendEmailNotification(formData);
+
+            // Scroll to top before showing the modal at the top
+            scrollToTop();  
+
             
             // Initialize the modal based on whether the user has been redirected
             if (redirected) {
