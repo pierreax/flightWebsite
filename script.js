@@ -854,7 +854,7 @@ $(document).ready(function () {
     const handleConfirmHotelTracker = () => {
         console.log('User confirmed hotel tracking.');
         window.open(redirectUrl, '_blank');    // Navigate to redirect to the other site in a new tab
-        window.location.href = 'https://www.robotize.no/flights';  // Navigate to the original URL to refresh the form
+        window.location.href = 'https://robotize-flights.azurewebsites.net/';  // Navigate to the original URL to refresh the form
     };
 
 
@@ -863,7 +863,7 @@ $(document).ready(function () {
      */
     const handleCancelHotelTracker = () => {
         console.log('User declined hotel tracking. Reloading the page.');
-        window.location.href = 'https://www.robotize.no/flights';  // Navigate to the original URL to refresh the form
+        window.location.href = 'https://robotize-flights.azurewebsites.net/';  // Navigate to the original URL to refresh the form
     };
 
 
@@ -872,7 +872,7 @@ $(document).ready(function () {
      */
     const handleThankYouButton = () => {
         console.log('User clicked OK. Reloading the page.');
-        window.location.href = 'https://www.robotize.no/flights';  // Navigate to the original URL to refresh the form
+        window.location.href = 'https://robotize-flights.azurewebsites.net/';  // Navigate to the original URL to refresh the form
     };
 
 
