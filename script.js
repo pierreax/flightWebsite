@@ -32,6 +32,7 @@ $(document).ready(function () {
         tooltip: $('#tooltip'),
         confirmHotelTrackerBtn: $('#confirmHotelTracker'),
         cancelHotelTrackerBtn: $('#cancelHotelTracker'),
+        closeThankYouModalBtn: $('#closeThankYouModal'),
         hotelTrackingModal: $('#hotelTrackingModal'),
         dateField: $('#dateField'),
         outboundTimeStartDisplay: $('#outboundTimeStartDisplay'),
@@ -855,6 +856,17 @@ $(document).ready(function () {
 
 
     /**
+     * Handle the "Ok" button click to reload the page.
+     */
+    const handleThankYouButton = () => {
+        console.log('User clicked OK. Reloading the page.');
+        window.location.href = 'https://www.robotize.no/flights';  // Navigate to the original URL to refresh the form
+    };
+
+
+
+
+    /**
      * Handle the switch icon click to toggle IATA codes.
      */
     const switchIATACodes = () => {
@@ -948,6 +960,9 @@ $(document).ready(function () {
 
         // Decline hotel tracker button click
         SELECTORS.cancelHotelTrackerBtn.on('click', handleCancelHotelTracker);
+
+        // Decline hotel tracker button click
+        SELECTORS.closeThankYouModalBtn.on('click', handleThankYouButton);
 
         // Attach event listener to suggestPriceBtn
         SELECTORS.suggestPriceBtn.on('click', suggestPriceLimit);
