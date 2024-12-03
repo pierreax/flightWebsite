@@ -72,6 +72,7 @@ $(document).ready(function () {
     let redirectCurrency = '';
     let redirectCity = '';
     let redirectUrl = '';
+    let redirected = false; // Global variable to track if the user has been redirected
     let airlineSelectionMode = false; // False for exclude mode, true for include mode
     let flatpickrInstance = null; // To store the Flatpickr instance
 
@@ -155,7 +156,7 @@ $(document).ready(function () {
     };
 
     /**
-     * Get query parameters from the URL.
+     * Parse query parameters from the URL and set the `redirected` flag if parameters exist.
      * @returns {Object} Query parameters as key-value pairs.
      */
     const getQueryParams = () => {
@@ -164,6 +165,13 @@ $(document).ready(function () {
         for (const [key, value] of params.entries()) {
             queryParams[key] = value;
         }
+
+        // Check if the query params contain any relevant redirection data
+        if (Object.keys(queryParams).length > 0) {
+            redirected = true;  // Set redirected to true if any query params exist
+            console.log('User has been redirected');
+        }
+
         return queryParams;
     };
 
@@ -680,6 +688,12 @@ $(document).ready(function () {
         SELECTORS.hotelTrackingModal.modal('show');
     };
 
+    // Function to show the thank you modal
+    const showThankYouModal = () => {
+        console.log('Displaying thank you modal.');
+        $('#thankYouModal').modal('show');
+    };
+
     // ===========================
     // Event Handler Functions
     // ===========================
@@ -711,8 +725,14 @@ $(document).ready(function () {
             // Send email notification
             await sendEmailNotification(formData);
             
-            // Show hotel tracking modal
-            askForHotelTracking();
+            // Initialize the modal based on whether the user has been redirected
+            if (redirected) {
+                // If user was redirected, show the thank you modal
+                showThankYouModal();
+            } else {
+                // Otherwise, show the hotel tracking modal
+                askForHotelTracking();
+            }
 
 
         } catch (error) {
