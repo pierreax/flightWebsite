@@ -171,18 +171,28 @@ $(document).ready(function () {
     const getQueryParams = () => {
         const params = new URLSearchParams(window.location.search);
         const queryParams = {};
+        let redirectedFlag = false;  // Initialize the redirected flag
+
         for (const [key, value] of params.entries()) {
             queryParams[key] = value;
         }
 
-        // Check if the query params contain any relevant redirection data
+        // Check if the query params contain any relevant redirection data, excluding 'city'
         if (Object.keys(queryParams).length > 0) {
-            redirected = true;  // Set redirected to true if any query params exist
-            console.log('User has been redirected');
+            if (queryParams.dateFrom || queryParams.dateTo || queryParams.email) {
+                redirectedFlag = true;  // Set redirected to true if any relevant param exists
+                console.log('User has been redirected');
+            }
+        }
+
+        // Only set the redirected flag if there's a relevant parameter
+        if (redirectedFlag) {
+            redirected = true;
         }
 
         return queryParams;
     };
+
 
     /**
      * Populate a datalist with airport data.
