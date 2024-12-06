@@ -677,8 +677,8 @@ $(document).ready(function () {
                     body: `
                         Welcome to the Flight Robot!<br><br>
                         We will check prices for you daily, and let you know if there is a change.<br><br>
-                        From: ${extractIATACode('iataCodeFrom')}<br>
-                        To: ${extractIATACode('iataCodeTo')}<br>
+                        From: ${SELECTORS.iataCodeFrom.val()}<br>
+                        To: ${SELECTORS.iataCodeTo.val()}<br>
                         Date: ${depDate_From}<br>
                         Passengers: ${parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val()))}<br>
                         Email: ${SELECTORS.emailInput.val()}<br><br>
