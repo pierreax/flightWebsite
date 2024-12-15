@@ -1090,9 +1090,6 @@ $(document).ready(function () {
             }, 0);
 
             initializeDatePicker();
-
-            // Initialize autocomplete
-            initializeAutocomplete();
             
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
