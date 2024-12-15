@@ -51,7 +51,6 @@ $(document).ready(function () {
         getCityByIATA: '/api/getCityByIATA',
         sheetyProxy: '/api/sheetyProxy',
         sendMail: '/api/sendEmail',
-        readAirportsData: 'airports.txt',
         readAirlinesData: 'airline_data.txt',
     };
 
@@ -1080,23 +1079,17 @@ $(document).ready(function () {
      */
     const init = async () => {
         try {
-            // Load airport and airline data
+            // Load airline data
             [airlinesDict] = await Promise.all([
                 loadData('readAirlinesData', 'json')
             ]);
 
-
-            // Initialize autocomplete
-            initializeAutocomplete();
-
-            // Initialize sliders
-            initializeSliders();
-
-            // Initialize date picker
-            initializeDatePicker();
-
-            // Initialize Select2 for airlines dropdown
-            initializeSelect2('Select airlines to exclude');
+            // Initialize slider and picker
+            setTimeout(() => {
+                initializeSliders();
+                initializeDatePicker();
+            }, 0);
+            
 
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
@@ -1183,10 +1176,17 @@ $(document).ready(function () {
 
 
             // Attach event listeners
-            attachAllEventListeners();
+            attachAllEventListeners();         
 
             // Hide the Advanced Settings toggle initially
             SELECTORS.advancedSettingsToggle.hide();
+
+            window.addEventListener('load', () => {
+                // Initialize only when the page is fully loaded
+                initializeAutocomplete();
+                // Initialize Select2 for airlines dropdown
+                initializeSelect2('Select airlines to exclude');
+            });
 
         } catch (error) {
             console.error('Initialization error:', error);
