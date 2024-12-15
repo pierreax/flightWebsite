@@ -1090,6 +1090,9 @@ $(document).ready(function () {
             }, 0);
 
             initializeDatePicker();
+
+            // Initialize autocomplete
+            initializeAutocomplete();
             
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
@@ -1182,8 +1185,6 @@ $(document).ready(function () {
             SELECTORS.advancedSettingsToggle.hide();
 
             window.addEventListener('load', () => {
-                // Initialize only when the page is fully loaded
-                initializeAutocomplete();
                 // Initialize Select2 for airlines dropdown
                 initializeSelect2('Select airlines to exclude');
             });
