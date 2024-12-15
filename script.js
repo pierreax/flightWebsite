@@ -1184,15 +1184,6 @@ $(document).ready(function () {
             // Hide the Advanced Settings toggle initially
             SELECTORS.advancedSettingsToggle.hide();
 
-            window.addEventListener('load', () => {
-                console.log('Window has loaded!');
-                // Initialize Select2 for airlines dropdown
-                initializeSelect2('Select airlines to exclude');
-                // Initialize autocomplete
-                initializeAutocomplete();
-                console.log('Autocomplete initialized!');
-            });
-
         } catch (error) {
             console.error('Initialization error:', error);
         }
@@ -1200,5 +1191,15 @@ $(document).ready(function () {
 
     // Start the initialization process
     init();
+
+
+    window.addEventListener('load', () => {
+        console.log('Window has loaded!');
+        // Initialize Select2 for airlines dropdown
+        initializeSelect2('Select airlines to exclude');
+        // Initialize autocomplete
+        initializeAutocomplete();
+        console.log('Autocomplete initialized!');
+    });
 
 });
