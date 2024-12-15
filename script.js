@@ -1087,10 +1087,10 @@ $(document).ready(function () {
             // Initialize slider and picker
             setTimeout(() => {
                 initializeSliders();
-                initializeDatePicker();
             }, 0);
-            
 
+            initializeDatePicker();
+            
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
             console.log(queryParams);
