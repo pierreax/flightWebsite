@@ -126,7 +126,7 @@ a.destinations-link:active {
 
 /* Change the background when hovering over an item */
 .ui-autocomplete li:hover {
-    background-color: var(--primary-hover; /* Accent color on hover */
+    background-color: var(--primary-hover); /* Accent color on hover */
     color: var(--surface-color); /* Ensure text is readable on hover */
 }
 
