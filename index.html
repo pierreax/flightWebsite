@@ -1,48 +1,49 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Meta tags for character set and responsive layout -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Page Title -->
-    <title>Automatic Flight Tracker</title>
-
-    <!-- Bootstrap CSS for core styling -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-    <!-- jQuery library (required by Bootstrap and some other libraries) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- jQuery UI for additional UI components like datepicker -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-    <!-- Flatpickr CSS and JS for custom date picker -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-    <!-- noUiSlider CSS and JS for range sliders -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+    <head>
+        <!-- Meta tags for character set and responsive layout -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- wNumb library for number formatting (used with noUiSlider) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
-
-    <!-- Select2 CSS and JS for enhanced dropdowns -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <!-- Custom CSS for additional styles -->
-    <link rel="stylesheet" href="styles.css">
-
-    <!-- Bootstrap JS (includes popper.js) for modal functionality and interactive components -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JavaScript for app-specific functionality -->
-    <script src="script.js"></script>
-</head>
-
+        <!-- Page Title -->
+        <title>Automatic Flight Tracker</title>
+    
+        <!-- Bootstrap CSS for core styling -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+        <!-- jQuery library (required by Bootstrap and some other libraries) -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+        <!-- jQuery UI for additional UI components like datepicker -->
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    
+        <!-- Flatpickr CSS and JS for custom date picker -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+        <!-- noUiSlider CSS and JS for range sliders -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+        
+        <!-- wNumb library for number formatting (used with noUiSlider) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
+    
+        <!-- Select2 CSS and JS for enhanced dropdowns -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+        <!-- Custom CSS for additional styles -->
+        <link rel="stylesheet" href="styles.css">
+    
+        <!-- Bootstrap JS (includes popper.js) for modal functionality and interactive components -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+        <!-- Custom JavaScript for app-specific functionality -->
+        <script src="script.js"></script>
+    </head>
+    
 <body>
     <h1>Flight Price Robot</h1>
     <h2>Enter your travel preferences and our robot will check daily for updated prices.</h2>
@@ -60,8 +61,7 @@
         <!-- From Field with Icon -->
         <div class="form-group iata-field">
             <img src="airplaneLift.png" alt="From" class="airplane-icon">
-            <label for="iataCodeFrom">Where are you flying from?</label>
-            <input type="text" id="iataCodeFrom" class="autocomplete-iata" placeholder="Enter IATA Code" required>
+            <input type="text" id="iataCodeFrom" class="autocomplete-iata" placeholder="Where are you flying from?">
             <datalist id="iataCodeFromList">
                 <!-- Options will be populated dynamically using JavaScript -->
             </datalist>
@@ -75,8 +75,7 @@
         <!-- To Field with Icon -->
         <div class="form-group iata-field">
             <img src="airplaneLand.png" alt="To" class="airplane-icon">
-            <label for="iataCodeTo">Where are you flying to?</label>
-            <input type="text" id="iataCodeTo" class="autocomplete-iata" placeholder="Enter IATA Code" required>
+            <input type="text" id="iataCodeTo" class="autocomplete-iata" placeholder="Where are you flying to?">
             <datalist id="iataCodeToList">
                 <!-- Options will be populated dynamically using JavaScript -->
             </datalist>
@@ -114,33 +113,31 @@
 
         <!-- Date Field using Flatpickr -->
         <div class="date-field">
-            <label for="dateField">Select Dates:</label>
             <input type="text" id="dateField" placeholder="Select Dates" required>
         </div>
 
         <!-- Grouped input fields -->
         <div class="input-group">
             <!-- Stops -->
-            <div class="form-group small-input-row">
-                <label for="maxStops" class="small-label">Stops (max)</label>
+            <div class="form-group small-input-row floating-label">
                 <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="1" required>
+                <label for="maxStops" class="small-label">Stops (max)</label>
             </div>
 
             <!-- Travel time -->
-            <div class="form-group small-input-row">
-                <label for="maxFlightDuration" class="small-label">Flight duration</label>
+            <div class="form-group small-input-row floating-label">
                 <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="50" value="8" required>
+                <label for="maxFlightDuration" class="small-label">Flight duration</label>
             </div>
 
             <!-- Passengers -->
-            <div class="form-group small-input-row">
-                <label for="nbrPassengers" class="small-label">Passengers</label>
+            <div class="form-group small-input-row floating-label">
                 <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
+                <label for="nbrPassengers" class="small-label">Passengers</label>
             </div>
 
             <!-- Currency Dropdown -->
-            <div class="form-group small-input-row">
-                <label for="currency" class="small-label">Currency</label>
+            <div class="form-group small-input-row floating-label">
                 <select id="currency" name="currency" class="small-input" required>
                     <option value="NOK" selected>NOK</option>
                     <option value="SEK">SEK</option>
@@ -148,6 +145,7 @@
                     <option value="USD">USD</option>
                     <option value="DKK">DKK</option>
                 </select>
+                <label for="currency" class="small-label">Currency</label>
             </div>
         </div>
 
@@ -166,7 +164,7 @@
             <div id="helpBtn">?</div>
         </button>
         <!-- Tooltip -->
-        <div id="tooltip">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
+        <div id="tooltip" style="display:none;">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
 
         <!-- Advanced Settings Section -->
         <div id="advancedSettingsToggle" role="button" tabindex="0">Advanced Settings</div>
@@ -190,13 +188,13 @@
         </div>
 
         <!-- Price Limit Field and Label -->
-        <div class="form-group">
+        <div class="form-group floating-label">
             <label class="price-limit-label" for="maxPricePerPerson">Price limit per person:</label>
             <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
         </div>
 
         <!-- Email Field and Label -->
-        <div class="form-group">
+        <div class="form-group floating-label">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
         </div>
@@ -241,5 +239,8 @@
             </div>
         </div>
     </div>
+
+
+
 </body>
 </html>
