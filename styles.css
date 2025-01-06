@@ -221,7 +221,6 @@ input, select {
     padding: 10px;
     width: 100%;
     background: var(--surface-color);
-    -webkit-appearance: none;
 }
 
 .floating-label label {
