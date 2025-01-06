@@ -121,7 +121,7 @@ a.destinations-link:active {
 .ui-autocomplete li {
     padding: 8px 10px;
     cursor: pointer;
-    font-size: 14px; /* Adjust font size for readability */
+    font-size: 10px; /* Adjust font size for readability */
 }
 
 /* Change the background when hovering over an item */
@@ -250,7 +250,7 @@ input, select {
     align-items: center; /* Centers items vertically in the container */
     justify-content: space-between; /* Distributes space between items */
     gap: 10px; /* Adds space between each switch */
-    font-size: 12px; /* Adjust font size for better readability */
+    font-size: 10px; /* Adjust font size for better readability */
     margin-bottom: 12px;
 }
 
