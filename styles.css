@@ -317,13 +317,6 @@ input, select {
     box-shadow: 0 0 1px var(--slider-active-bg); /* Optional: add a box-shadow when the switch is focused */
 }
 
-/* Specific fix for the 'Travel duration (max)' label */
-#maxFlightDuration + .small-label::after {
-    content: " (max)";
-    display: block; /* Makes the pseudo-element behave like a block, putting it on a new line */
-    font-size: smaller; /* Optional: makes the '(max)' font size smaller */
-}
-
 /* Airplane icon styles */
 .airplane-icon {
     position: absolute;
