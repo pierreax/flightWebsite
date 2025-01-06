@@ -194,8 +194,9 @@ input, select {
 /* Ensure consistent width for dropdowns within .input-group */
 .input-group {
     display: flex;
-    gap: 10px; /* Space between fields */
+    gap: 5px; /* Space between fields */
     width: 100%; /* Make sure it takes the full width available */
+    margin-top: 20px;
 }
 
 .input-group .input-wrapper {
@@ -230,7 +231,7 @@ input, select {
     transition: 0.2s ease all;
     color: var(--text-color);
     padding: 0px;
-    font-size: 8px; /* Adjust font size for initial state */
+    font-size: 6px; /* Adjust font size for initial state */
 }
 
 /* Floating label transitions */
@@ -239,7 +240,7 @@ input, select {
 #currency ~ label { /* This targets the label for the currency field specifically */
     top: -12px; /* Move above the input field */
     left: 8px;
-    font-size: 10px; /* Adjust font size when focused or filled */
+    font-size: 6px; /* Adjust font size when focused or filled */
     color: var(--primary-color);
 }
 
@@ -462,7 +463,7 @@ input, select {
 
 /* Ensure the switch labels are aligned with the switches */
 .switch-label {
-    font-size: 10px;
+    font-size: 8px;
     color: var(--text-color);
     text-align: center;
     flex-grow: 1; /* Ensures labels are evenly spaced */
