@@ -353,6 +353,7 @@ input, select {
     right: 15%; /* Positions the icon exactly between the two fields */
     transform: translateX(50%) translateY(-50%); /* Adjust horizontally and vertically */
     z-index: 2; /* Ensures the icon is clickable */
+    top: 60px; /* Adjust based on your layout */
 }
 
 .switch-icon {
