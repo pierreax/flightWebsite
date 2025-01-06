@@ -83,7 +83,7 @@ a.destinations-link {
     margin: auto;
     padding: 10px;
     max-width: 300px;
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     color: var(--surface-color);
     text-decoration: none;
     font-family: 'Avenir Light', sans-serif;
@@ -94,7 +94,7 @@ a.destinations-link {
 
 a.destinations-link:hover,
 a.destinations-link:active {
-    background-color: var(--input-background);
+    background-color: var(--primary-hover);
     transform: translateY(-2px);
 }
 
@@ -250,6 +250,8 @@ input, select {
     align-items: center; /* Centers items vertically in the container */
     justify-content: space-between; /* Distributes space between items */
     gap: 10px; /* Adds space between each switch */
+    font-size: 12px; /* Adjust font size for better readability */
+    margin-bottom: 12px;
 }
 
 .form-group.switches > div {
@@ -340,6 +342,7 @@ input, select {
 
 #iataCodeTo, #iataCodeFrom {
     text-align: center;
+    font-size: 10px; /* Adjust font size for better visibility */
 }
 
 /* Adjust the switch icon container */
@@ -515,7 +518,7 @@ input[type="submit"]:active {
     font-family: 'Avenir Light', sans-serif;
     width: 100%;
     margin-top: 10px;
-    margin-bottom: 0px;
+    margin-bottom: 10px;
 }
 
 #suggestPriceBtn:hover,
