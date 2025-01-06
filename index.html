@@ -118,26 +118,48 @@
 
         <!-- Grouped input fields -->
         <div class="input-group">
-            <!-- Stops -->
-            <div class="form-group small-input-row floating-label">
-                <input type="number" id="maxStops" name="maxStops" class="small-input" min="0" max="9" value="1" required>
+            <!-- Stops Dropdown -->
+            <div class="form-group small-input-row">
                 <label for="maxStops" class="small-label">Stops (max)</label>
+                <select id="maxStops" name="maxStops" class="small-input" required>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="">All</option>
+                </select>
             </div>
 
-            <!-- Travel time -->
-            <div class="form-group small-input-row floating-label">
-                <input type="number" id="maxFlightDuration" name="maxFlightDuration" class="small-input" min="0" max="50" value="8" required>
-                <label for="maxFlightDuration" class="small-label">Flight duration</label>
+            <!-- Flight Duration Dropdown -->
+            <div class="form-group small-input-row">
+                <label for="maxFlightDuration" class="small-label">Flight Duration</label>
+                <select id="maxFlightDuration" name="maxFlightDuration" class="small-input" required>
+                    <option value="2">2</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">All</option>
+                </select>
             </div>
 
-            <!-- Passengers -->
-            <div class="form-group small-input-row floating-label">
-                <input type="number" id="nbrPassengers" name="nbrPassengers" class="small-input" min="1" max="9" value="1" required>
+            <!-- Passengers Dropdown -->
+            <div class="form-group small-input-row">
                 <label for="nbrPassengers" class="small-label">Passengers</label>
+                <select id="nbrPassengers" name="nbrPassengers" class="small-input" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
             </div>
 
             <!-- Currency Dropdown -->
-            <div class="form-group small-input-row floating-label">
+            <div class="form-group small-input-row">
+                <label for="currency" class="small-label">Currency</label>
                 <select id="currency" name="currency" class="small-input" required>
                     <option value="NOK" selected>NOK</option>
                     <option value="SEK">SEK</option>
@@ -145,9 +167,10 @@
                     <option value="USD">USD</option>
                     <option value="DKK">DKK</option>
                 </select>
-                <label for="currency" class="small-label">Currency</label>
             </div>
         </div>
+
+
 
         <!-- Outbound Slider Options -->
         <div id="outbound-timeRangeDisplay">Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span></div>

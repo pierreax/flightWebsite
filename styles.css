@@ -192,13 +192,30 @@ input, select {
     box-shadow: 0 0 0 3px rgba(45, 156, 219, 0.2); /* Deep Blue shadow */
 }
 
-/* Ensure consistent width for dropdowns within .input-group */
+/* Ensure input-group stays in one row and adjusts spacing */
 .input-group {
     display: flex;
-    gap: 5px; /* Space between fields */
-    width: 100%; /* Make sure it takes the full width available */
+    flex-wrap: nowrap; /* Prevent wrapping to the next line */
+    gap: 10px; /* Increased gap for better spacing */
+    width: 100%; /* Full width of the form */
     margin-top: 20px;
+    box-sizing: border-box;
 }
+
+.input-group .form-group.small-input-row {
+    flex: 0 0 22%;
+    max-width: 22%;
+    min-width: 0;
+    position: relative;
+}
+
+.input-group .form-group.small-input-row select {
+    padding: 8px 6px;
+    font-size: 12px;
+    text-align: center;
+}
+
+
 
 .input-group .input-wrapper {
     flex: 1; /* Each input-wrapper will take equal space */
@@ -234,15 +251,32 @@ input, select {
     font-size: 6px; /* Adjust font size for initial state */
 }
 
-/* Floating label transitions */
-.floating-label input:focus ~ label,
-.floating-label input:not(:placeholder-shown) ~ label,
-#currency ~ label { /* This targets the label for the currency field specifically */
-    top: -12px; /* Move above the input field */
-    left: 8px;
-    font-size: 6px; /* Adjust font size when focused or filled */
-    color: var(--primary-color);
+/* 1. Stack labels above dropdowns within .input-group */
+.input-group .form-group.small-input-row {
+    display: flex;
+    flex-direction: column; /* Stack label above select */
+    margin-bottom: 15px;    /* Space between form groups */
 }
+
+/* 2. Style the labels */
+.input-group .form-group.small-input-row label.small-label {
+    margin-bottom: 5px;       /* Space between label and dropdown */
+    font-size: 8px;          /* Standard font size for labels */
+    color: var(--text-color); /* Consistent label color */
+}
+
+/* 3. Style the select elements */
+.input-group .form-group.small-input-row select.small-input {
+    padding: 8px 6px;          /* Smaller padding for compactness */
+    font-size: 12px;           /* Smaller font size */
+    text-align: center;        /* Center text within dropdown */
+    border: 1px solid var(--border-color); /* Consistent border */
+    border-radius: 5px;        /* Rounded corners */
+    background: var(--surface-color); /* Background color */
+    color: var(--text-color);  /* Text color */
+}
+
+
 
 /* Centering switch labels and switches */
 .form-group.switches {
@@ -635,8 +669,8 @@ input[type="submit"]:active {
 
 /* Increased specificity for disabled input fields */
 form .form-group .disabled-input {
-    background-color: var(--slider-bg); /* Light gray for background */
-    color: #9e9e9e; /* Dimmed text color */
+    background-color: var(--slider-bg) !important; /* Light gray for background */
+    color: #9e9e9e !important; /* Dimmed text color */
 }
 
 /* Modal Styles */
