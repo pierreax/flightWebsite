@@ -249,8 +249,6 @@ input, select {
 .form-group.switches {
     display: flex;
     align-items: center; /* Centers items vertically in the container */
-    justify-content: space-between; /* Distributes space between items */
-    gap: 10px; /* Adds space between each switch */
     font-size: 10px; /* Adjust font size for better readability */
     margin-bottom: 12px;
 }
