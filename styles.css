@@ -106,7 +106,7 @@ a.destinations-link:active {
 
 /* Custom styles for the autocomplete dropdown */
 .ui-autocomplete {
-    background-color: var(--input-background); /* Matches form input background */
+    background-color: var(--background-color); /* Matches form background */
     border: 1px solid var(--border-color); /* Consistent with form input borders */
     border-radius: 5px; /* Match input border radius */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow to match the form */
@@ -126,7 +126,7 @@ a.destinations-link:active {
 
 /* Change the background when hovering over an item */
 .ui-autocomplete li:hover {
-    background-color: var(--accent-color); /* Accent color on hover */
+    background-color: var(--primary-hover; /* Accent color on hover */
     color: var(--surface-color); /* Ensure text is readable on hover */
 }
 
