@@ -631,8 +631,8 @@ input[type="submit"]:active {
     border-radius: 5px;
     width: 200px; /* Adjust as needed */
     z-index: 1000;
-    margin-left: 35px; /* Position to the right of the help button */
-    margin-top: -5px; /* Position aligned with the help button */
+    margin-left: 50px; /* Position to the right of the help button */
+    margin-top: 450px; /* Position aligned with the help button */
 }
 
 /* Increased specificity for disabled input fields */
