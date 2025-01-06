@@ -164,14 +164,17 @@ form {
     box-sizing: border-box; /* Ensure box-sizing is applied to the form */
 }
 
-/* Wrapper styles */
-.input-wrapper {
-    position: relative;
-    margin-bottom: 20px; /* Space between fields */
+/* Static Label Styles */
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: var(--font-size-medium);
+    color: var(--text-color);
 }
 
 /* Input and select fields */
-input, select {
+form input, 
+form select {
     width: 100%;
     padding: 12px;
     box-sizing: border-box;
@@ -183,9 +186,11 @@ input, select {
     font-size: 14px; /* Adjust font size */
     color: var(--text-color);
     text-align: center;
+    margin-bottom: 15px; /* Space below each input */
 }
 
-.form-control, .form-control:focus {
+.form-control, 
+.form-control:focus {
     background: var(--surface-color);
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(45, 156, 219, 0.2); /* Deep Blue shadow */
@@ -208,40 +213,10 @@ input, select {
     width: 100%; /* Ensure dropdowns fill the width of their container */
 }
 
-/* Floating label styles */
-.floating-label {
-    position: relative;
+/* Styling for small labels */
+.small-label {
+    font-size: var(--font-size-small);
     color: var(--text-color);
-}
-
-.floating-label input,
-.floating-label select {
-    border: 1px solid var(--border-color);
-    padding: 10px;
-    width: 100%;
-    background: var(--surface-color);
-    -webkit-appearance: none;
-}
-
-.floating-label label {
-    position: absolute;
-    pointer-events: none;
-    left: 10px;
-    top: 8px; /* Adjust position for unfocused state */
-    transition: 0.2s ease all;
-    color: var(--text-color);
-    padding: 0px;
-    font-size: 6px; /* Adjust font size for initial state */
-}
-
-/* Floating label transitions */
-.floating-label input:focus ~ label,
-.floating-label input:not(:placeholder-shown) ~ label,
-#currency ~ label { /* This targets the label for the currency field specifically */
-    top: -12px; /* Move above the input field */
-    left: 8px;
-    font-size: 6px; /* Adjust font size when focused or filled */
-    color: var(--primary-color);
 }
 
 /* Centering switch labels and switches */
@@ -338,8 +313,10 @@ input, select {
     width: 100%; /* Full width of its container */
 }
 
-#iataCodeTo, #iataCodeFrom {
+#iataCodeTo, 
+#iataCodeFrom {
     text-align: center;
+    width: 100%;
 }
 
 /* Adjust the switch icon container */
@@ -360,7 +337,8 @@ input, select {
 }
 
 /* Ensure the airplane icons and selects fill their containers without additional space for the switch icon */
-.airplane-icon, .iata-field select {
+.airplane-icon, 
+.iata-field select {
     max-width: calc(100% - 30px); /* Adjust the width to account for the icon */
 }
 
@@ -657,111 +635,4 @@ form .form-group .disabled-input {
     border-radius: 10px;
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: 'Avenir Light', sans-serif;
-}
-
-/* Modal Header */
-.modal-header {
-    background-color: var(--accent-color);
-    color: var(--surface-color);
-    border-bottom: 1px solid var(--border-color);
-    font-size: 1.2em;
-    font-weight: normal;
-    padding: 15px;
-}
-
-.modal-title {
-    font-family: 'Avenir Light', sans-serif;
-}
-
-/* Close button in header */
-.modal-header .btn-close {
-    color: var(--surface-color);
-    opacity: 1;
-    background: transparent;
-}
-
-/* Modal Body */
-.modal-body {
-    padding: 20px;
-    color: var(--text-color);
-    font-size: 1em;
-    text-align: center;
-}
-
-/* Modal Footer */
-.modal-footer {
-    border-top: 1px solid var(--border-color);
-    padding: 15px;
-    justify-content: center;
-}
-
-/* Buttons inside Modal */
-.modal-footer .btn-primary {
-    background-color: var(--primary-color);
-    border: none;
-    color: var(--surface-color);
-    font-family: 'Avenir Light', sans-serif;
-    transition: background-color var(--transition-duration);
-}
-
-.modal-footer .btn-primary:hover {
-    background-color: var(--primary-hover);
-}
-
-.modal-footer .btn-secondary {
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-family: 'Avenir Light', sans-serif;
-}
-
-.modal-footer .btn-secondary:hover {
-    background-color: var(--surface-color);
-}
-
-/* Reset default mobile browser styles */
-input:-webkit-autofill {
-    transition: background-color 5000s ease-in-out 0s;
-}
-
-/* General reset for appearance */
-input[list] {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    -ms-appearance: none !important;
-}
-
-/* Hide the default arrow in input fields with list attribute */
-input[list]::-webkit-calendar-picker-indicator,
-input[list]::-webkit-clear-button,
-input[list]::-webkit-inner-spin-button,
-input[list]::-webkit-outer-spin-button,
-input[list]::-ms-clear,
-input[list]::-ms-expand {
-    display: none !important;
-    -webkit-appearance: none !important;
-}
-
-/* Ensuring no dropdown on hover or focus */
-input[list]:hover,
-input[list]:focus {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    -ms-appearance: none !important;
-}
-
-/* Specific fix for the arrow in some browsers */
-input[list]::-webkit-search-cancel-button,
-input[list]::-webkit-search-decoration {
-    display: none !important;
-}
-
-/* Edge-specific CSS hack */
-@supports (-ms-ime-align: auto) {
-    input[list]::-ms-expand {
-        display: none !important;
-    }
-}
+    font-family
