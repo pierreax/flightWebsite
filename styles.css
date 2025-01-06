@@ -196,15 +196,15 @@ input, select {
 .input-group {
     display: flex;
     flex-wrap: nowrap; /* Prevent wrapping to the next line */
-    gap: 10px; /* Increased gap for better spacing */
+    gap: 5px; /* Increased gap for better spacing */
     width: 100%; /* Full width of the form */
     margin-top: 20px;
     box-sizing: border-box;
 }
 
 .input-group .form-group.small-input-row {
-    flex: 0 0 22%;
-    max-width: 22%;
+    flex: 0 0 24%;
+    max-width: 24%;
     min-width: 0;
     position: relative;
 }
