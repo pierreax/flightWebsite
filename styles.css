@@ -660,7 +660,7 @@ form .form-group .disabled-input {
 
 /* Modal Header */
 .modal-header {
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     color: var(--surface-color);
     border-bottom: 1px solid var(--border-color);
     font-size: 1.2em;
