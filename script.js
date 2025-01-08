@@ -547,8 +547,8 @@ $(document).ready(function () {
             dateTo: depDate_To,
             returnFrom: returnDate_From,
             returnTo: returnDate_To,
-            maxStops: parseInt(SELECTORS.maxStopsInput.val()),
-            maxFlyDuration: parseFloat(SELECTORS.maxFlightDurationInput.val()) || '',
+            maxStops: SELECTORS.maxStopsInput.val() === "All" ? "" : SELECTORS.maxStopsInput.val(),
+            maxFlyDuration: SELECTORS.maxFlightDurationInput.val() === "All" ? "" : SELECTORS.maxFlightDurationInput.val(),
             flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'oneway' : 'return',
             currency: SELECTORS.currencyInput.val(),
             dtime_from: SELECTORS.outboundTimeStartDisplay.text(),
@@ -1051,7 +1051,7 @@ $(document).ready(function () {
                 flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'one-way' : 'return',
                 maxPricePerPerson: SELECTORS.maxPricePerPerson.val(),
                 currency: SELECTORS.currencyInput.val(),
-                maxStops: parseInputValue(parseInt(SELECTORS.maxStopsInput.val())),
+                maxStops: SELECTORS.maxStopsInput.val() === "All" ? "" : SELECTORS.maxStopsInput.val(),
                 nbrPassengers: parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val())),
                 depDateFrom: depDate_From,
                 depDateTo: depDate_To,
@@ -1061,7 +1061,7 @@ $(document).ready(function () {
                 dtimeTo: outboundTimes[1],   // Correctly retrieved
                 retDtimeFrom: inboundTimes[0],
                 retDtimeTo: inboundTimes[1],
-                maxFlightDuration: parseInputValue(parseFloat(SELECTORS.maxFlightDurationInput.val())) || '',
+                maxFlyDuration: SELECTORS.maxFlightDurationInput.val() === "All" ? "" : SELECTORS.maxFlightDurationInput.val(),
                 excludedAirlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
                 exclude: !airlineSelectionMode, // Set based on the switch state
                 email: SELECTORS.emailInput.val(),
