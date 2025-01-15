@@ -550,7 +550,7 @@ $(document).ready(function () {
             returnFrom: returnDate_From,
             returnTo: returnDate_To,
             maxStops: SELECTORS.maxStopsInput.val() === "All" ? "" : SELECTORS.maxStopsInput.val(),
-            maxFlyDuration: SELECTORS.maxFlightDurationInput.val() === "All" ? "" : SELECTORS.maxFlightDurationInput.val(),
+            maxFlyDuration: SELECTORS.maxFlightDurationInput.val() === "All" || SELECTORS.maxFlightDurationInput.val() === null ? "" : SELECTORS.maxFlightDurationInput.val(),
             flightType: SELECTORS.oneWayTripCheckbox.is(':checked') ? 'oneway' : 'return',
             currency: SELECTORS.currencyInput.val(),
             dtime_from: SELECTORS.outboundTimeStartDisplay.text(),
@@ -1065,7 +1065,7 @@ $(document).ready(function () {
                 dtimeTo: outboundTimes[1],   // Correctly retrieved
                 retDtimeFrom: inboundTimes[0],
                 retDtimeTo: inboundTimes[1],
-                maxFlyDuration: SELECTORS.maxFlightDurationInput.val() === "All" ? "" : SELECTORS.maxFlightDurationInput.val(),
+                maxFlyDuration: SELECTORS.maxFlightDurationInput.val() === "All" || SELECTORS.maxFlightDurationInput.val() === null ? "" : SELECTORS.maxFlightDurationInput.val(),
                 excludedAirlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
                 exclude: !airlineSelectionMode, // Set based on the switch state
                 email: SELECTORS.emailInput.val(),
