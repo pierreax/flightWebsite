@@ -805,7 +805,7 @@ $(document).ready(function () {
             SELECTORS.maxStopsInput.val('0').prop('disabled', true).addClass('disabled-input');
             console.log("Max Stops:",SELECTORS.maxStopsInput.val());
             console.log("Max Flight Duration before:",SELECTORS.maxFlightDurationInput.val());
-            SELECTORS.maxFlightDurationInput.val('All').prop('disabled', true).addClass('disabled-input');
+            SELECTORS.maxFlightDurationInput.val('').prop('disabled', true).addClass('disabled-input');
             console.log("Max Flight Duration after:",SELECTORS.maxFlightDurationInput.val());
 
             // Remove the 'required' attribute when disabled
