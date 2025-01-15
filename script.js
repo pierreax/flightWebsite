@@ -803,7 +803,7 @@ $(document).ready(function () {
 
             // Disable the inputs and add the 'disabled-input' class
             SELECTORS.maxStopsInput.val('0').prop('disabled', true).addClass('disabled-input');
-            SELECTORS.maxFlightDurationInput.val('').prop('disabled', true).addClass('disabled-input');
+            SELECTORS.maxFlightDurationInput.val('All').prop('disabled', true).addClass('disabled-input');
 
             // Remove the 'required' attribute when disabled
             SELECTORS.maxStopsInput.prop('required', false);
