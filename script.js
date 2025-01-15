@@ -540,6 +540,8 @@ $(document).ready(function () {
      */
     const suggestPriceLimit = async () => {
         SELECTORS.loader.show(); // Show the loading icon
+        console.log("Max Flight Duration:",SELECTORS.maxFlightDurationInput.val()); // Log the max flight duration
+        console.log("Max Stops:",SELECTORS.maxStopsInput.val()); // Log the max stops
         const params = new URLSearchParams({
             origin: extractIATACode('iataCodeFrom'),
             destination: extractIATACode('iataCodeTo'),
