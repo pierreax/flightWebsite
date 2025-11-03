@@ -22,6 +22,14 @@ app.get('/', (req, res) => {
 app.post('/api/getClosestAirport', async (req, res) => {
     const { latitude, longitude } = req.body;
 
+    // Validate inputs
+    if (typeof latitude !== 'number' || latitude < -90 || latitude > 90) {
+        return res.status(400).json({ error: 'Invalid latitude. Must be a number between -90 and 90.' });
+    }
+    if (typeof longitude !== 'number' || longitude < -180 || longitude > 180) {
+        return res.status(400).json({ error: 'Invalid longitude. Must be a number between -180 and 180.' });
+    }
+
     try {
         const apiKey = process.env.TEQUILA_API_KEY;
 
@@ -94,9 +102,22 @@ app.post('/api/getClosestAirport', async (req, res) => {
 // Create a cache instance with a TTL of 30 days (2592000 seconds)
 const cache = new NodeCache({ stdTTL: 2592000, checkperiod: 120 });
 
+// Add error handler for cache
+cache.on('error', (err) => {
+    console.error('Cache error:', err);
+});
+
 // Route for Airport and City Autocomplete
 app.get('/api/airport-suggestions', async (req, res) => {
     const { term, limit } = req.query;
+
+    // Validate inputs
+    if (!term || typeof term !== 'string' || term.trim().length === 0) {
+        return res.status(400).json({ error: 'Invalid search term. Must be a non-empty string.' });
+    }
+    if (term.length > 100) {
+        return res.status(400).json({ error: 'Search term too long. Maximum 100 characters.' });
+    }
 
     if (!term || term.length < 3) {
         console.log('Search term too short:', term);
