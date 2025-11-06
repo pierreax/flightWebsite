@@ -8,6 +8,7 @@ const port = process.env.PORT || 8080;
 // Validate required environment variables at startup
 const requiredEnvVars = [
     'TEQUILA_API_KEY',
+    'IPGEOLOCATION_API_KEY',
     'SHEETY_API_URL',
     'SHEETY_TOKEN',
     'EMAIL_TENANT_ID',
@@ -63,6 +64,38 @@ async function fetchWithTimeout(url, options = {}, timeout = 30000) {
         throw error;
     }
 }
+
+// Route to get user geolocation and currency based on IP
+app.get('/api/geolocation', async (req, res) => {
+    try {
+        const apiKey = process.env.IPGEOLOCATION_API_KEY;
+
+        if (!apiKey) {
+            console.error('IPGeolocation API key is not set in environment variables.');
+            return res.status(500).json({ error: 'Server configuration error.' });
+        }
+
+        const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}`;
+
+        const response = await fetchWithTimeout(url);
+
+        if (!response.ok) {
+            throw new Error(`IPGeolocation API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Only send back what's needed to reduce exposure
+        res.json({
+            currency: data.currency,
+            latitude: data.latitude,
+            longitude: data.longitude
+        });
+    } catch (error) {
+        console.error('Geolocation error:', error);
+        res.status(500).json({ error: 'Failed to fetch geolocation data' });
+    }
+});
 
 // Route to fetch the closest airport using Tequila API
 app.post('/api/getClosestAirport', async (req, res) => {

@@ -45,7 +45,7 @@ $(document).ready(function () {
     };
 
     const API_ENDPOINTS = {
-        ipGeo: 'https://api.ipgeolocation.io/ipgeo?apiKey=420e90eecc6c4bb285f238f38aea898f',
+        geolocation: '/api/geolocation',
         getClosestAirport: '/api/getClosestAirport',
         suggestPriceLimit: '/api/suggestPriceLimit',
         getCityByIATA: '/api/getCityByIATA',
@@ -446,22 +446,22 @@ $(document).ready(function () {
      */
     const getLocationInfo = async () => {
         try {
-            const response = await fetch(API_ENDPOINTS.ipGeo);
+            const response = await fetch(API_ENDPOINTS.geolocation);
             if (!response.ok) {
                 throw new Error(`Failed to fetch IP Geolocation data: ${response.statusText}`);
             }
             const data = await response.json();
-            
+
             // Store the currency if currency data is available
             if (data.currency && data.currency.code) {
                 currency = data.currency.code;  // Store the currency in the global variable
             }
-    
+
             // Update location fields based on geolocation data
             if (data.latitude && data.longitude) {
                 await fetchClosestAirport(data.latitude, data.longitude);  // Optional: Use latitude and longitude for location
             }
-    
+
         } catch (error) {
             console.error('Error getting location info:', error);
             // Optionally, handle the error by setting default values or notifying the user
