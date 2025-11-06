@@ -5,8 +5,35 @@ const NodeCache = require('node-cache');
 const app = express();
 const port = process.env.PORT || 8080;
 
+// Validate required environment variables at startup
+const requiredEnvVars = [
+    'TEQUILA_API_KEY',
+    'SHEETY_API_URL',
+    'SHEETY_TOKEN',
+    'EMAIL_TENANT_ID',
+    'EMAIL_CLIENT_ID',
+    'EMAIL_CLIENT_SECRET'
+];
+
+const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+if (missingVars.length > 0) {
+    console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    process.exit(1);
+}
+
 // Middleware to parse JSON requests
 app.use(express.json());
+
+// Enable CORS for all routes
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 // Serve static files from the root directory
 app.use(express.static(path.join(__dirname)));
@@ -16,7 +43,26 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Helper function for fetch with timeout
+async function fetchWithTimeout(url, options = {}, timeout = 30000) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
 
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout');
+        }
+        throw error;
+    }
+}
 
 // Route to fetch the closest airport using Tequila API
 app.post('/api/getClosestAirport', async (req, res) => {
@@ -53,8 +99,8 @@ app.post('/api/getClosestAirport', async (req, res) => {
         // Append query parameters to the URL
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-        // Make the GET request to Tequila API
-        const tequilaResponse = await fetch(url.toString(), {
+        // Make the GET request to Tequila API with timeout
+        const tequilaResponse = await fetchWithTimeout(url.toString(), {
             method: 'GET',
             headers: {
                 'apikey': apiKey
@@ -115,13 +161,11 @@ app.get('/api/airport-suggestions', async (req, res) => {
     if (!term || typeof term !== 'string' || term.trim().length === 0) {
         return res.status(400).json({ error: 'Invalid search term. Must be a non-empty string.' });
     }
+    if (term.length < 3) {
+        return res.status(400).json({ error: 'Search term too short. Minimum 3 characters.' });
+    }
     if (term.length > 100) {
         return res.status(400).json({ error: 'Search term too long. Maximum 100 characters.' });
-    }
-
-    if (!term || term.length < 3) {
-        console.log('Search term too short:', term);
-        return res.status(400).json({ error: 'Search term is too short' });
     }
 
     try {
@@ -155,8 +199,8 @@ app.get('/api/airport-suggestions', async (req, res) => {
         // Append query parameters to the URL
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-        // Make the GET request to Tequila API
-        const tequilaResponse = await fetch(url.toString(), {
+        // Make the GET request to Tequila API with timeout
+        const tequilaResponse = await fetchWithTimeout(url.toString(), {
             method: 'GET',
             headers: {
                 'apikey': apiKey
@@ -197,7 +241,7 @@ app.post('/api/sheetyProxy', async (req, res) => {
     const sheetyToken = process.env.SHEETY_TOKEN; // Set your Sheety API token in environment variables
 
     try {
-        const sheetyResponse = await fetch(sheetyApiUrl, {
+        const sheetyResponse = await fetchWithTimeout(sheetyApiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -241,8 +285,13 @@ app.post('/api/sheetyProxy', async (req, res) => {
 app.get('/api/getCityByIATA', async (req, res) => {
     const { iataCode } = req.query;
 
+    // Validate input
+    if (!iataCode || typeof iataCode !== 'string' || iataCode.length !== 3) {
+        return res.status(400).json({ error: 'Valid 3-letter IATA code is required' });
+    }
+
     try {
-        const response = await fetch(`https://tequila-api.kiwi.com/locations/query?term=${encodeURIComponent(iataCode)}&location_types=city&limit=1`, {
+        const response = await fetchWithTimeout(`https://tequila-api.kiwi.com/locations/query?term=${encodeURIComponent(iataCode)}&location_types=city&limit=1`, {
             method: 'GET',
             headers: { 'apikey': process.env.TEQUILA_API_KEY }
         });
@@ -263,6 +312,11 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
         dtime_to, ret_dtime_from, ret_dtime_to
     } = req.query;
 
+    // Validate required parameters
+    if (!origin || !destination || !dateFrom || !dateTo) {
+        return res.status(400).json({ error: 'Missing required parameters: origin, destination, dateFrom, dateTo' });
+    }
+
     const queryParams = new URLSearchParams({
         fly_from: origin,
         fly_to: destination,
@@ -282,12 +336,16 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
     });
 
     try {
-        const response = await fetch(`https://tequila-api.kiwi.com/v2/search?${queryParams.toString()}`, {
+        const response = await fetchWithTimeout(`https://tequila-api.kiwi.com/v2/search?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
                 'apikey': process.env.TEQUILA_API_KEY
             }
         });
+
+        if (!response.ok) {
+            throw new Error(`Tequila API error: ${response.status}`);
+        }
 
         const data = await response.json();
         res.json(data);
@@ -343,7 +401,7 @@ async function getAccessToken() {
         scope: 'https://graph.microsoft.com/.default'  // Make sure this scope is correct
     };
 
-    const response = await fetch(`https://login.microsoftonline.com/${EMAIL_TENANT_ID}/oauth2/v2.0/token`, {
+    const response = await fetchWithTimeout(`https://login.microsoftonline.com/${EMAIL_TENANT_ID}/oauth2/v2.0/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(tokenData).toString()
@@ -391,7 +449,7 @@ async function sendEmail(subject, body, recipientEmail, token) {
     };
 
     try {
-        const response = await fetch(SENDMAIL_ENDPOINT, {
+        const response = await fetchWithTimeout(SENDMAIL_ENDPOINT, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
