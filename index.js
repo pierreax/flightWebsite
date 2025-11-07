@@ -86,12 +86,23 @@ app.get('/api/geolocation', async (req, res) => {
             });
         }
 
-        const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}`;
+        // Clean and validate the API key (remove any whitespace)
+        const cleanedApiKey = apiKey.trim();
+
+        // Log key length and first few chars for debugging (never log full key!)
+        console.log(`IPGeolocation API key found: ${cleanedApiKey.length} chars, starts with: ${cleanedApiKey.substring(0, 10)}...`);
+
+        const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${cleanedApiKey}`;
+        console.log(`Making request to: https://api.ipgeolocation.io/ipgeo?apiKey=${cleanedApiKey.substring(0, 10)}...`);
 
         const response = await fetchWithTimeout(url);
 
         if (!response.ok) {
             const status = response.status;
+            const responseText = await response.text();
+            console.error(`IPGeolocation API error: ${status}`);
+            console.error(`Response body: ${responseText}`);
+
             if (status === 401) {
                 console.error('IPGeolocation API key is invalid or expired (401)');
                 return res.status(503).json({
@@ -99,7 +110,7 @@ app.get('/api/geolocation', async (req, res) => {
                     message: 'Invalid API credentials'
                 });
             }
-            throw new Error(`IPGeolocation API error: ${status}`);
+            throw new Error(`IPGeolocation API error: ${status} - ${responseText}`);
         }
 
         const data = await response.json();
