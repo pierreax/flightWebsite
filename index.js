@@ -111,8 +111,6 @@ app.get('/api/geolocation', async (req, res) => {
 
         const data = await response.json();
 
-        console.log(`Geolocation successful for IP. Currency: ${data.currency?.code}, Coords: ${data.latitude}, ${data.longitude}`);
-
         // Only send back what's needed to reduce exposure
         // Ensure coordinates are numbers, not strings
         res.json({
@@ -184,7 +182,6 @@ app.post('/api/getClosestAirport', async (req, res) => {
         // Check if any locations were found
         if (data.locations && data.locations.length > 0) {
             const nearestAirport = data.locations[0];
-            console.log('Closest Airport:', nearestAirport);
 
             // Structure the response data as needed
             const responseData = {
@@ -201,7 +198,6 @@ app.post('/api/getClosestAirport', async (req, res) => {
 
             return res.json(responseData);
         } else {
-            console.log('No airport found near this location.');
             return res.status(404).json({ error: 'No nearby airports found.' });
         }
     } catch (error) {
@@ -234,18 +230,12 @@ app.get('/api/airport-suggestions', async (req, res) => {
     }
 
     try {
-        // Log the search term
-        console.log(`Searching for term: "${term}" with limit: ${limit || 10}`);
-
         // Check the cache first
         const cacheKey = `${term}:${limit || 10}`;
         const cachedData = cache.get(cacheKey);
 
         if (cachedData) {
-            console.log('Cache hit: Returning cached data');
             return res.json({ source: 'Cached', data: cachedData }); // Include 'source' in the response
-        } else {
-            console.log('Cache miss: Fetching data from Tequila API');
         }
 
         const apiKey = process.env.TEQUILA_API_KEY;
@@ -281,12 +271,8 @@ app.get('/api/airport-suggestions', async (req, res) => {
 
         const data = await tequilaResponse.json();
 
-        // Log the full response from Tequila API
-        console.log('Tequila API Response:', JSON.stringify(data, null, 2));
-
         // Cache the response data with a 30-day TTL
         cache.set(cacheKey, data);
-        console.log('Cache updated: Data stored in cache');
 
         // Return the full response to the frontend, including the source information
         res.json({ source: 'Fetched', data: data });
@@ -440,9 +426,6 @@ app.post('/api/sendEmail', async (req, res) => {
         // Get access token for Microsoft Graph API
         const token = await getAccessToken();
 
-        // Log the token to verify it
-        console.log("Access Token:", token);
-
         // Send the email via Microsoft Graph API
         const result = await sendEmail(subject, body, recipient_email, token);
 
@@ -478,7 +461,6 @@ async function getAccessToken() {
     }
 
     const data = await response.json();
-    console.log('Access Token:', data.access_token); // Log to verify the token
     return data.access_token;
 }
 
