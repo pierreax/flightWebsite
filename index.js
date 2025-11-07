@@ -89,37 +89,36 @@ app.get('/api/geolocation', async (req, res) => {
         // Clean and validate the API key (remove any whitespace)
         const cleanedApiKey = apiKey.trim();
 
-        // Log key length and first few chars for debugging (never log full key!)
-        console.log(`IPGeolocation API key found: ${cleanedApiKey.length} chars, starts with: ${cleanedApiKey.substring(0, 10)}...`);
-
         const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${cleanedApiKey}`;
-        console.log(`Making request to: https://api.ipgeolocation.io/ipgeo?apiKey=${cleanedApiKey.substring(0, 10)}...`);
 
         const response = await fetchWithTimeout(url);
 
         if (!response.ok) {
             const status = response.status;
             const responseText = await response.text();
-            console.error(`IPGeolocation API error: ${status}`);
-            console.error(`Response body: ${responseText}`);
 
             if (status === 401) {
-                console.error('IPGeolocation API key is invalid or expired (401)');
+                console.error('IPGeolocation API: Invalid or expired API key (401)');
                 return res.status(503).json({
                     error: 'Geolocation service unavailable',
                     message: 'Invalid API credentials'
                 });
             }
-            throw new Error(`IPGeolocation API error: ${status} - ${responseText}`);
+
+            console.error(`IPGeolocation API error ${status}: ${responseText}`);
+            throw new Error(`IPGeolocation API error: ${status}`);
         }
 
         const data = await response.json();
 
+        console.log(`Geolocation successful for IP. Currency: ${data.currency?.code}, Coords: ${data.latitude}, ${data.longitude}`);
+
         // Only send back what's needed to reduce exposure
+        // Ensure coordinates are numbers, not strings
         res.json({
             currency: data.currency,
-            latitude: data.latitude,
-            longitude: data.longitude
+            latitude: parseFloat(data.latitude),
+            longitude: parseFloat(data.longitude)
         });
     } catch (error) {
         console.error('Geolocation error:', error);
