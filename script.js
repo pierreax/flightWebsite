@@ -448,7 +448,9 @@ $(document).ready(function () {
         try {
             const response = await fetch(API_ENDPOINTS.geolocation);
             if (!response.ok) {
-                throw new Error(`Failed to fetch IP Geolocation data: ${response.statusText}`);
+                // Geolocation is optional - fail silently if service unavailable
+                console.log('Geolocation service unavailable. Users will enter location manually.');
+                return;
             }
             const data = await response.json();
 
@@ -463,8 +465,8 @@ $(document).ready(function () {
             }
 
         } catch (error) {
-            console.error('Error getting location info:', error);
-            // Optionally, handle the error by setting default values or notifying the user
+            // Geolocation is optional - fail silently
+            console.log('Geolocation not available:', error.message);
         }
     };
 

@@ -8,7 +8,6 @@ const port = process.env.PORT || 8080;
 // Validate required environment variables at startup
 const requiredEnvVars = [
     'TEQUILA_API_KEY',
-    'IPGEOLOCATION_API_KEY',
     'SHEETY_API_URL',
     'SHEETY_TOKEN',
     'EMAIL_TENANT_ID',
@@ -16,10 +15,19 @@ const requiredEnvVars = [
     'EMAIL_CLIENT_SECRET'
 ];
 
+// Optional environment variables (features will be disabled if missing)
+const optionalEnvVars = ['IPGEOLOCATION_API_KEY'];
+
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 if (missingVars.length > 0) {
     console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
     process.exit(1);
+}
+
+// Log optional variables status
+const missingOptional = optionalEnvVars.filter(varName => !process.env[varName]);
+if (missingOptional.length > 0) {
+    console.warn(`Optional environment variables not set (features will be disabled): ${missingOptional.join(', ')}`);
 }
 
 // Middleware to parse JSON requests
@@ -71,8 +79,11 @@ app.get('/api/geolocation', async (req, res) => {
         const apiKey = process.env.IPGEOLOCATION_API_KEY;
 
         if (!apiKey) {
-            console.error('IPGeolocation API key is not set in environment variables.');
-            return res.status(500).json({ error: 'Server configuration error.' });
+            console.warn('IPGeolocation API key is not set. Geolocation feature disabled.');
+            return res.status(503).json({
+                error: 'Geolocation service unavailable',
+                message: 'API key not configured'
+            });
         }
 
         const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}`;
@@ -80,7 +91,15 @@ app.get('/api/geolocation', async (req, res) => {
         const response = await fetchWithTimeout(url);
 
         if (!response.ok) {
-            throw new Error(`IPGeolocation API error: ${response.status}`);
+            const status = response.status;
+            if (status === 401) {
+                console.error('IPGeolocation API key is invalid or expired (401)');
+                return res.status(503).json({
+                    error: 'Geolocation service unavailable',
+                    message: 'Invalid API credentials'
+                });
+            }
+            throw new Error(`IPGeolocation API error: ${status}`);
         }
 
         const data = await response.json();
@@ -93,7 +112,10 @@ app.get('/api/geolocation', async (req, res) => {
         });
     } catch (error) {
         console.error('Geolocation error:', error);
-        res.status(500).json({ error: 'Failed to fetch geolocation data' });
+        res.status(503).json({
+            error: 'Geolocation service unavailable',
+            message: error.message
+        });
     }
 });
 
