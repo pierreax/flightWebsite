@@ -300,7 +300,6 @@ input::placeholder {
     font-size: var(--font-size-xs);
     margin: 20px 0;
     padding: 16px;
-    background: var(--background-color);
     border-radius: var(--radius-md);
     gap: 8px;
 }
