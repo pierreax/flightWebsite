@@ -965,8 +965,8 @@ $(document).ready(function () {
         // Handle checkbox interactions
         SELECTORS.excludeAirlinesSelect.on('change', handleExcludedAirlinesChange);
 
-        // Toggle IATA codes
-        $('.switch-icon-container').on('click', switchIATACodes);
+        // Toggle IATA codes (support both old and new selectors)
+        $('.switch-icon-container, .swap-btn').on('click', switchIATACodes);
 
         // One-way trip checkbox change
         SELECTORS.oneWayTripCheckbox.on('change', handleOneWayTripChange);
@@ -979,6 +979,9 @@ $(document).ready(function () {
 
         // Airline mode switch change
         SELECTORS.airlineModeSwitch.on('change', handleAirlineModeSwitchChange);
+
+        // Currency change - update suffix display
+        SELECTORS.currencyInput.on('change', updateCurrencySuffix);
 
         // Help button tooltip toggle
         SELECTORS.helpBtn.on('click', toggleTooltip);
@@ -1006,6 +1009,16 @@ $(document).ready(function () {
         });
     };
 
+
+    /**
+     * Update the currency suffix display when currency changes.
+     */
+    const updateCurrencySuffix = () => {
+        const currencySuffix = $('#currencySuffix');
+        if (currencySuffix.length) {
+            currencySuffix.text(SELECTORS.currencyInput.val());
+        }
+    };
 
     /**
      * Handle the toggle of the advanced settings section.
@@ -1170,6 +1183,9 @@ $(document).ready(function () {
                 // Set the currency input based on the URL
                 SELECTORS.currencyInput.val(queryParams.currency).trigger('change');
             }
+
+            // Update currency suffix display
+            updateCurrencySuffix();
 
 
             // Check if email is already in the URL

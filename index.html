@@ -1,275 +1,367 @@
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Meta tags for character set and responsive layout -->
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flight Price Tracker | Robotize</title>
 
-        <!-- Page Title -->
-        <title>Automatic Flight Tracker</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
 
-        <!-- Google Fonts - Inter -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        <!-- Bootstrap CSS for core styling -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    
-        <!-- jQuery library (required by Bootstrap and some other libraries) -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-        <!-- jQuery UI for additional UI components like datepicker -->
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    
-        <!-- Flatpickr CSS and JS for custom date picker -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    
-        <!-- noUiSlider CSS and JS for range sliders -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
-        
-        <!-- wNumb library for number formatting (used with noUiSlider) -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
-    
-        <!-- Select2 CSS and JS for enhanced dropdowns -->
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
-        <!-- Custom CSS for additional styles -->
-        <link rel="stylesheet" href="styles.css">
-    
-        <!-- Bootstrap JS (includes popper.js) for modal functionality and interactive components -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-        <!-- Custom JavaScript for app-specific functionality -->
-        <script src="script.js"></script>
-    </head>
-    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- noUiSlider -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
+
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</head>
+
 <body>
-    <h1>Flight Price Robot</h1>
-    <h2>Enter your travel preferences and our robot will check daily for updated prices.</h2>
-    <h2>We will let you know as soon as we find a match.</h2>
-
-    <!-- Insert Link to https://www.robotize.no/destinations -->
-    <!--<p><a href="https://www.robotize.no/destinations" target="_blank" class="destinations-link">Need help finding your travel destination?</a></p>-->
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                </svg>
+            </div>
+            <h1>Flight Price Tracker</h1>
+            <p class="hero-subtitle">Set your travel preferences and let our robot monitor prices daily. We'll notify you when prices drop.</p>
+        </div>
+    </header>
 
     <!-- Main Form -->
-    <form id="sheetyForm">
+    <main class="form-container">
+        <form id="sheetyForm">
+            <!-- Loader -->
+            <div class="loader"></div>
 
-        <!-- Loader animation -->
-        <div class="loader"></div>
+            <!-- Route Section -->
+            <section class="form-section route-section">
+                <div class="route-inputs">
+                    <!-- From Field -->
+                    <div class="form-group iata-field">
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 2v4"/>
+                                <path d="m4.93 4.93 2.83 2.83"/>
+                                <path d="M2 12h4"/>
+                                <path d="m4.93 19.07 2.83-2.83"/>
+                                <path d="M12 18v4"/>
+                                <path d="m19.07 19.07-2.83-2.83"/>
+                                <path d="M18 12h4"/>
+                                <path d="m19.07 4.93-2.83 2.83"/>
+                            </svg>
+                        </div>
+                        <input type="text" id="iataCodeFrom" class="autocomplete-iata" placeholder="From where?">
+                        <datalist id="iataCodeFromList"></datalist>
+                        <span class="input-label">From</span>
+                    </div>
 
-        <!-- From Field with Icon -->
-        <div class="form-group iata-field">
-            <img src="airplaneLift.png" alt="From" class="airplane-icon">
-            <input type="text" id="iataCodeFrom" class="autocomplete-iata" placeholder="Where are you flying from?">
-            <datalist id="iataCodeFromList">
-                <!-- Options will be populated dynamically using JavaScript -->
-            </datalist>
-        </div>
+                    <!-- Swap Button -->
+                    <button type="button" class="swap-btn" aria-label="Swap destinations">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7 16V4m0 0L3 8m4-4l4 4"/>
+                            <path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                        </svg>
+                    </button>
 
-        <!-- Switch Icon, positioned to float above the select fields -->
-        <div class="switch-icon-container">
-            <img src="up-down.png" alt="Switch" class="switch-icon">
-        </div>
+                    <!-- To Field -->
+                    <div class="form-group iata-field">
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <input type="text" id="iataCodeTo" class="autocomplete-iata" placeholder="Where to?">
+                        <datalist id="iataCodeToList"></datalist>
+                        <span class="input-label">To</span>
+                    </div>
+                </div>
 
-        <!-- To Field with Icon -->
-        <div class="form-group iata-field">
-            <img src="airplaneLand.png" alt="To" class="airplane-icon">
-            <input type="text" id="iataCodeTo" class="autocomplete-iata" placeholder="Where are you flying to?">
-            <datalist id="iataCodeToList">
-                <!-- Options will be populated dynamically using JavaScript -->
-            </datalist>
-        </div>
+                <!-- Hidden switch elements for backward compatibility -->
+                <div class="switch-icon-container" style="display:none;">
+                    <img src="up-down.png" alt="Switch" class="switch-icon">
+                </div>
+            </section>
 
-        <!-- One-Way Trip, Flexible Dates and Direct flight Toggle Switch Group -->
-        <div class="form-group switches">
-            <!-- One-Way Trip Switch -->
-            <div>
-                <label for="oneWayTrip">One-Way Trip</label>
-                <label class="switch">
-                    <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            
-            <!-- Flexible Dates Switch -->
-            <div>
-                <label for="flexibleDates">+/- 1 day</label>
-                <label class="switch">
-                    <input type="checkbox" id="flexibleDates" name="flexibleDates">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-            
-            <!-- Direct Flight Switch -->
-            <div>
-                <label for="directFlight">Direct flights</label>
-                <label class="switch">
-                    <input type="checkbox" id="directFlight" name="directFlight">
-                    <span class="slider round"></span>
-                </label>
-            </div>
-        </div>
-
-        <!-- Date Field using Flatpickr -->
-        <div class="date-field">
-            <input type="text" id="dateField" placeholder="Select Dates" required>
-        </div>
-
-        <!-- Grouped input fields -->
-        <div class="input-group">
-            <!-- Stops Dropdown -->
-            <div class="form-group small-input-row">
-                <label for="maxStops" class="small-label">Stops (max)</label>
-                <select id="maxStops" name="maxStops" class="small-input" required>
-                    <option value="0">0</option>
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="">All</option>
-                </select>
-            </div>
-
-            <!-- Flight Duration Dropdown -->
-            <div class="form-group small-input-row">
-                <label for="maxFlightDuration" class="small-label">Duration</label>
-                <select id="maxFlightDuration" name="maxFlightDuration" class="small-input" required>
-                    <option value="2">2</option>
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="">All</option>
-                </select>
-            </div>
-
-            <!-- Passengers Dropdown -->
-            <div class="form-group small-input-row">
-                <label for="nbrPassengers" class="small-label">Passengers</label>
-                <select id="nbrPassengers" name="nbrPassengers" class="small-input" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
-            </div>
-
-            <!-- Currency Dropdown -->
-            <div class="form-group small-input-row">
-                <label for="currency" class="small-label">Currency</label>
-                <select id="currency" name="currency" class="small-input" required>
-                    <option value="NOK" selected>NOK</option>
-                    <option value="SEK">SEK</option>
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                    <option value="DKK">DKK</option>
-                </select>
-            </div>
-        </div>
-
-
-
-        <!-- Outbound Slider Options -->
-        <div id="outbound-timeRangeDisplay">Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span></div>
-        <div id="outbound-timeRangeSlider" class="time-slider"></div>
-
-        <!-- Inbound Slider Options -->
-        <div id="inbound-timeRangeDisplay">Inbound departure time: <span id="inboundTimeStartDisplay"></span> - <span id="inboundTimeEndDisplay"></span></div>
-        <div id="inbound-timeRangeSlider" class="time-slider"></div>
-
-        <!-- Suggest Price Button and Help Button -->
-        <button type="button" id="suggestPriceBtn">
-            1. Check availability
-            <!-- Help Button -->
-            <div id="helpBtn">?</div>
-        </button>
-        <!-- Tooltip -->
-        <div id="tooltip" style="display:none;">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
-
-        <!-- Advanced Settings Section -->
-        <div id="advancedSettingsToggle" role="button" tabindex="0">
-            <span class="toggle-text">Advanced Settings</span>
-            <span class="toggle-icon"></span>
-        </div>
-        <div id="advancedSettings" style="display:none;">
-            <div class="airline-selection-container">
-                <div class="mode-description" id="modeDescription">Select airlines to exclude from results</div>
-                <div class="segmented-control">
-                    <input type="checkbox" id="airlineModeSwitch" class="segmented-checkbox">
-                    <label for="airlineModeSwitch" class="segmented-label">
-                        <span class="segment segment-exclude">Exclude</span>
-                        <span class="segment segment-include">Include Only</span>
+            <!-- Quick Options -->
+            <section class="form-section options-section">
+                <div class="option-chips">
+                    <label class="chip">
+                        <input type="checkbox" id="oneWayTrip" name="oneWayTrip">
+                        <span class="chip-content">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14"/>
+                                <path d="m12 5 7 7-7 7"/>
+                            </svg>
+                            One-way
+                        </span>
+                    </label>
+                    <label class="chip">
+                        <input type="checkbox" id="flexibleDates" name="flexibleDates">
+                        <span class="chip-content">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                <line x1="16" x2="16" y1="2" y2="6"/>
+                                <line x1="8" x2="8" y1="2" y2="6"/>
+                                <line x1="3" x2="21" y1="10" y2="10"/>
+                            </svg>
+                            +/- 1 day
+                        </span>
+                    </label>
+                    <label class="chip">
+                        <input type="checkbox" id="directFlight" name="directFlight">
+                        <span class="chip-content">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+                            </svg>
+                            Direct only
+                        </span>
                     </label>
                 </div>
-                <!-- Airline Selection -->
-                <div class="form-group airline-select">
-                    <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple"></select>
+            </section>
+
+            <!-- Date Selection -->
+            <section class="form-section">
+                <div class="date-field">
+                    <div class="input-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                            <line x1="16" x2="16" y1="2" y2="6"/>
+                            <line x1="8" x2="8" y1="2" y2="6"/>
+                            <line x1="3" x2="21" y1="10" y2="10"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="dateField" placeholder="Select travel dates" required>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <!-- Price Limit Field and Label -->
-        <div class="form-group floating-label">
-            <label class="price-limit-label" for="maxPricePerPerson">Price limit per person:</label>
-            <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" required>
-        </div>
+            <!-- Filter Options -->
+            <section class="form-section filters-section">
+                <div class="filters-grid">
+                    <div class="filter-item">
+                        <label for="maxStops">Max stops</label>
+                        <select id="maxStops" name="maxStops" required>
+                            <option value="0">Direct</option>
+                            <option value="1" selected>1 stop</option>
+                            <option value="2">2 stops</option>
+                            <option value="3">3 stops</option>
+                            <option value="">Any</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="maxFlightDuration">Max duration</label>
+                        <select id="maxFlightDuration" name="maxFlightDuration" required>
+                            <option value="5">5 hours</option>
+                            <option value="10" selected>10 hours</option>
+                            <option value="15">15 hours</option>
+                            <option value="20">20 hours</option>
+                            <option value="">Any</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="nbrPassengers">Travelers</label>
+                        <select id="nbrPassengers" name="nbrPassengers" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="currency">Currency</label>
+                        <select id="currency" name="currency" required>
+                            <option value="NOK" selected>NOK</option>
+                            <option value="SEK">SEK</option>
+                            <option value="EUR">EUR</option>
+                            <option value="USD">USD</option>
+                            <option value="DKK">DKK</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
 
-        <!-- Email Field and Label -->
-        <div class="form-group floating-label">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
+            <!-- Time Sliders -->
+            <section class="form-section time-section">
+                <div class="time-slider-group">
+                    <div class="time-label" id="outbound-timeRangeDisplay">
+                        <span class="time-label-text">Departure time</span>
+                        <span class="time-value"><span id="outboundTimeStartDisplay">0:00</span> - <span id="outboundTimeEndDisplay">24:00</span></span>
+                    </div>
+                    <div id="outbound-timeRangeSlider" class="time-slider"></div>
+                </div>
+                <div class="time-slider-group">
+                    <div class="time-label" id="inbound-timeRangeDisplay">
+                        <span class="time-label-text">Return departure</span>
+                        <span class="time-value"><span id="inboundTimeStartDisplay">0:00</span> - <span id="inboundTimeEndDisplay">24:00</span></span>
+                    </div>
+                    <div id="inbound-timeRangeSlider" class="time-slider"></div>
+                </div>
+            </section>
 
-        <!-- Submit Button -->
-        <input type="submit" id="submitFormButton" value="2. Submit" disabled>
-    </form>
+            <!-- Check Availability Button -->
+            <section class="form-section">
+                <button type="button" id="suggestPriceBtn" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" x2="16.65" y1="21" y2="16.65"/>
+                    </svg>
+                    Check availability
+                </button>
+                <button type="button" id="helpBtn" class="help-btn" aria-label="Help">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" x2="12.01" y1="17" y2="17"/>
+                    </svg>
+                </button>
+                <div id="tooltip">Click to check available flights and get the current lowest price based on your preferences.</div>
+            </section>
 
-    <!-- Modal for Hotel Tracker Confirmation -->
+            <!-- Advanced Settings -->
+            <section class="form-section">
+                <button type="button" id="advancedSettingsToggle" class="advanced-toggle">
+                    <span class="toggle-text">Advanced filters</span>
+                    <span class="toggle-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </span>
+                </button>
+                <div id="advancedSettings">
+                    <div class="airline-selection-container">
+                        <p class="mode-description" id="modeDescription">Filter airlines from your results</p>
+                        <div class="segmented-control">
+                            <input type="checkbox" id="airlineModeSwitch" class="segmented-checkbox">
+                            <label for="airlineModeSwitch" class="segmented-label">
+                                <span class="segment segment-exclude">Exclude</span>
+                                <span class="segment segment-include">Include only</span>
+                            </label>
+                        </div>
+                        <div class="form-group airline-select">
+                            <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple"></select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Price & Email -->
+            <section class="form-section submit-section">
+                <div class="input-group-stack">
+                    <div class="form-group floating-label">
+                        <input type="text" id="maxPricePerPerson" name="maxPricePerPerson" placeholder=" " required>
+                        <label for="maxPricePerPerson">Maximum price per person</label>
+                        <span class="input-suffix" id="currencySuffix">NOK</span>
+                    </div>
+                    <div class="form-group floating-label">
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email">Email for notifications</label>
+                    </div>
+                </div>
+                <button type="submit" id="submitFormButton" class="btn-submit" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 2L11 13"/>
+                        <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+                    </svg>
+                    Start tracking
+                </button>
+            </section>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Powered by <a href="https://www.robotize.no" target="_blank">Robotize</a></p>
+    </footer>
+
+    <!-- Hotel Tracking Modal -->
     <div class="modal fade" id="hotelTrackingModal" tabindex="-1" aria-labelledby="hotelTrackingModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="hotelTrackingModalLabel">Thank you for your submission!</h5>
+                    <div class="modal-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h5 class="modal-title" id="hotelTrackingModalLabel">Tracking activated!</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Would you also like to track hotel prices?
+                    <p>Your flight price tracker is now active. Would you also like to track hotel prices for your destination?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="confirmHotelTracker">Yes</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No thanks</button>
+                    <button type="button" class="btn btn-primary" id="confirmHotelTracker">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        Track hotels too
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Thank You Confirmation -->
+    <!-- Thank You Modal -->
     <div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="thankYouModalLabel">Thank you for your submission!</h5>
+                    <div class="modal-icon success">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h5 class="modal-title" id="thankYouModalLabel">You're all set!</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Your submission has been received. We will notify you about flight prices.
+                    <p>We'll monitor flight prices and notify you when they match your criteria. Check your email for confirmation.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="closeThankYouModal">Ok</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="closeThankYouModal">Done</button>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 </body>
 </html>
