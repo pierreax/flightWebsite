@@ -195,21 +195,22 @@
         <div id="tooltip" style="display:none;">Click this button to check available flights and get the current lowest price (per person), based on your preferences.</div>
 
         <!-- Advanced Settings Section -->
-        <div id="advancedSettingsToggle" role="button" tabindex="0">Advanced Settings</div>
+        <div id="advancedSettingsToggle" role="button" tabindex="0">
+            <span class="toggle-text">Advanced Settings</span>
+            <span class="toggle-icon"></span>
+        </div>
         <div id="advancedSettings" style="display:none;">
             <div class="airline-selection-container">
-                <div class="switch-row">
-                    <div class="switch-label">Exclude Airlines</div>
-                    <div class="switch-container">
-                        <label class="switch">
-                            <input type="checkbox" id="airlineModeSwitch">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                    <div class="switch-label">Include only Airlines</div>
+                <div class="mode-description" id="modeDescription">Select airlines to exclude from results</div>
+                <div class="segmented-control">
+                    <input type="checkbox" id="airlineModeSwitch" class="segmented-checkbox">
+                    <label for="airlineModeSwitch" class="segmented-label">
+                        <span class="segment segment-exclude">Exclude</span>
+                        <span class="segment segment-include">Include Only</span>
+                    </label>
                 </div>
-                <!-- Airline Exclusion -->
-                <div class="form-group">
+                <!-- Airline Selection -->
+                <div class="form-group airline-select">
                     <select id="excludeAirlines" name="excludeAirlines[]" multiple="multiple"></select>
                 </div>
             </div>
