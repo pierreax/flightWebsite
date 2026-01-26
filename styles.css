@@ -1,47 +1,68 @@
-/* Define Modern Color Variables */
+/* Modern Design System - Flight Price Robot */
 :root {
-    /* Base Colors */
-    --background-color: #F2F2F2; /* Very Light Gray background */
-    --surface-color: #FFFFFF; /* White surfaces */
-    --text-color: #333333; /* Dark Gray text */
-    --border-color: #E0E0E0; /* Light Gray borders */
+    /* Base Colors - Refined neutral palette */
+    --background-color: #f8fafc;
+    --surface-color: #ffffff;
+    --surface-elevated: #ffffff;
+    --text-color: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
 
-    /* Primary Palette */
-    --primary-color: #2D9CDB; /* Deep Blue */
-    --primary-hover: #2381C3; /* Slightly darker Deep Blue for hover */
-    --secondary-color: #56CCF2; /* Soft Teal */
-    --secondary-hover: #3FA3D3; /* Slightly darker Soft Teal for hover */
+    /* Primary Palette - Modern blue-violet gradient */
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --primary-light: #eef2ff;
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+
+    /* Secondary Palette - Teal accent */
+    --secondary-color: #14b8a6;
+    --secondary-hover: #0d9488;
+    --secondary-light: #f0fdfa;
+    --secondary-gradient: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
 
     /* Accent Colors */
-    --accent-color: #F2994A; /* Warm Orange */
-    --error-color: #FF6B6B; /* Coral Red */
+    --accent-color: #f59e0b;
+    --accent-hover: #d97706;
+    --error-color: #ef4444;
+    --success-color: #22c55e;
 
-    /* Loader Colors */
-    --loader-border: #EEEEEE; /* Very Light Gray */
-    --loader-bg: var(--primary-color); /* Deep Blue */
+    /* Shadows - Layered depth system */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 40px -10px rgba(99, 102, 241, 0.3);
+
+    /* Loader */
+    --loader-border: #e2e8f0;
+    --loader-bg: var(--primary-color);
 
     /* Slider Colors */
-    --slider-bg: #BDBDBD; /* Medium Gray */
-    --slider-active-bg: var(--secondary-color); /* Soft Teal */
+    --slider-bg: #cbd5e1;
+    --slider-active-bg: var(--primary-color);
 
-    /* Table Header */
-    --tableheader-color: var(--secondary-color); /* Soft Teal */
+    /* Cards */
+    --card-shadow: var(--shadow-md);
+    --card-hover-shadow: var(--shadow-xl);
 
-    /* No Results Message */
-    --no-results-bg: #F8D7DA; /* Light Coral */
-    --no-results-text: #721C24; /* Dark Coral */
+    /* Design Tokens */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+    --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Checkbox */
-    --checkbox-primary: var(--primary-color); /* Deep Blue */
-
-    /* Additional Variables */
-    --card-shadow: rgba(0, 0, 0, 0.1);
-    --card-hover-shadow: rgba(0, 0, 0, 0.2);
-    --checkbox-size: 20px;
-    --transition-duration: 0.3s;
-    --border-radius: 8px;
-    --font-size-small: 12px;
-    --font-size-medium: 14px;
+    /* Typography */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
 }
 
 /* Fonts */
@@ -52,266 +73,270 @@
     font-style: normal;
 }
 
-/* Global styles */
-body {
-    font-family: 'Avenir Light', sans-serif;
-    margin: 20px;
-    background-color: var(--background-color);
-    box-sizing: border-box; /* Ensure box-sizing is applied to the body */
+/* Global Reset & Base Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
-h1, h2 {
+body {
+    font-family: 'Inter', 'Avenir Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--background-color);
+    background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(139, 92, 246, 0.05), transparent);
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px 16px;
+    color: var(--text-color);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3 {
     color: var(--text-color);
     margin: 0;
     text-align: center;
-    padding: 10px;
-    font-weight: normal;
+    font-weight: 600;
+    letter-spacing: -0.025em;
 }
 
 h1 {
-    font-size: 1.2em;
-    margin-top: 20px;
+    font-size: var(--font-size-2xl);
+    margin-top: 24px;
+    margin-bottom: 8px;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 h2 {
-    font-size: 1.0em;
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    font-weight: 400;
+    padding: 4px 16px;
+    max-width: 400px;
+    margin: 0 auto 8px;
 }
 
-/* Styles for the clickable link */
+/* Destinations Link */
 a.destinations-link {
     display: block;
     text-align: center;
-    margin: auto;
-    padding: 10px;
-    max-width: 300px;
-    background-color: var(--primary-color);
-    color: var(--surface-color);
+    margin: 16px auto 24px;
+    padding: 12px 24px;
+    max-width: 320px;
+    background: var(--secondary-gradient);
+    color: white;
     text-decoration: none;
-    font-family: 'Avenir Light', sans-serif;
-    font-size: 14px;
-    border-radius: 5px;
-    transition: background-color var(--transition-duration), transform 0.2s;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-md);
 }
 
-a.destinations-link:hover,
-a.destinations-link:active {
-    background-color: var(--primary-hover);
+a.destinations-link:hover {
     transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), 0 4px 20px -4px rgba(20, 184, 166, 0.5);
+    color: white;
 }
 
-#maxPricePerPerson {
-    margin-top: 5px;
+/* Form Styles */
+form {
+    position: relative;
+    max-width: 360px;
+    margin: 24px auto;
+    padding: 32px 28px;
+    border-radius: var(--radius-xl);
+    background: var(--surface-color);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    border: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
 }
 
-/* IATA FIELD DROPDOWNS */
-
-/* Custom styles for the autocomplete dropdown */
-.ui-autocomplete {
-    background-color: var(--background-color); /* Matches form background */
-    border: 1px solid var(--border-color); /* Consistent with form input borders */
-    border-radius: 5px; /* Match input border radius */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow to match the form */
-    max-height: 200px; /* Limit the height of the dropdown */
-    overflow-y: auto; /* Enable scrolling if there are too many results */
-    font-family: 'Avenir Light', sans-serif; /* Consistent font */
-    color: var(--text-color); /* Text color */
-    z-index: 9999; /* Ensure it's above other content */
+/* Form Groups */
+.form-group {
+    text-align: center;
+    position: relative;
+    margin-bottom: 16px;
 }
 
-/* Style for individual items in the dropdown */
-.ui-autocomplete li {
-    padding: 8px 10px;
+/* Input and Select Fields */
+input, select {
+    width: 100%;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-color);
+    background: var(--surface-color);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    color: var(--text-color);
+    text-align: center;
+    transition: var(--transition-normal);
+    outline: none;
+}
+
+input:hover, select:hover {
+    border-color: #cbd5e1;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+input::placeholder {
+    color: var(--text-muted);
+}
+
+.form-control:focus {
+    background: var(--surface-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* IATA Field Styling */
+.form-group.iata-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.airplane-icon {
+    position: absolute;
+    left: 12px;
+    z-index: 3;
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+}
+
+#iataCodeTo, #iataCodeFrom {
+    text-align: center;
+    font-size: var(--font-size-sm);
+    padding-left: 40px;
+}
+
+/* Switch Icon Container */
+.switch-icon-container {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    right: 15%;
+    transform: translateX(50%) translateY(-50%);
+    z-index: 2;
+    top: 60px;
+}
+
+.switch-icon {
     cursor: pointer;
-    font-size: 10px; /* Adjust font size for readability */
+    width: 24px;
+    height: auto;
+    opacity: 0.5;
+    transition: var(--transition-fast);
+    padding: 4px;
+    border-radius: 50%;
+    background: var(--surface-color);
+    box-shadow: var(--shadow-sm);
 }
 
-/* Change the background when hovering over an item */
-.ui-autocomplete li:hover {
-    background-color: var(--primary-hover); /* Accent color on hover */
-    color: var(--surface-color); /* Ensure text is readable on hover */
+.switch-icon:hover {
+    opacity: 1;
+    background: var(--primary-light);
 }
 
-/* Style the highlighted item when selected */
+/* Autocomplete Dropdown */
+.ui-autocomplete {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: inherit;
+    color: var(--text-color);
+    z-index: 9999;
+}
+
+.ui-autocomplete li {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    transition: var(--transition-fast);
+}
+
+.ui-autocomplete li:hover,
 .ui-state-focus {
-    background-color: var(--primary-color); /* Matches button background */
-    color: var(--surface-color); /* Ensure text is visible on hover */
+    background-color: var(--primary-light);
+    color: var(--primary-color);
 }
 
-/* Style the scrollbar */
 .ui-autocomplete::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .ui-autocomplete::-webkit-scrollbar-thumb {
-    background-color: var(--border-color); /* Same color as borders */
-    border-radius: 4px;
+    background-color: var(--border-color);
+    border-radius: 3px;
 }
 
 .ui-autocomplete::-webkit-scrollbar-track {
-    background-color: var(--background-color); /* Matches the input background */
+    background-color: var(--background-color);
 }
 
-/* Form styles */
-form {
-    position: relative;
-    max-width: 300px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background: var(--surface-color);
-    display: flex;
-    flex-direction: column; /* Ensure form elements stack vertically */
-    box-sizing: border-box; /* Ensure box-sizing is applied to the form */
-}
-
-/* Wrapper styles */
-.input-wrapper {
-    position: relative;
-    margin-bottom: 20px; /* Space between fields */
-}
-
-/* Input and select fields */
-input, select {
-    width: 100%;
-    padding: 12px;
-    box-sizing: border-box;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid var(--border-color);
-    background: var(--surface-color);
-    font-family: 'Avenir Light', sans-serif;
-    font-size: 14px; /* Adjust font size */
-    color: var(--text-color);
-    text-align: center;
-}
-
-.form-control, .form-control:focus {
-    background: var(--surface-color);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(45, 156, 219, 0.2); /* Deep Blue shadow */
-}
-
-/* Ensure input-group stays in one row and adjusts spacing */
-.input-group {
-    display: flex;
-    flex-wrap: nowrap; /* Prevent wrapping to the next line */
-    gap: 5px; /* Increased gap for better spacing */
-    width: 100%; /* Full width of the form */
-    margin-top: 20px;
-    box-sizing: border-box;
-}
-
-.input-group .form-group.small-input-row {
-    flex: 0 0 24%;
-    max-width: 24%;
-    min-width: 0;
-    position: relative;
-}
-
-.input-group .form-group.small-input-row select {
-    padding: 8px 6px;
-    font-size: 12px;
-    text-align: center;
-}
-
-
-
-.input-group .input-wrapper {
-    flex: 1; /* Each input-wrapper will take equal space */
-    min-width: 0; /* Prevent items from exceeding their container */
-}
-
-.input-group select {
-    width: 100%; /* Ensure dropdowns fill the width of their container */
-}
-
-/* Floating label styles */
-.floating-label {
-    position: relative;
-    color: var(--text-color);
-}
-
-.floating-label input,
-.floating-label select {
-    border: 1px solid var(--border-color);
-    padding: 10px;
-    width: 100%;
-    background: var(--surface-color);
-}
-
-.floating-label label {
-    position: absolute;
-    pointer-events: none;
-    left: 10px;
-    top: 8px; /* Adjust position for unfocused state */
-    transition: 0.2s ease all;
-    color: var(--text-color);
-    padding: 0px;
-    font-size: 6px; /* Adjust font size for initial state */
-}
-
-/* 1. Stack labels above dropdowns within .input-group */
-.input-group .form-group.small-input-row {
-    display: flex;
-    flex-direction: column; /* Stack label above select */
-    margin-bottom: 15px;    /* Space between form groups */
-}
-
-/* 2. Style the labels */
-.input-group .form-group.small-input-row label.small-label {
-    margin-bottom: 5px;       /* Space between label and dropdown */
-    font-size: 8px;          /* Standard font size for labels */
-    color: var(--text-color); /* Consistent label color */
-}
-
-/* 3. Style the select elements */
-.input-group .form-group.small-input-row select.small-input {
-    padding: 8px 6px;          /* Smaller padding for compactness */
-    font-size: 12px;           /* Smaller font size */
-    text-align: center;        /* Center text within dropdown */
-    border: 1px solid var(--border-color); /* Consistent border */
-    border-radius: 5px;        /* Rounded corners */
-    background: var(--surface-color); /* Background color */
-    color: var(--text-color);  /* Text color */
-}
-
-
-
-/* Centering switch labels and switches */
+/* Toggle Switches Section */
 .form-group.switches {
     display: flex;
-    align-items: center; /* Centers items vertically in the container */
-    font-size: 10px; /* Adjust font size for better readability */
-    margin-bottom: 12px;
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+    gap: 8px;
 }
 
 .form-group.switches > div {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centers the content (both label and switch) vertically */
-    width: 100%; /* Ensures the div takes up the full width of its parent */
+    align-items: center;
+    flex: 1;
 }
 
+.form-group.switches label:not(.switch) {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+/* Modern Switch */
 .switch {
     position: relative;
     display: inline-block;
-    width: 40px; /* Width of the switch */
-    height: 20px; /* Height of the switch */
-    margin: 5px 0;
-    background-color: var(--slider-bg); /* Background for the switch */
-    border-radius: 24px; /* Fully rounded corners */
-    transition: background-color var(--transition-duration);
+    width: 44px;
+    height: 24px;
+    background-color: var(--slider-bg);
+    border-radius: 24px;
+    transition: var(--transition-normal);
+    cursor: pointer;
 }
 
-/* Hide default HTML checkbox */
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* The slider */
 .switch .slider {
     position: absolute;
     cursor: pointer;
@@ -320,340 +345,260 @@ input, select {
     right: 0;
     bottom: 0;
     background-color: var(--slider-bg);
-    transition: .4s;
-    border-radius: 24px; /* Fully rounded corners for the slider */
+    transition: var(--transition-normal);
+    border-radius: 24px;
 }
 
 .switch .slider:before {
     position: absolute;
     content: "";
-    height: 20px; /* Height of the circle inside the slider */
-    width: 20px; /* Width of the circle inside the slider */
-    left: 0px;
-    background-color: var(--surface-color);
-    transition: .4s;
-    border-radius: 50%; /* Circular shape for the slider */
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: var(--transition-normal);
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm);
 }
 
-/* Change background when checked */
 .switch input:checked + .slider {
-    background-color: var(--slider-active-bg) !important; /* Color when the switch is active/checked */
+    background: var(--primary-gradient) !important;
 }
 
 .switch input:checked + .slider:before {
-    transform: translateX(20px); /* Move the circle to the right on check */
+    transform: translateX(20px);
 }
 
-/* Focus styles for accessibility */
 .switch input:focus + .slider {
-    box-shadow: 0 0 1px var(--slider-active-bg); /* Optional: add a box-shadow when the switch is focused */
+    box-shadow: 0 0 0 4px var(--primary-light);
 }
 
-/* Airplane icon styles */
-.airplane-icon {
-    position: absolute;
-    left: 10px; /* Adjust based on your specific spacing requirements */
-    z-index: 3; /* Ensures icon is above the select box */
-    width: 24px; /* Specify width for consistency */
-    height: 24px; /* Maintain aspect ratio */
-}
-
-.form-group.iata-field {
-    position: relative; /* Needed for absolute positioning of icons */
+/* Input Group - Small Dropdowns */
+.input-group {
     display: flex;
-    align-items: center;
-    width: 100%; /* Full width of its container */
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100%;
+    margin: 16px 0;
 }
 
-#iataCodeTo, #iataCodeFrom {
+.input-group .form-group.small-input-row {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+.input-group .form-group.small-input-row label.small-label {
+    margin-bottom: 6px;
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.input-group .form-group.small-input-row select.small-input {
+    padding: 10px 8px;
+    font-size: var(--font-size-xs);
     text-align: center;
-    font-size: 10px; /* Adjust font size for better visibility */
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--surface-color);
+    color: var(--text-color);
+    transition: var(--transition-normal);
 }
 
-/* Adjust the switch icon container */
-.switch-icon-container {
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    right: 15%; /* Positions the icon exactly between the two fields */
-    transform: translateX(50%) translateY(-50%); /* Adjust horizontally and vertically */
-    z-index: 2; /* Ensures the icon is clickable */
-    top: 60px; /* Adjust based on your layout */
+.input-group .form-group.small-input-row select.small-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-.switch-icon {
-    cursor: pointer;
-    width: 20px; /* Adjust based on your icon's size */
-    height: auto;
-    left: 10px; /* Adjust as necessary, depending on padding */
-}
-
-/* Ensure the airplane icons and selects fill their containers without additional space for the switch icon */
-.airplane-icon, .iata-field select {
-    max-width: calc(100% - 30px); /* Adjust the width to account for the icon */
-}
-
-/* Specific adjustments to ensure layout does not break */
-.iata-field:first-child {
-    margin-right: 20px; /* Adds some space between the fields */
-}
-
-.iata-field:last-child {
-    margin-left: 20px; /* Adjust if needed to balance the layout */
-}
-
-/* Ensure the select fields and airplane icons fill the form */
-.iata-field select,
-.iata-field .airplane-icon {
-    max-width: calc(100% - 20px); /* Adjust width considering the switch icon width */
-    flex-grow: 1;
-}
-
-/* Extra padding above the switches */
-.switches {
-    padding-top: 10px;
-}
-
+/* Time Range Display */
 #inbound-timeRangeDisplay,
 #outbound-timeRangeDisplay {
-    font-size: 12px;
-    font-family: 'Avenir Light', sans-serif;
-    text-align: center; /* Center the text */
-    width: 100%; /* Ensure the divs take up the full width */
-    margin: 10px 0; /* Add some margin for better spacing */
+    font-size: var(--font-size-xs);
+    font-family: inherit;
+    text-align: center;
+    width: 100%;
+    margin: 12px 0 8px;
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
-/* Make sure the sliders are full width within the form */
+/* Time Slider */
 .time-slider {
-    margin: 0 0 20px 0; /* Add some margin below the slider */
-    padding: 0 10px; /* Padding to prevent the handles from being cut off on the sides */
+    margin: 0 0 24px 0;
+    padding: 0 8px;
 }
 
-/* Handle styles with !important to ensure override */
+/* noUiSlider Styling */
+.noUi-target {
+    background: var(--border-color) !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+    height: 6px !important;
+}
+
+.noUi-base {
+    background-color: transparent !important;
+}
+
+.noUi-connect {
+    background: var(--primary-gradient) !important;
+    border-radius: 8px !important;
+}
+
 .noUi-handle {
-    border-radius: 50% !important; /* Makes the handle circular */
-    background-color: var(--primary-color) !important; /* Use the primary color for consistency */
-    border: none !important; /* Removes default border */
-    box-shadow: 0 0 8px rgba(0,0,0,0.3) !important; /* Adds a shadow for a more lifted look */
-    cursor: pointer !important; /* Changes cursor to pointer to indicate it's draggable */
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+    background: white !important;
+    border: 2px solid var(--primary-color) !important;
+    box-shadow: var(--shadow-md) !important;
+    cursor: pointer !important;
+    top: -8px !important;
 }
 
-.noUi-handle:after, .noUi-handle:before {
-    content: "";
-    display: block;
-    position: absolute;
-    height: 14px;
-    width: 1px;
-    left: 14px;
-    background-color: var(--primary-color) !important; /* Use the primary color for consistency */
-    top: 6px;
+.noUi-handle:before,
+.noUi-handle:after {
+    display: none !important;
 }
 
 .noUi-horizontal .noUi-handle-lower {
-    width: 25px !important;
-    height: 21px !important;
     right: -10px !important;
-    top: -3px !important;
 }
 
 .noUi-horizontal .noUi-handle-upper {
-    width: 25px !important;
-    height: 21px !important;
-    right: -16px !important;
-    top: -3px !important;
+    right: -10px !important;
 }
 
-/* Touch area styles */
+.noUi-handle:hover {
+    transform: scale(1.1);
+}
+
+.noUi-handle:focus {
+    outline: none;
+    box-shadow: var(--shadow-md), 0 0 0 4px var(--primary-light) !important;
+}
+
 .noUi-touch-area {
-    cursor: pointer !important; /* Ensures the cursor changes to pointer in the touch area */
+    cursor: pointer !important;
 }
 
-/* Slider background */
-.noUi-base {
-    background-color: var(--slider-bg) !important; /* Background color of the slider */
+/* Floating Labels */
+.floating-label {
+    position: relative;
+    margin-bottom: 16px;
 }
 
-/* Connect bar styles */
-.noUi-connect {
-    background-color: var(--background-color) !important; /* Color of the active (selected) range */
+.floating-label label {
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--surface-color);
+    padding: 0 6px;
+    pointer-events: none;
+    z-index: 1;
 }
 
-.noUi-target {
-    background: none !important;
-}
-
-/* Add flexbox alignment to switch-row in the Advanced Settings */
-.switch-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Align items with space between */
-    gap: 10px; /* Add gap to space the labels and switches */
-}
-
-/* Ensure the switch labels are aligned with the switches */
-.switch-label {
-    font-size: 8px;
-    color: var(--text-color);
-    text-align: center;
-    flex-grow: 1; /* Ensures labels are evenly spaced */
-    margin-top: 5px;
-}
-
-.form-group {
-    text-align: center; /* Center the select dropdown if desired */
-    position: relative; /* Needed for positioning the switch icon absolutely */
-}
-
-/* Submit button styles */
-input[type="submit"] {
-    background-color: var(--primary-color);
-    color: var(--surface-color);
-    padding: 10px;
-    border: none;
-    margin-top: 12px;
-    cursor: pointer;
-    transition: background-color var(--transition-duration), transform 0.2s;
-    border-radius: 5px;
-    text-align: center;
-    font-family: 'Avenir Light', sans-serif;
-    font-weight: normal; /* Ensure both buttons have normal text weight */
-}
-
-/* Disabled button styles */
-#submitFormButton:disabled {
-    background-color: var(--border-color); /* Light Gray */
-    color: #6C757D; /* Darker Gray */
-    cursor: not-allowed; /* Cursor to indicate the button is not clickable */
-}
-
-input[type="submit"]:hover,
-input[type="submit"]:active {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-}
-
-/* Suggest price button styles */
-#suggestPriceBtn {
-    position: relative; /* Make this a relative container for absolute positioning inside */
-    background-color: var(--primary-color);
-    color: var(--surface-color);
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    transition: background-color var(--transition-duration), transform 0.2s;
-    border-radius: 5px;
-    font-family: 'Avenir Light', sans-serif;
+.floating-label input,
+.floating-label select {
     width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-weight: normal; /* Ensure both buttons have normal text weight */
+    padding: 14px 16px;
 }
 
-#suggestPriceBtn:hover,
-#suggestPriceBtn:active {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
+#maxPricePerPerson {
+    margin-top: 8px;
 }
 
-/* Label for advanced settings toggle */
-#advancedSettingsToggle {
-    background-color: transparent; /* Remove background color for a label-like appearance */
-    color: var(--text-color);
+/* Buttons */
+#suggestPriceBtn {
+    position: relative;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 14px 24px;
+    border: none;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    font-family: 'Avenir Light', sans-serif;
-    font-size: 8px; /* Adjust font size for visibility */
-    display: inline-flex; /* Use inline-flex to keep label and symbol in the same line */
-    align-items: center;
-    justify-content: center;
-    transition: color var(--transition-duration);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    width: 100%;
+    margin: 16px 0;
+    transition: var(--transition-normal);
+    overflow: hidden;
 }
 
-/* Icon before the text */
-#advancedSettingsToggle::before {
-    content: "+"; /* "+" icon by default */
-    margin-right: 5px; /* Space between icon and text */
-    font-size: 8px; /* Icon size to match the text */
-    transition: transform 0.2s; /* Smooth transition for rotation */
+#suggestPriceBtn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    opacity: 0;
+    transition: var(--transition-fast);
 }
 
-/* Rotate icon when expanded */
-#advancedSettingsToggle.expanded::before {
-    content: "\2212"; /* "−" icon for expanded state */
+#suggestPriceBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), 0 4px 20px -4px rgba(99, 102, 241, 0.5);
 }
 
-/* Select2 container and selections styles */
-.select2-container--default .select2-selection--multiple {
-    background-color: var(--surface-color) !important; /* Match with your form's background color */
-    border: 1px solid var(--border-color) !important; /* Match with your form's border color */
-    border-radius: 4px !important; /* Optional: match with your form's border-radius */
+#suggestPriceBtn:hover::before {
+    opacity: 1;
 }
 
-/* Adjust the height of the selection container to eliminate white space */
-.select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    padding: 4px 8px !important; /* Adjust padding to ensure content fits nicely */
-    line-height: 1.5 !important; /* Adjust line height for better visual */
+input[type="submit"] {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 14px 24px;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    width: 100%;
+    margin-top: 8px;
+    transition: var(--transition-normal);
 }
 
-/* Style for the search input within the selection */
-.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
-    background-color: var(--surface-color) !important; /* Ensure background matches */
-    border: none !important; /* Remove any default border */
-    font-family: 'Avenir Light', sans-serif; /* Optional: adjust font-family */
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), 0 4px 20px -4px rgba(99, 102, 241, 0.5);
 }
 
-/* Placeholder color adjustment for consistency */
-.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field::placeholder {
-    color: var(--text-color) !important; /* Optional: adjust placeholder text color */
+#submitFormButton:disabled {
+    background: var(--border-color);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
-/* When focusing on the search field, remove the outline or adjust as necessary */
-.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field:focus {
-    outline: none !important; /* Remove outline */
-    border: none !important; /* Ensure no border appears */
-}
-
-/* Loader animation styles */
-.loader {
-    display: none; /* Hide loader initially */
-    position: absolute; /* Position absolute relative to the form */
-    top: 50%; /* Center vertically in the form */
-    left: 50%; /* Center horizontally in the form */
-    transform: translate(-50%, -50%); /* Adjust the positioning correctly */
-    z-index: 1000; /* Make sure it's above other elements */
-    border: 4px solid var(--loader-border);
-    border-radius: 50%;
-    border-top: 4px solid var(--loader-bg);
-    width: 30px;
-    height: 30px;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
-    animation: spin 2s linear infinite;
-}
-
-/* Keyframes for spinner */
-@-webkit-keyframes spin {
-   0% { -webkit-transform: rotate(0deg); }
-   100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-   0% { transform: rotate(0deg); }
-   100% { transform: rotate(360deg); }
-}
-
-/* Help button and tooltip styles */
+/* Help Button */
 #helpBtn {
     position: absolute;
-    top: 5px; /* Adjust as needed */
-    right: 5px; /* Adjust as needed */
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
     width: 20px;
     height: 20px;
     line-height: 20px;
     text-align: center;
     border-radius: 50%;
-    background-color: var(--primary-color);
-    color: var(--surface-color);
-    font-size: 14px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 12px;
     cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+#helpBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 #tooltip {
@@ -661,139 +606,382 @@ input[type="submit"]:active {
     position: absolute;
     background-color: var(--surface-color);
     border: 1px solid var(--border-color);
-    padding: 5px;
-    border-radius: 5px;
-    width: 200px; /* Adjust as needed */
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    width: 220px;
     z-index: 1000;
-    margin-left: 50px; /* Position to the right of the help button */
-    margin-top: 450px; /* Position aligned with the help button */
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    box-shadow: var(--shadow-lg);
+    right: 0;
+    top: 100%;
+    margin-top: 8px;
+    line-height: 1.5;
 }
 
-/* Increased specificity for disabled input fields */
+/* Advanced Settings */
+#advancedSettingsToggle {
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: var(--font-size-xs);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    width: 100%;
+    font-weight: 500;
+}
+
+#advancedSettingsToggle:hover {
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+#advancedSettingsToggle::before {
+    content: "+";
+    margin-right: 6px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--border-color);
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+#advancedSettingsToggle.expanded::before {
+    content: "\2212";
+    background: var(--primary-color);
+    color: white;
+}
+
+#advancedSettings {
+    margin-top: 12px;
+    padding: 16px;
+    background: var(--background-color);
+    border-radius: var(--radius-md);
+}
+
+/* Switch Row in Advanced Settings */
+.switch-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.switch-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    text-align: center;
+    flex: 1;
+    font-weight: 500;
+}
+
+/* Select2 Styling */
+.select2-container--default .select2-selection--multiple {
+    background-color: var(--surface-color) !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    min-height: 44px !important;
+    transition: var(--transition-normal);
+}
+
+.select2-container--default .select2-selection--multiple:hover {
+    border-color: #cbd5e1 !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 4px var(--primary-light) !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+    padding: 4px 8px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background: var(--primary-light) !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--primary-color) !important;
+    font-size: var(--font-size-xs) !important;
+    padding: 4px 8px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+    color: var(--primary-color) !important;
+    margin-right: 4px !important;
+}
+
+.select2-container--default .select2-search--inline .select2-search__field {
+    background-color: transparent !important;
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+}
+
+.select2-container--default .select2-search--inline .select2-search__field::placeholder {
+    color: var(--text-muted) !important;
+}
+
+.select2-dropdown {
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.select2-results__option--highlighted {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Disabled Input */
 form .form-group .disabled-input {
-    background-color: var(--slider-bg) !important; /* Light gray for background */
-    color: #9e9e9e !important; /* Dimmed text color */
+    background-color: var(--border-light) !important;
+    color: var(--text-muted) !important;
+    cursor: not-allowed;
+}
+
+/* Loader Animation */
+.loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--loader-border);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 /* Modal Styles */
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal-backdrop {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+}
+
 .modal-dialog {
     display: flex;
-    align-items: start;
-    justify-content: center;  /* Center horizontally */
-    min-height: 100vh; /* Ensures it covers the full viewport height */
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 24px;
 }
 
-/* Modal Content */
 .modal-content {
-    background-color: var(--surface-color);
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: 'Avenir Light', sans-serif;
+    background: var(--surface-color);
+    border-radius: var(--radius-xl);
+    border: none;
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    width: 100%;
+    margin-top: 80px;
 }
 
-/* Modal Header */
 .modal-header {
-    background-color: var(--primary-color);
-    color: var(--surface-color);
-    border-bottom: 1px solid var(--border-color);
-    font-size: 1.2em;
-    font-weight: normal;
-    padding: 15px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 20px 24px;
 }
 
 .modal-title {
-    font-family: 'Avenir Light', sans-serif;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: var(--font-size-lg);
 }
 
-/* Close button in header */
 .modal-header .btn-close {
-    color: var(--surface-color);
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+    transition: var(--transition-fast);
+}
+
+.modal-header .btn-close:hover {
     opacity: 1;
-    background: transparent;
 }
 
-/* Modal Body */
 .modal-body {
-    padding: 20px;
+    padding: 24px;
     color: var(--text-color);
-    font-size: 1em;
+    font-size: var(--font-size-base);
     text-align: center;
+    line-height: 1.6;
 }
 
-/* Modal Footer */
 .modal-footer {
-    border-top: 1px solid var(--border-color);
-    padding: 15px;
+    border-top: 1px solid var(--border-light);
+    padding: 16px 24px;
     justify-content: center;
+    gap: 12px;
 }
 
-/* Buttons inside Modal */
+.modal-footer .btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    transition: var(--transition-normal);
+    min-width: 100px;
+}
+
 .modal-footer .btn-primary {
-    background-color: var(--primary-color);
+    background: var(--primary-gradient);
     border: none;
-    color: var(--surface-color);
-    font-family: 'Avenir Light', sans-serif;
-    transition: background-color var(--transition-duration);
+    color: white;
 }
 
 .modal-footer .btn-primary:hover {
-    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.4);
 }
 
 .modal-footer .btn-secondary {
-    background-color: var(--background-color);
+    background: var(--background-color);
     border: 1px solid var(--border-color);
     color: var(--text-color);
-    font-family: 'Avenir Light', sans-serif;
 }
 
 .modal-footer .btn-secondary:hover {
-    background-color: var(--surface-color);
+    background: var(--surface-color);
+    border-color: var(--text-muted);
+}
+
+/* Date Field */
+.date-field {
+    margin-bottom: 16px;
+}
+
+.date-field input {
+    cursor: pointer;
+}
+
+/* Flatpickr Overrides */
+.flatpickr-calendar {
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-xl) !important;
+    border: 1px solid var(--border-light) !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.flatpickr-day.inRange {
+    background: var(--primary-light) !important;
+    border-color: var(--primary-light) !important;
+    box-shadow: none !important;
+}
+
+.flatpickr-day:hover {
+    background: var(--primary-light) !important;
+    border-color: var(--primary-light) !important;
 }
 
 /* Reset default mobile browser styles */
 input:-webkit-autofill {
-    transition: background-color 5000s ease-in-out 0s;
+    -webkit-box-shadow: 0 0 0 30px var(--surface-color) inset !important;
+    -webkit-text-fill-color: var(--text-color) !important;
 }
 
-/* General reset for appearance */
 input[list] {
     appearance: none !important;
     -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    -ms-appearance: none !important;
 }
 
-/* Hide the default arrow in input fields with list attribute */
 input[list]::-webkit-calendar-picker-indicator,
-input[list]::-webkit-clear-button,
-input[list]::-webkit-inner-spin-button,
-input[list]::-webkit-outer-spin-button,
-input[list]::-ms-clear,
-input[list]::-ms-expand {
-    display: none !important;
-    -webkit-appearance: none !important;
-}
-
-/* Ensuring no dropdown on hover or focus */
-input[list]:hover,
-input[list]:focus {
-    appearance: none !important;
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    -ms-appearance: none !important;
-}
-
-/* Specific fix for the arrow in some browsers */
-input[list]::-webkit-search-cancel-button,
-input[list]::-webkit-search-decoration {
+input[list]::-webkit-clear-button {
     display: none !important;
 }
 
-/* Edge-specific CSS hack */
-@supports (-ms-ime-align: auto) {
-    input[list]::-ms-expand {
-        display: none !important;
+/* Responsive Design */
+@media (max-width: 480px) {
+    body {
+        padding: 16px 12px;
     }
+
+    form {
+        padding: 24px 20px;
+        margin: 16px auto;
+    }
+
+    h1 {
+        font-size: var(--font-size-xl);
+    }
+
+    h2 {
+        font-size: var(--font-size-sm);
+        padding: 4px 12px;
+    }
+
+    .input-group {
+        gap: 6px;
+    }
+
+    .input-group .form-group.small-input-row select.small-input {
+        padding: 8px 4px;
+        font-size: 0.7rem;
+    }
+
+    .input-group .form-group.small-input-row label.small-label {
+        font-size: 0.65rem;
+    }
+
+    .form-group.switches {
+        padding: 12px 8px;
+        gap: 4px;
+    }
+
+    .form-group.switches label:not(.switch) {
+        font-size: 0.65rem;
+    }
+
+    .modal-dialog {
+        padding: 16px;
+    }
+
+    .modal-content {
+        margin-top: 40px;
+    }
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+/* Extra padding above switches */
+.switches {
+    margin-top: 8px;
 }
