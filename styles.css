@@ -738,6 +738,10 @@ input[type="submit"]:hover {
     margin-bottom: 0;
 }
 
+.airline-select .select2-container {
+    width: 100% !important;
+}
+
 /* Select2 Styling */
 .select2-container--default .select2-selection--multiple {
     background-color: var(--surface-color) !important;
