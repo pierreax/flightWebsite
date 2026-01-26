@@ -252,11 +252,11 @@ form {
 /* Swap Button */
 .swap-btn {
     position: absolute;
-    right: var(--space-md);
+    right: calc(var(--space-md) + 40px);
     top: 50%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border: 2px solid var(--color-border);
     border-radius: var(--radius-full);
     background: var(--color-surface);
@@ -266,7 +266,8 @@ form {
     align-items: center;
     justify-content: center;
     transition: var(--transition-fast);
-    z-index: 10;
+    z-index: 5;
+    pointer-events: auto;
 }
 
 .swap-btn:hover {
@@ -1104,8 +1105,16 @@ form {
     max-height: 240px !important;
     overflow-y: auto !important;
     font-family: inherit !important;
-    z-index: 9999 !important;
+    z-index: 99999 !important;
     padding: var(--space-xs) !important;
+    position: absolute !important;
+}
+
+/* Ensure autocomplete can overflow from containers */
+.route-section,
+.route-inputs,
+.form-group.iata-field {
+    overflow: visible !important;
 }
 
 .ui-autocomplete .ui-menu-item {

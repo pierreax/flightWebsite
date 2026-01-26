@@ -289,14 +289,16 @@ $(document).ready(function () {
     const initializeSliders = () => {
         // Outbound Time Range Slider
         initializeSlider(SELECTORS.outboundSlider, function (values, handle) {
-            SELECTORS.outboundTimeStartDisplay.text(values[0]);
-            SELECTORS.outboundTimeEndDisplay.text(values[1]);
+            // Use direct DOM queries to ensure elements are found
+            $('#outboundTimeStartDisplay').text(values[0]);
+            $('#outboundTimeEndDisplay').text(values[1]);
         });
 
         // Inbound Time Range Slider
         initializeSlider(SELECTORS.inboundSlider, function (values, handle) {
-            SELECTORS.inboundTimeStartDisplay.text(values[0]);
-            SELECTORS.inboundTimeEndDisplay.text(values[1]);
+            // Use direct DOM queries to ensure elements are found
+            $('#inboundTimeStartDisplay').text(values[0]);
+            $('#inboundTimeEndDisplay').text(values[1]);
         });
     };
 
@@ -305,6 +307,7 @@ $(document).ready(function () {
      */
     const initializeAutocomplete = () => {
         $(".autocomplete-iata").autocomplete({
+            appendTo: "body",
             source: function (request, response) {
                 const term = request.term;
                 if (term.length < 3) return; // Trigger only after 3 or more characters
@@ -777,7 +780,8 @@ $(document).ready(function () {
             console.log("One-way trip selected");
             // Hide inbound slider and adjust display
             $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').hide();
-            $('#outbound-timeRangeDisplay').html('Departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
+            // Update the label text (support both old and new HTML structure)
+            $('#outbound-timeRangeDisplay .time-label-text').text('Departure time');
             // Set Flatpickr to single date mode
             flatpickrInstance.set('mode', 'single');
             selectedEndDate = null;
@@ -791,7 +795,8 @@ $(document).ready(function () {
             console.log("Return trip selected");
             // Show inbound slider and revert display
             $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').show();
-            $('#outbound-timeRangeDisplay').html('Outbound departure time: <span id="outboundTimeStartDisplay"></span> - <span id="outboundTimeEndDisplay"></span>');
+            // Update the label text (support both old and new HTML structure)
+            $('#outbound-timeRangeDisplay .time-label-text').text('Departure time');
             flatpickrInstance.set('mode', 'range');
         }
     };
