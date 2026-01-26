@@ -634,6 +634,7 @@ input[type="submit"]:hover {
     font-weight: 500;
     border: 1px solid var(--border-color);
     margin-top: 8px;
+    margin-bottom: 16px;
 }
 
 #advancedSettingsToggle:hover {
