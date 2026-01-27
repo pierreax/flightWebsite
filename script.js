@@ -873,7 +873,7 @@ $(document).ready(function () {
 
             // Fetch city from IATA code
             redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
-            redirectUrl = `https://robotize-hotels.azurewebsites.net/?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
+            redirectUrl = `https://hotels.robotize.no/?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
             console.log('Redirect URL:', redirectUrl);
 
             // Send email notification
@@ -1006,7 +1006,7 @@ $(document).ready(function () {
     const handleConfirmHotelTracker = () => {
         console.log('User confirmed hotel tracking.');
         window.open(redirectUrl, '_blank');    // Navigate to redirect to the other site in a new tab
-        window.location.href = 'https://robotize-flights.azurewebsites.net/';  // Navigate to the original URL to refresh the form
+        window.location.href = 'https://flights.robotize.no/';  // Navigate to the original URL to refresh the form
     };
 
 
@@ -1015,7 +1015,7 @@ $(document).ready(function () {
      */
     const handleCancelHotelTracker = () => {
         console.log('User declined hotel tracking. Reloading the page.');
-        window.location.href = 'https://robotize-flights.azurewebsites.net/';  // Navigate to the original URL to refresh the form
+        window.location.href = 'https://flights.robotize.no/';  // Navigate to the original URL to refresh the form
     };
 
 
@@ -1024,7 +1024,7 @@ $(document).ready(function () {
      */
     const handleThankYouButton = () => {
         console.log('User clicked OK. Reloading the page.');
-        window.location.href = 'https://robotize-flights.azurewebsites.net/';  // Navigate to the original URL to refresh the form
+        window.location.href = 'https://flights.robotize.no/';  // Navigate to the original URL to refresh the form
     };
 
 
