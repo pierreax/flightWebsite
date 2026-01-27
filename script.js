@@ -210,14 +210,35 @@ $(document).ready(function () {
     };
 
     /**
-     * Initialize Select2 for the airlines dropdown.
-     * @param {string} placeholder 
+     * Choices.js instance for airlines dropdown.
      */
-    const initializeSelect2 = (placeholder) => {
-        SELECTORS.excludeAirlinesSelect.select2({
-            placeholder: placeholder,
-            allowClear: true
-        });
+    let airlinesChoices = null;
+
+    /**
+     * Initialize Choices.js for the airlines dropdown.
+     * @param {string} placeholder
+     */
+    const initializeChoices = (placeholder) => {
+        // Destroy existing instance if it exists
+        if (airlinesChoices) {
+            airlinesChoices.destroy();
+        }
+
+        const element = document.getElementById('excludeAirlines');
+        if (element) {
+            airlinesChoices = new Choices(element, {
+                placeholder: true,
+                placeholderValue: placeholder,
+                removeItemButton: true,
+                searchEnabled: true,
+                searchPlaceholderValue: 'Search airlines...',
+                noResultsText: 'No airlines found',
+                noChoicesText: 'No airlines available',
+                itemSelectText: '',
+                shouldSort: true,
+                searchResultLimit: 50
+            });
+        }
     };
 
     // ===========================
@@ -523,20 +544,29 @@ $(document).ready(function () {
 
     /**
      * Populate the airlines dropdown with options.
-     * @param {Array} airlines 
+     * @param {Array} airlines
      */
     const updateExcludedAirlinesDropdown = (airlines) => {
-        // Clear existing options
-        SELECTORS.excludeAirlinesSelect.empty();
+        // Build choices array for Choices.js
+        const choices = airlines.map(code => ({
+            value: code,
+            label: airlinesDict[code] || code,
+            selected: false
+        }));
 
-        // Populate with new airline options
-        airlines.forEach(code => {
-            const airlineName = airlinesDict[code] || code;
-            SELECTORS.excludeAirlinesSelect.append(new Option(airlineName, code));
-        });
-
-        // Reinitialize Select2 to update options
-        initializeSelect2(airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude');
+        // If Choices instance exists, update it; otherwise initialize
+        if (airlinesChoices) {
+            airlinesChoices.clearStore();
+            airlinesChoices.setChoices(choices, 'value', 'label', true);
+        } else {
+            // Clear and populate the native select first
+            SELECTORS.excludeAirlinesSelect.empty();
+            airlines.forEach(code => {
+                const airlineName = airlinesDict[code] || code;
+                SELECTORS.excludeAirlinesSelect.append(new Option(airlineName, code));
+            });
+            initializeChoices(airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude');
+        }
     };
 
 
@@ -744,7 +774,7 @@ $(document).ready(function () {
 
             // Fetch city from IATA code
             redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
-            redirectUrl = `https://www.robotize.no/hotels?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
+            redirectUrl = `https://robotize-hotels.azurewebsites.net/?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
             console.log('Redirect URL:', redirectUrl);
 
             // Send email notification
@@ -846,16 +876,18 @@ $(document).ready(function () {
      */
     const handleAirlineModeSwitchChange = () => {
         airlineSelectionMode = SELECTORS.airlineModeSwitch.is(':checked');
-        const newPlaceholder = airlineSelectionMode ? 'Select airlines to include' : 'Select airlines to exclude';
-        initializeSelect2(newPlaceholder);
 
-        if (airlineSelectionMode) {
-            // Include mode: select all airlines
-            const allAirlineIds = SELECTORS.excludeAirlinesSelect.find('option').map(function () { return this.value }).get();
-            SELECTORS.excludeAirlinesSelect.val(allAirlineIds).trigger('change');
-        } else {
-            // Exclude mode: clear selection
-            SELECTORS.excludeAirlinesSelect.val(null).trigger('change');
+        if (airlinesChoices) {
+            if (airlineSelectionMode) {
+                // Include mode: select all airlines
+                const allChoices = airlinesChoices._currentState.choices;
+                allChoices.forEach(choice => {
+                    airlinesChoices.setChoiceByValue(choice.value);
+                });
+            } else {
+                // Exclude mode: clear selection
+                airlinesChoices.removeActiveItems();
+            }
         }
 
         updatePriceBasedOnSelection();
@@ -924,8 +956,9 @@ $(document).ready(function () {
      * Update the suggested price based on airline selections.
      */
     const updatePriceBasedOnSelection = () => {
-        const selectedAirlines = SELECTORS.excludeAirlinesSelect.val();
-        console.log('Selected Airlines: ',selectedAirlines);
+        // Get selected airlines from Choices.js instance
+        const selectedAirlines = airlinesChoices ? airlinesChoices.getValue(true) : [];
+        console.log('Selected Airlines: ', selectedAirlines);
 
         if (!globalTequilaResponse || !globalTequilaResponse.data) {
             return;
@@ -967,8 +1000,8 @@ $(document).ready(function () {
         // Handle form submission
         SELECTORS.searchForm.on('submit', handleFormSubmission);
 
-        // Handle checkbox interactions
-        SELECTORS.excludeAirlinesSelect.on('change', handleExcludedAirlinesChange);
+        // Handle airline selection changes (Choices.js fires 'change' on the original element)
+        document.getElementById('excludeAirlines').addEventListener('change', handleExcludedAirlinesChange);
 
         // Toggle IATA codes (support both old and new selectors)
         $('.switch-icon-container, .swap-btn').on('click', switchIATACodes);
@@ -1037,11 +1070,10 @@ $(document).ready(function () {
             advancedSettings.style.display = 'block';
             toggleButton.classList.add('expanded'); // Add the 'expanded' class
 
-            // Initialize select2 on the exclude airlines dropdown
-            $('#excludeAirlines').select2({
-                placeholder: 'Select airlines to exclude',
-                allowClear: true
-            });
+            // Initialize Choices.js on the exclude airlines dropdown if not already done
+            if (!airlinesChoices) {
+                initializeChoices('Select airlines to exclude');
+            }
 
         } else {
             advancedSettings.style.display = 'none';
@@ -1087,7 +1119,7 @@ $(document).ready(function () {
                 retDtimeFrom: inboundTimes[0],
                 retDtimeTo: inboundTimes[1],
                 maxFlyDuration: SELECTORS.maxFlightDurationInput.val(),
-                excludedAirlines: SELECTORS.excludeAirlinesSelect.val() ? SELECTORS.excludeAirlinesSelect.val().join(',') : '',
+                excludedAirlines: airlinesChoices ? airlinesChoices.getValue(true).join(',') : '',
                 exclude: !airlineSelectionMode, // Set based on the switch state
                 email: SELECTORS.emailInput.val(),
                 token: generateToken(),
@@ -1220,8 +1252,8 @@ $(document).ready(function () {
 
     window.addEventListener('load', () => {
         console.log('Window has loaded!');
-        // Initialize Select2 for airlines dropdown
-        initializeSelect2('Select airlines to exclude');
+        // Initialize Choices.js for airlines dropdown
+        initializeChoices('Select airlines to exclude');
         // Initialize autocomplete
         initializeAutocomplete();
         console.log('Autocomplete initialized!');
