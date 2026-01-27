@@ -60,6 +60,14 @@
         </div>
     </header>
 
+    <!-- Explore Top Destinations Section -->
+    <section class="explore-section" id="exploreSection" style="display: none;">
+        <div class="explore-container">
+            <h2 class="explore-heading" id="exploreHeading">Explore destinations</h2>
+            <div class="explore-scroll" id="exploreCards"></div>
+        </div>
+    </section>
+
     <!-- Main Form -->
     <main class="form-container">
         <form id="sheetyForm">
@@ -201,6 +209,15 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                             <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="cabinClass">Cabin class</label>
+                        <select id="cabinClass" name="cabinClass" required>
+                            <option value="M" selected>Economy</option>
+                            <option value="W">Premium Eco</option>
+                            <option value="C">Business</option>
+                            <option value="F">First</option>
                         </select>
                     </div>
                     <div class="filter-item">

@@ -39,9 +39,13 @@ $(document).ready(function () {
         outboundTimeEndDisplay: $('#outboundTimeEndDisplay'),
         inboundTimeStartDisplay: $('#inboundTimeStartDisplay'),
         inboundTimeEndDisplay: $('#inboundTimeEndDisplay'),
+        cabinClassInput: $('#cabinClass'),
         maxPricePerPerson: $('#maxPricePerPerson'),
         iataCodeFromList: $('#iataCodeFromList'),
         iataCodeToList: $('#iataCodeToList'),
+        exploreSection: $('#exploreSection'),
+        exploreHeading: $('#exploreHeading'),
+        exploreCards: $('#exploreCards'),
     };
 
     const API_ENDPOINTS = {
@@ -52,6 +56,7 @@ $(document).ready(function () {
         sheetyProxy: '/api/sheetyProxy',
         sendMail: '/api/sendEmail',
         readAirlinesData: 'airline_data.txt',
+        topDestinations: '/api/topDestinations',
     };
 
     // ===========================
@@ -530,6 +535,9 @@ $(document).ready(function () {
 
                 // Update the IATA Code From field in the UI
                 SELECTORS.iataCodeFrom.val(`${airportIATA} - ${airportName}`).trigger('change');
+
+                // Fetch top destinations from the detected airport
+                fetchTopDestinations(airportIATA);
             } else {
                 console.log('No airport data found in the response.');
                 alert('No nearby airports found based on your location. Please select your departure airport manually.');
@@ -541,6 +549,54 @@ $(document).ready(function () {
     };
 
 
+
+    /**
+     * Fetch top destinations from the user's detected airport.
+     * @param {string} originCode - IATA code of the origin airport.
+     */
+    const fetchTopDestinations = async (originCode) => {
+        try {
+            const curr = SELECTORS.currencyInput.val() || 'NOK';
+            const params = new URLSearchParams({ origin: originCode, currency: curr });
+            const response = await fetch(`${API_ENDPOINTS.topDestinations}?${params.toString()}`);
+            if (!response.ok) return;
+            const destinations = await response.json();
+            if (destinations && destinations.length > 0) {
+                renderTopDestinations(destinations, originCode);
+            }
+        } catch (error) {
+            console.log('Top destinations not available:', error.message);
+        }
+    };
+
+    /**
+     * Render top destination cards into the explore section.
+     * @param {Array} destinations
+     * @param {string} originCode
+     */
+    const renderTopDestinations = (destinations, originCode) => {
+        SELECTORS.exploreHeading.text(`Explore from ${originCode}`);
+        SELECTORS.exploreCards.empty();
+
+        destinations.forEach(dest => {
+            const card = $(`
+                <div class="explore-card" data-city="${dest.cityCode}" data-name="${dest.cityName}">
+                    <div class="explore-card-city">${dest.cityName}</div>
+                    <div class="explore-card-country">${dest.countryName}</div>
+                    <div class="explore-card-price">${dest.currency} ${dest.price}</div>
+                </div>
+            `);
+            card.on('click', function () {
+                const cityCode = $(this).data('city');
+                const cityName = $(this).data('name');
+                SELECTORS.iataCodeTo.val(`${cityCode} - ${cityName} All Airports`).trigger('change');
+                $('html, body').animate({ scrollTop: SELECTORS.iataCodeTo.offset().top - 100 }, 400);
+            });
+            SELECTORS.exploreCards.append(card);
+        });
+
+        SELECTORS.exploreSection.show();
+    };
 
     /**
      * Populate the airlines dropdown with options.
@@ -616,7 +672,8 @@ $(document).ready(function () {
             dtime_from: SELECTORS.outboundTimeStartDisplay.text(),
             dtime_to: SELECTORS.outboundTimeEndDisplay.text(),
             ret_dtime_from: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeStartDisplay.text(),
-            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text()
+            ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text(),
+            selected_cabins: SELECTORS.cabinClassInput.val()
         });
         console.log("Sending Current Price request with params:", params.toString());
         try {
@@ -662,7 +719,11 @@ $(document).ready(function () {
             // Enable the Submit button since a matching flight was found
             SELECTORS.submitFormButton.prop('disabled', false);
         } else {
-            alert("No flights available for the given parameters. Please adjust your search criteria.");
+            const cabinVal = SELECTORS.cabinClassInput.val();
+            const cabinHint = cabinVal !== 'M'
+                ? ' Try switching cabin class to Economy, as not all routes offer premium cabins.'
+                : '';
+            alert('No flights available for the given parameters. Please adjust your search criteria.' + cabinHint);
         }
     };
 
@@ -1158,6 +1219,7 @@ $(document).ready(function () {
                 retDtimeTo: inboundTimes[1],
                 maxFlyDuration: SELECTORS.maxFlightDurationInput.val(),
                 excludedAirlines: airlinesChoices ? airlinesChoices.getValue(true).join(',') : '',
+                cabinClass: SELECTORS.cabinClassInput.val(),
                 exclude: !airlineSelectionMode, // Set based on the switch state
                 email: SELECTORS.emailInput.val(),
                 token: generateToken(),

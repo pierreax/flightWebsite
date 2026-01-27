@@ -360,7 +360,7 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
     const {
         origin, destination, dateFrom, dateTo, returnFrom, returnTo,
         maxStops, maxFlyDuration, flightType, currency, dtime_from,
-        dtime_to, ret_dtime_from, ret_dtime_to
+        dtime_to, ret_dtime_from, ret_dtime_to, selected_cabins
     } = req.query;
 
     // Validate required parameters
@@ -386,6 +386,10 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
         sort: 'price'
     });
 
+    if (selected_cabins) {
+        queryParams.append('selected_cabins', selected_cabins);
+    }
+
     try {
         const response = await fetchWithTimeout(`https://tequila-api.kiwi.com/v2/search?${queryParams.toString()}`, {
             method: 'GET',
@@ -403,6 +407,65 @@ app.get('/api/suggestPriceLimit', async (req, res) => {
     } catch (error) {
         console.error("Error suggesting price limit:", error);
         res.status(500).json({ error: "Failed to suggest price limit" });
+    }
+});
+
+// Route to fetch top destinations from an origin airport
+app.get('/api/topDestinations', async (req, res) => {
+    const { origin, currency } = req.query;
+
+    if (!origin || typeof origin !== 'string' || origin.length < 2 || origin.length > 4) {
+        return res.status(400).json({ error: 'Valid origin IATA code is required' });
+    }
+
+    try {
+        const apiKey = process.env.TEQUILA_API_KEY;
+        if (!apiKey) {
+            return res.status(500).json({ error: 'Server configuration error.' });
+        }
+
+        // Search for cheap flights in the next 1-6 months with flexible dates
+        const now = new Date();
+        const dateFrom = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+        const futureDate = new Date(now);
+        futureDate.setMonth(futureDate.getMonth() + 6);
+        const dateTo = `${String(futureDate.getDate()).padStart(2, '0')}/${String(futureDate.getMonth() + 1).padStart(2, '0')}/${futureDate.getFullYear()}`;
+
+        const queryParams = new URLSearchParams({
+            fly_from: origin,
+            date_from: dateFrom,
+            date_to: dateTo,
+            flight_type: 'round',
+            nights_in_dst_from: 2,
+            nights_in_dst_to: 14,
+            one_for_city: 1,
+            curr: currency || 'NOK',
+            sort: 'price',
+            limit: 8
+        });
+
+        const response = await fetchWithTimeout(`https://tequila-api.kiwi.com/v2/search?${queryParams.toString()}`, {
+            method: 'GET',
+            headers: { 'apikey': apiKey }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Tequila API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const destinations = (data.data || []).map(flight => ({
+            cityName: flight.cityTo,
+            cityCode: flight.cityCodeTo,
+            countryName: flight.countryTo?.name || flight.countryTo || '',
+            price: Math.ceil(flight.price),
+            currency: currency || 'NOK'
+        }));
+
+        res.json(destinations);
+    } catch (error) {
+        console.error('Error fetching top destinations:', error);
+        res.status(500).json({ error: 'Failed to fetch top destinations' });
     }
 });
 
