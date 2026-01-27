@@ -1,5 +1,9 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/60d42086-4282-443e-bfff-7e5440a31df5/resourceGroups/Robotize/providers/Microsoft.Web/sites/robotize-flights",
     "appService.deploySubpath": ".",
-    "CodeGPT.apiKey": "OpenAI"
+    "CodeGPT.apiKey": "OpenAI",
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ]
 }

@@ -574,12 +574,37 @@ $(document).ready(function () {
      * Suggest price limit by querying the backend API.
      */
     const suggestPriceLimit = async () => {
+        // Validate required fields before making the API call
+        const origin = extractIATACode('iataCodeFrom');
+        const destination = extractIATACode('iataCodeTo');
+
+        if (!origin) {
+            SELECTORS.iataCodeFrom.focus();
+            alert('Please select a departure airport.');
+            return;
+        }
+        if (!destination) {
+            SELECTORS.iataCodeTo.focus();
+            alert('Please select a destination airport.');
+            return;
+        }
+        if (!depDate_From) {
+            flatpickrInstance.open();
+            alert('Please select your travel dates.');
+            return;
+        }
+        if (!SELECTORS.oneWayTripCheckbox.is(':checked') && !returnDate_From) {
+            flatpickrInstance.open();
+            alert('Please select a return date, or choose "One-way trip".');
+            return;
+        }
+
         SELECTORS.loader.show(); // Show the loading icon
         console.log("Max Flight Duration:",SELECTORS.maxFlightDurationInput.val()); // Log the max flight duration
         console.log("Max Stops:",SELECTORS.maxStopsInput.val()); // Log the max stops
         const params = new URLSearchParams({
-            origin: extractIATACode('iataCodeFrom'),
-            destination: extractIATACode('iataCodeTo'),
+            origin: origin,
+            destination: destination,
             dateFrom: depDate_From,
             dateTo: depDate_To,
             returnFrom: returnDate_From,
@@ -759,6 +784,19 @@ $(document).ready(function () {
      */
     const handleFormSubmission = async (event) => {
         event.preventDefault();
+
+        // Validate airports before submission
+        const origin = extractIATACode('iataCodeFrom');
+        const destination = extractIATACode('iataCodeTo');
+        if (!origin || !destination) {
+            alert('Please select both departure and destination airports.');
+            return;
+        }
+        if (!depDate_From) {
+            alert('Please select your travel dates.');
+            return;
+        }
+
         adjustDatesForFlexibility();
         SELECTORS.loader.show();
 

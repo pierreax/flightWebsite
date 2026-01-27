@@ -717,61 +717,107 @@ form {
 }
 
 /* Airline Select */
-.airline-select .select2-container {
-    width: 100% !important;
+.airline-select {
+    margin-bottom: 0;
 }
 
-/* Select2 Overrides */
-.select2-container--default .select2-selection--multiple {
-    background-color: var(--color-surface) !important;
-    border: 1.5px solid var(--color-border) !important;
-    border-radius: var(--radius-md) !important;
-    min-height: 44px !important;
+/* Choices.js Overrides */
+.choices {
+    margin-bottom: 0;
+    font-family: inherit;
+}
+
+.choices__inner {
+    background-color: var(--color-surface);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    min-height: 44px;
+    padding: 4px 8px;
+    font-size: var(--font-size-sm);
     transition: var(--transition-fast);
 }
 
-.select2-container--default .select2-selection--multiple:hover {
-    border-color: var(--color-text-muted) !important;
+.choices__inner:hover {
+    border-color: var(--color-text-muted);
 }
 
-.select2-container--default.select2-container--focus .select2-selection--multiple {
-    border-color: var(--color-primary) !important;
-    box-shadow: var(--shadow-focus) !important;
+.is-focused .choices__inner,
+.is-open .choices__inner {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
 }
 
-.select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    padding: 4px 8px !important;
+.choices__list--multiple .choices__item {
+    background: var(--color-primary-light);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-primary);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    padding: 4px 8px;
+    margin: 2px;
 }
 
-.select2-container--default .select2-selection--multiple .select2-selection__choice {
-    background: var(--color-primary-light) !important;
-    border: none !important;
-    border-radius: var(--radius-sm) !important;
-    color: var(--color-primary) !important;
-    font-size: var(--font-size-xs) !important;
-    padding: 4px 8px !important;
-    margin: 4px !important;
+.choices__list--multiple .choices__item.is-highlighted {
+    background: var(--color-primary);
+    color: white;
 }
 
-.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-    color: var(--color-primary) !important;
-    margin-right: 4px !important;
+.choices__button {
+    border-left: 1px solid rgba(0, 102, 255, 0.2);
+    opacity: 0.7;
 }
 
-.select2-container--default .select2-search--inline .select2-search__field {
-    font-family: inherit;
+.choices__button:hover {
+    opacity: 1;
+}
+
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    margin-top: 4px;
+    z-index: 100;
+}
+
+.choices__list--dropdown .choices__item,
+.choices__list[aria-expanded] .choices__item {
+    padding: 10px 12px;
     font-size: var(--font-size-sm);
+    color: var(--color-text);
 }
 
-.select2-dropdown {
-    border: 1.5px solid var(--color-border) !important;
-    border-radius: var(--radius-md) !important;
-    box-shadow: var(--shadow-lg) !important;
+.choices__list--dropdown .choices__item--selectable.is-highlighted,
+.choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
 }
 
-.select2-results__option--highlighted {
-    background-color: var(--color-primary-light) !important;
-    color: var(--color-primary) !important;
+.choices__list--dropdown .choices__item--selectable.is-selected {
+    opacity: 0.5;
+}
+
+.choices__input {
+    background: transparent;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    margin-bottom: 0;
+    padding: 2px 0;
+}
+
+.choices__input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.choices__placeholder {
+    color: var(--color-text-muted);
+    opacity: 1;
+}
+
+.choices[data-type*=select-multiple] .choices__input {
+    min-width: 100px;
 }
 
 /* ============================================
@@ -796,7 +842,8 @@ form {
 
 .floating-label input {
     width: 100%;
-    padding: 20px var(--space-md) var(--space-sm);
+    height: 56px;
+    padding: 0 var(--space-md);
     border: 2px solid var(--color-border);
     border-radius: var(--radius-md);
     font-size: var(--font-size-base);
@@ -804,6 +851,19 @@ form {
     background: var(--color-surface);
     transition: var(--transition-fast);
     color: var(--color-text);
+    text-align: right;
+    line-height: 56px;
+}
+
+/* Price input with currency suffix */
+.floating-label input#maxPricePerPerson {
+    padding-right: 52px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Email input - no suffix needed */
+.floating-label input#email {
+    padding-right: var(--space-md);
 }
 
 .floating-label input:hover {
@@ -825,13 +885,15 @@ form {
     color: var(--color-text-muted);
     pointer-events: none;
     transition: var(--transition-fast);
-    background: transparent;
+    background: var(--color-surface);
+    padding: 0 4px;
+    line-height: 1;
 }
 
 .floating-label input:focus ~ label,
 .floating-label input:not(:placeholder-shown) ~ label {
-    top: 10px;
-    transform: translateY(0);
+    top: 0;
+    transform: translateY(-50%);
     font-size: var(--font-size-xs);
     font-weight: 500;
     color: var(--color-primary);
@@ -843,8 +905,10 @@ form {
     top: 50%;
     transform: translateY(-50%);
     font-size: var(--font-size-sm);
-    font-weight: 500;
-    color: var(--color-text-muted);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+    user-select: none;
 }
 
 /* Submit Button */
