@@ -789,24 +789,101 @@ $(document).ready(function () {
      */
     const sendEmailNotification = async (formData) => {
         try {
+            const origin = SELECTORS.iataCodeFrom.val();
+            const destination = SELECTORS.iataCodeTo.val();
+            const passengers = parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val()));
+            const cabin = SELECTORS.cabinClassInput.val() || 'M';
+            const cabinLabels = { M: 'Economy', W: 'Premium Economy', C: 'Business', F: 'First' };
+            const cabinLabel = cabinLabels[cabin] || cabin;
+            const email = SELECTORS.emailInput.val();
+
+            const emailBody = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#f4f7fa;font-family:'Segoe UI',Roboto,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f7fa;">
+    <tr>
+      <td align="center" style="padding:30px 10px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background:linear-gradient(135deg,#1a73e8,#0d47a1);padding:30px 40px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:600;">Welcome to the Flight Robot</h1>
+              <p style="margin:8px 0 0;color:rgba(255,255,255,0.85);font-size:14px;">Your price tracker is now active</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:30px 40px;">
+              <p style="color:#202124;font-size:15px;line-height:1.6;margin:0 0 16px;">Hi,</p>
+              <p style="color:#202124;font-size:15px;line-height:1.6;margin:0 0 20px;">
+                We'll check flight prices for you daily and notify you whenever there's a change. Here's a summary of your tracked trip:
+              </p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#e3f2fd;border-radius:10px;margin:0 0 24px;">
+                <tr>
+                  <td style="padding:20px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td width="50%" style="padding:6px 0;">
+                          <p style="margin:0;font-size:12px;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;">From</p>
+                          <p style="margin:2px 0 0;font-size:15px;color:#202124;font-weight:600;">${origin}</p>
+                        </td>
+                        <td width="50%" style="padding:6px 0;">
+                          <p style="margin:0;font-size:12px;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;">To</p>
+                          <p style="margin:2px 0 0;font-size:15px;color:#202124;font-weight:600;">${destination}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="50%" style="padding:6px 0;">
+                          <p style="margin:0;font-size:12px;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;">Date</p>
+                          <p style="margin:2px 0 0;font-size:15px;color:#202124;font-weight:600;">${depDate_From}</p>
+                        </td>
+                        <td width="50%" style="padding:6px 0;">
+                          <p style="margin:0;font-size:12px;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;">Passengers</p>
+                          <p style="margin:2px 0 0;font-size:15px;color:#202124;font-weight:600;">${passengers}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding:6px 0;">
+                          <p style="margin:0;font-size:12px;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;">Cabin Class</p>
+                          <p style="margin:2px 0 0;font-size:15px;color:#202124;font-weight:600;">${cabinLabel}</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <p style="color:#5f6368;font-size:14px;line-height:1.6;margin:0 0 24px;">
+                You'll receive an email whenever the price changes. Reply to any of our emails if you have questions.
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td align="center" style="border-radius:6px;background-color:#1a73e8;">
+                    <a href="https://flights.robotize.no" style="display:inline-block;padding:12px 28px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;">Visit Robotize Flights</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px 40px 30px;text-align:center;">
+              <p style="color:#5f6368;font-size:14px;margin:0 0 16px;">Best regards,<br>Pierre</p>
+              <a href="https://flights.robotize.no"><img src="cid:logo" height="80" alt="Robotize" style="display:block;margin:0 auto;"></a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
             const emailResponse = await fetch(API_ENDPOINTS.sendMail, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     subject: "Welcome to the Flight Robot",
-                    body: `
-                        Welcome to the Flight Robot!<br><br>
-                        We will check prices for you daily, and let you know if there is a change.<br><br>
-                        From: ${SELECTORS.iataCodeFrom.val()}<br>
-                        To: ${SELECTORS.iataCodeTo.val()}<br>
-                        Date: ${depDate_From}<br>
-                        Passengers: ${parseInputValue(parseInt(SELECTORS.nbrPassengersInput.val()))}<br>
-                        Email: ${SELECTORS.emailInput.val()}<br><br>
-                        Thank you!
-                    `,
-                    recipient_email: SELECTORS.emailInput.val()
+                    body: emailBody,
+                    recipient_email: email
                 })
             });
 
