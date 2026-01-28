@@ -1434,10 +1434,15 @@ $(document).ready(function () {
 
 
             // Attach event listeners
-            attachAllEventListeners();         
+            attachAllEventListeners();
 
             // Hide the Advanced Settings toggle initially
             SELECTORS.advancedSettingsToggle.hide();
+
+            // Fallback: if explore section is still hidden but From field has value, try to populate
+            if (!SELECTORS.exploreSection.is(':visible')) {
+                handleFromFieldChange();
+            }
 
         } catch (error) {
             console.error('Initialization error:', error);
