@@ -471,28 +471,33 @@ $(document).ready(function () {
     * Get location info based on the user's IP address.
      */
     const getLocationInfo = async () => {
+        console.log('[Explore] Starting getLocationInfo...');
         try {
+            console.log('[Explore] Fetching geolocation from:', API_ENDPOINTS.geolocation);
             const response = await fetch(API_ENDPOINTS.geolocation);
             if (!response.ok) {
-                // Geolocation is optional - fail silently if service unavailable
-                console.log('Geolocation service unavailable. Users will enter location manually.');
+                console.log('[Explore] Geolocation service unavailable, status:', response.status);
                 return;
             }
             const data = await response.json();
+            console.log('[Explore] Geolocation response:', data);
 
             // Store the currency if currency data is available
             if (data.currency && data.currency.code) {
-                currency = data.currency.code;  // Store the currency in the global variable
+                currency = data.currency.code;
+                console.log('[Explore] Currency set to:', currency);
             }
 
             // Update location fields based on geolocation data
             if (data.latitude && data.longitude) {
-                await fetchClosestAirport(data.latitude, data.longitude);  // Optional: Use latitude and longitude for location
+                console.log('[Explore] Got coordinates, fetching closest airport...');
+                await fetchClosestAirport(data.latitude, data.longitude);
+            } else {
+                console.log('[Explore] No coordinates in geolocation response');
             }
 
         } catch (error) {
-            // Geolocation is optional - fail silently
-            console.log('Geolocation not available:', error.message);
+            console.log('[Explore] Geolocation error:', error.message);
         }
     };
 
@@ -528,10 +533,11 @@ $(document).ready(function () {
                 const cityName = tequilaData.city || 'Unknown City';
                 const countryName = tequilaData.country || 'Unknown Country';
 
-                console.log(`Closest Airport: ${airportIATA} - ${airportName}, ${cityName}, ${countryName}`);
+                console.log(`[Explore] Closest Airport: ${airportIATA} - ${airportName}, ${cityName}, ${countryName}`);
 
                 // Update the IATA Code From field in the UI
                 SELECTORS.iataCodeFrom.val(`${airportIATA} - ${airportName}`).trigger('change');
+                console.log('[Explore] From field updated, now fetching top destinations...');
 
                 // Fetch top destinations from the detected airport
                 fetchTopDestinations(airportIATA);
@@ -552,17 +558,28 @@ $(document).ready(function () {
      * @param {string} originCode - IATA code of the origin airport.
      */
     const fetchTopDestinations = async (originCode) => {
+        console.log('[Explore] fetchTopDestinations called with origin:', originCode);
         try {
             const curr = SELECTORS.currencyInput.val() || 'NOK';
             const params = new URLSearchParams({ origin: originCode, currency: curr });
-            const response = await fetch(`${API_ENDPOINTS.topDestinations}?${params.toString()}`);
-            if (!response.ok) return;
+            const url = `${API_ENDPOINTS.topDestinations}?${params.toString()}`;
+            console.log('[Explore] Fetching top destinations from:', url);
+            const response = await fetch(url);
+            console.log('[Explore] Top destinations response status:', response.status);
+            if (!response.ok) {
+                console.log('[Explore] Top destinations request failed');
+                return;
+            }
             const destinations = await response.json();
+            console.log('[Explore] Top destinations received:', destinations?.length || 0, 'results');
             if (destinations && destinations.length > 0) {
                 renderTopDestinations(destinations, originCode);
+                console.log('[Explore] Explore section rendered successfully');
+            } else {
+                console.log('[Explore] No destinations returned from API');
             }
         } catch (error) {
-            console.log('Top destinations not available:', error.message);
+            console.log('[Explore] Top destinations error:', error.message);
         }
     };
 
@@ -1228,10 +1245,13 @@ $(document).ready(function () {
      */
     const handleFromFieldChange = () => {
         const iataCode = extractIATACode('iataCodeFrom');
+        console.log('[Explore] handleFromFieldChange called, iataCode:', iataCode);
         if (iataCode && !iataCode.startsWith('city:')) {
             fetchTopDestinations(iataCode);
         } else if (iataCode && iataCode.startsWith('city:')) {
             fetchTopDestinations(iataCode.replace('city:', ''));
+        } else {
+            console.log('[Explore] No valid IATA code in From field');
         }
     };
 
@@ -1440,7 +1460,10 @@ $(document).ready(function () {
             SELECTORS.advancedSettingsToggle.hide();
 
             // Fallback: if explore section is still hidden but From field has value, try to populate
+            console.log('[Explore] Init complete. Explore section visible:', SELECTORS.exploreSection.is(':visible'));
+            console.log('[Explore] From field value:', SELECTORS.iataCodeFrom.val());
             if (!SELECTORS.exploreSection.is(':visible')) {
+                console.log('[Explore] Explore section not visible, trying fallback...');
                 handleFromFieldChange();
             }
 
