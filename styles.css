@@ -1360,7 +1360,17 @@ form {
     }
 
     .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: var(--space-sm);
+    }
+
+    .filter-item {
+        min-width: 0;
+    }
+
+    .filter-item select {
+        width: 100%;
     }
 
     .explore-card {
