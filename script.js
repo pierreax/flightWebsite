@@ -1211,6 +1211,9 @@ $(document).ready(function () {
         SELECTORS.increaseTravelers.on('click', () => updateTravelersCount(1));
         SELECTORS.decreaseTravelers.on('click', () => updateTravelersCount(-1));
 
+        // Update explore section when From field changes
+        SELECTORS.iataCodeFrom.on('blur', handleFromFieldChange);
+
         // Close tooltip when clicking outside
         $(document).on('click', function (event) {
             if (!$(event.target).closest('#helpBtn, #tooltip').length) {
@@ -1219,6 +1222,18 @@ $(document).ready(function () {
         });
     };
 
+
+    /**
+     * Handle changes to the From field and update explore section.
+     */
+    const handleFromFieldChange = () => {
+        const iataCode = extractIATACode('iataCodeFrom');
+        if (iataCode && !iataCode.startsWith('city:')) {
+            fetchTopDestinations(iataCode);
+        } else if (iataCode && iataCode.startsWith('city:')) {
+            fetchTopDestinations(iataCode.replace('city:', ''));
+        }
+    };
 
     /**
      * Update the travelers count when +/- buttons are clicked.
