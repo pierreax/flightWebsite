@@ -289,10 +289,10 @@ form {
 }
 
 .option-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
+    display: grid;
+    grid-template-columns: repeat(2, auto);
     justify-content: center;
+    gap: var(--space-sm);
 }
 
 .chip {
@@ -444,7 +444,7 @@ form {
    ============================================ */
 .filters-grid {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(2, auto);
     justify-content: center;
     gap: var(--space-sm);
 }
@@ -1406,11 +1406,7 @@ form {
     }
 
     .filters-grid {
-        grid-template-columns: repeat(2, minmax(0, 120px));
-    }
-
-    .filter-item select {
-        width: 100%;
+        gap: 6px;
     }
 
     .filter-item label {
@@ -1424,14 +1420,7 @@ form {
     }
 
     .option-chips {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
         gap: 6px;
-    }
-
-    .option-chips .chip,
-    .option-chips .travelers-control {
-        justify-self: center;
     }
 
     .chip-content {
