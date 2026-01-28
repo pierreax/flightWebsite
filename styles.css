@@ -1314,15 +1314,12 @@ form {
     }
 
     .explore-scroll {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 0 var(--space-md) var(--space-md);
-        overflow-x: visible;
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
     }
 
     .explore-card {
-        flex: 0 0 calc(50% - var(--space-sm));
-        max-width: 150px;
+        flex: 0 0 120px;
     }
 
     .hero {
@@ -1361,7 +1358,8 @@ form {
 
     .filters-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, minmax(0, 100px));
+        justify-content: center;
         gap: var(--space-sm);
     }
 
@@ -1371,10 +1369,6 @@ form {
 
     .filter-item select {
         width: 100%;
-    }
-
-    .explore-card {
-        flex: 0 0 120px;
     }
 
     .filter-item label {
