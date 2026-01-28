@@ -1305,6 +1305,23 @@ form {
    Responsive Design
    ============================================ */
 @media (max-width: 480px) {
+    .explore-section {
+        padding: var(--space-md) 0 0;
+    }
+
+    .explore-heading {
+        padding: 0 var(--space-md);
+    }
+
+    .explore-scroll {
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
+    }
+
+    .explore-card {
+        flex: 0 0 120px;
+    }
+
     .hero {
         padding: var(--space-xl) var(--space-md);
     }
