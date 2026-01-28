@@ -78,6 +78,7 @@ body {
     line-height: 1.6;
     color: var(--color-text);
     background: var(--color-bg);
+    overflow-x: hidden;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -1354,15 +1355,17 @@ form {
    ============================================ */
 @media (max-width: 480px) {
     .explore-section {
-        padding: var(--space-md) 0 0;
+        padding: var(--space-md) var(--space-md) 0;
+        max-width: 100%;
+        overflow: hidden;
     }
 
     .explore-heading {
-        padding: 0 var(--space-md);
         text-align: center;
     }
 
     .explore-scroll {
+        margin: 0 calc(-1 * var(--space-md));
         padding-left: var(--space-md);
         padding-right: var(--space-md);
     }
