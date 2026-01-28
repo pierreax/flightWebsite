@@ -2,7 +2,7 @@
 const $ = jQuery.noConflict();
 
 $(document).ready(function () {
-    console.log("Flight Site Loaded");
+    console.log("[Init] Flight Site Loaded");
 
     // ===========================
     // Constants and Selectors
@@ -109,10 +109,10 @@ $(document).ready(function () {
 
             // Check if "All Airports" is present in the string
             if (inputValue.includes("All Airports")) {
-                console.log(`city:${iataCode}`);
+                console.log(`[IATA] Extracted city code: ${iataCode}`);
                 return `city:${iataCode}`; // Prepend 'city:' if it includes "All Airports"
             }
-            console.log(iataCode);
+            console.log(`[IATA] Extracted airport code: ${iataCode}`);
             return iataCode; // Just return the IATA code
         }
 
@@ -182,7 +182,7 @@ $(document).ready(function () {
         if (Object.keys(queryParams).length > 0) {
             if (queryParams.dateFrom || queryParams.dateTo || queryParams.email) {
                 redirectedFlag = true;  // Set redirected to true if any relevant param exists
-                console.log('User has been redirected');
+                console.log('[URL] User has been redirected from hotel site');
             }
         }
 
@@ -271,7 +271,7 @@ $(document).ready(function () {
      * @param {Object} instance 
      */
     function handleDateChange(selectedDates, dateStr, instance) {
-        console.log(selectedDates, dateStr);
+        console.log('[Date] Selected dates:', selectedDates, dateStr);
         // Update the selected start and end dates
         selectedStartDate = selectedDates[0];
         depDate_From = formatDate(selectedStartDate);
@@ -342,7 +342,7 @@ $(document).ready(function () {
                     success: function (data) {
                         if (data.data && data.data.locations && data.data.locations.length) {
                             // Log whether the data is cached or fetched
-                            console.log('Data Source:', data.source);  // 'Cached' or 'Fetched'
+                            console.log('[Autocomplete] Data source:', data.source);
 
                             // Filter to only keep items with type 'city' or 'airport'
                             const filteredLocations = data.data.locations.filter(location => location.type === 'city' || location.type === 'airport');
@@ -357,7 +357,7 @@ $(document).ready(function () {
 
                             // Remove duplicates based on the label and return unique suggestions
                             const uniqueSuggestions = [...new Map(suggestions.map(s => [s.label, s])).values()];
-                            console.log('Unique suggestions', uniqueSuggestions);
+                            console.log('[Autocomplete] Unique suggestions:', uniqueSuggestions);
 
                             response(uniqueSuggestions); // Return unique suggestions
                         } else {
@@ -407,7 +407,7 @@ $(document).ready(function () {
         let adjustedReturnToDate = selectedEndDate ? new Date(selectedEndDate) : null;
 
         if (SELECTORS.flexibleDatesCheckbox.is(':checked')) {
-            console.log("Adjusting for flexible dates");
+            console.log("[Date] Adjusting for flexible dates (+/- 1 day)");
             // Adjust departure dates by subtracting and adding one day
             adjustedDepFromDate.setDate(adjustedDepFromDate.getDate() - 1);
             adjustedDepToDate.setDate(adjustedDepToDate.getDate() + 1);
@@ -418,7 +418,7 @@ $(document).ready(function () {
                 adjustedReturnToDate.setDate(adjustedReturnToDate.getDate() + 1);
             }
         } else {
-            console.log("Using exact dates");
+            console.log("[Date] Using exact dates");
         }
 
         // Update global variables with the adjusted and formatted dates
@@ -462,7 +462,7 @@ $(document).ready(function () {
                 return dict;
             }
         } catch (error) {
-            console.error(`Error loading ${endpoint}:`, error);
+            console.error(`[Autocomplete] Error loading ${endpoint}:`, error);
             return {};
         }
     };
@@ -507,7 +507,7 @@ $(document).ready(function () {
      * @param {number} longitude 
      */
     const fetchClosestAirport = async (latitude, longitude) => {
-        console.log('Searching closest airport to coordinates:', latitude, longitude);
+        console.log('[Explore] Searching closest airport to coordinates:', latitude, longitude);
 
         try {
             const response = await fetch(API_ENDPOINTS.getClosestAirport, {
@@ -524,7 +524,7 @@ $(document).ready(function () {
             }
 
             const tequilaData = await response.json();
-            console.log('Tequila API Response:', tequilaData);
+            console.log('[Explore] Tequila closest airport response:', tequilaData);
             
             // Check if required fields are present
             if (tequilaData.code) {
@@ -542,11 +542,11 @@ $(document).ready(function () {
                 // Fetch top destinations from the detected airport
                 fetchTopDestinations(airportIATA);
             } else {
-                console.log('No airport data found in the response.');
+                console.log('[Explore] No airport data found in the response');
                 alert('No nearby airports found based on your location. Please select your departure airport manually.');
             }
         } catch (error) {
-            console.error('Error fetching closest airport:', error);
+            console.error('[Explore] Error fetching closest airport:', error);
             alert('There was an error determining your closest airport. Please select your departure airport manually.');
         }
     };
@@ -670,8 +670,8 @@ $(document).ready(function () {
         }
 
         SELECTORS.loader.show(); // Show the loading icon
-        console.log("Max Flight Duration:",SELECTORS.maxFlightDurationInput.val()); // Log the max flight duration
-        console.log("Max Stops:",SELECTORS.maxStopsInput.val()); // Log the max stops
+        console.log("[Price] Max Flight Duration:", SELECTORS.maxFlightDurationInput.val());
+        console.log("[Price] Max Stops:", SELECTORS.maxStopsInput.val());
         const params = new URLSearchParams({
             origin: origin,
             destination: destination,
@@ -689,7 +689,7 @@ $(document).ready(function () {
             ret_dtime_to: SELECTORS.oneWayTripCheckbox.is(':checked') ? '' : SELECTORS.inboundTimeEndDisplay.text(),
             selected_cabins: SELECTORS.cabinClassInput.val()
         });
-        console.log("Sending Current Price request with params:", params.toString());
+        console.log("[Price] Sending price request with params:", params.toString());
         try {
             const response = await fetch(`/api/suggestPriceLimit?${params.toString()}`, {
                 method: 'GET'
@@ -700,14 +700,14 @@ $(document).ready(function () {
             }
 
             const tequilaResponse = await response.json();
-            console.log('Raw response from Tequila API:', tequilaResponse);
+            console.log('[Price] Tequila API response:', tequilaResponse);
             handleTequilaResponse(tequilaResponse);
 
             // Show the Advanced Settings toggle after successful request
             SELECTORS.advancedSettingsToggle.show();
 
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('[Price] Error fetching price data:', error);
             alert('There was an error processing your request. Please try again later.');
         } finally {
             SELECTORS.loader.hide();
@@ -720,7 +720,7 @@ $(document).ready(function () {
      */
     const handleTequilaResponse = (tequilaResponse) => {
         globalTequilaResponse = tequilaResponse;
-        console.log('Tequila response:',globalTequilaResponse);
+        console.log('[Price] Cached Tequila response:', globalTequilaResponse);
 
         if (tequilaResponse.data && tequilaResponse.data.length > 0) {
             const lowestPriceFlight = tequilaResponse.data[0];
@@ -762,7 +762,7 @@ $(document).ready(function () {
 
             return await response.json();
         } catch (error) {
-            console.error('Error submitting to SheetyProxy:', error);
+            console.error('[API] Error submitting to SheetyProxy:', error);
             throw error;
         }
     };
@@ -775,7 +775,7 @@ $(document).ready(function () {
         redirectCurrency = encodeURIComponent(SELECTORS.currencyInput.val());
         const iataCodeToValue = SELECTORS.iataCodeTo.val();
         redirectIataCodeTo = iataCodeToValue ? iataCodeToValue.split(' - ')[0] : '';
-        console.log('Redirect IATA Code To:', redirectIataCodeTo);
+        console.log('[Redirect] IATA Code To:', redirectIataCodeTo);
     };
 
     /**
@@ -789,10 +789,10 @@ $(document).ready(function () {
         try {
             const response = await fetch(backendUrl);
             const data = await response.json();
-            console.log('City fetched:', data);
+            console.log('[Redirect] City fetched:', data);
             return data.city || '';
         } catch (error) {
-            console.error('Error fetching city from IATA code:', error);
+            console.error('[Redirect] Error fetching city from IATA code:', error);
             return '';
         }
     };
@@ -905,10 +905,10 @@ $(document).ready(function () {
                 throw new Error('Failed to send email.');
             }
 
-            console.log('Email sent successfully');
+            console.log('[Email] Confirmation email sent successfully');
 
         } catch (error) {
-            console.error('Error during email sending:', error.message);
+            console.error('[Email] Error sending confirmation:', error.message);
         }
     };
 
@@ -916,13 +916,13 @@ $(document).ready(function () {
      * Ask the user if they want to track hotel prices via a modal.
      */
     const askForHotelTracking = () => {
-        console.log('Showing hotel tracking modal.');
+        console.log('[Modal] Showing hotel tracking modal');
         SELECTORS.hotelTrackingModal.modal('show');
     };
 
     // Function to show the thank you modal
     const showThankYouModal = () => {
-        console.log('Displaying thank you modal.');
+        console.log('[Modal] Showing thank you modal');
         $('#thankYouModal').modal('show');
     };
 
@@ -953,11 +953,11 @@ $(document).ready(function () {
         SELECTORS.loader.show();
 
         const formData = buildFormData();
-        console.log('Sending data to SheetyProxy:', formData);
+        console.log('[Submit] Sending data to SheetyProxy:', formData);
 
         try {
             const sheetyResponse = await submitToSheetyProxy(formData);
-            console.log('SheetyProxy response:', sheetyResponse);
+            console.log('[Submit] SheetyProxy response:', sheetyResponse);
 
             // Capture redirect parameters
             captureRedirectParameters();
@@ -965,7 +965,7 @@ $(document).ready(function () {
             // Fetch city from IATA code
             redirectCity = encodeURIComponent(await fetchCityFromIATACode(redirectIataCodeTo));
             redirectUrl = `https://hotels.robotize.no/?email=${redirectEmail}&currency=${redirectCurrency}&city=${redirectCity}&dateFrom=${depDate_From}&dateTo=${returnDate_From}`;
-            console.log('Redirect URL:', redirectUrl);
+            console.log('[Submit] Redirect URL for hotels:', redirectUrl);
 
             // Send email notification
             await sendEmailNotification(formData);
@@ -981,7 +981,7 @@ $(document).ready(function () {
 
 
         } catch (error) {
-            console.error('Error during form submission:', error);
+            console.error('[Submit] Error during form submission:', error);
             alert('There was an error processing your request. Please try again later.');
         } finally {
             SELECTORS.loader.hide();
@@ -993,7 +993,7 @@ $(document).ready(function () {
      */
     const handleOneWayTripChange = () => {
         if (SELECTORS.oneWayTripCheckbox.is(':checked')) {
-            console.log("One-way trip selected");
+            console.log("[Form] One-way trip selected");
             // Hide inbound slider and adjust display
             $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').hide();
             // Update the label text (support both old and new HTML structure)
@@ -1008,7 +1008,7 @@ $(document).ready(function () {
                 flatpickrInstance.setDate(selectedStartDate, true);
             }
         } else {
-            console.log("Return trip selected");
+            console.log("[Form] Return trip selected");
             // Show inbound slider and revert display
             $('#inbound-timeRangeSlider, #inbound-timeRangeDisplay').show();
             // Update the label text (support both old and new HTML structure)
@@ -1022,21 +1022,21 @@ $(document).ready(function () {
      */
     const handleDirectFlightChange = () => {
         if (SELECTORS.directFlightCheckbox.is(':checked')) {
-            console.log("Direct flights only enabled!");
+            console.log("[Form] Direct flights only enabled");
 
             // Disable the inputs and add the 'disabled-input' class
             SELECTORS.maxStopsInput.val('0').prop('disabled', true).addClass('disabled-input');
-            console.log("Max Stops:",SELECTORS.maxStopsInput.val());
-            console.log("Max Flight Duration before:",SELECTORS.maxFlightDurationInput.val());
+            console.log("[Form] Max Stops:", SELECTORS.maxStopsInput.val());
+            console.log("[Form] Max Flight Duration before:", SELECTORS.maxFlightDurationInput.val());
             SELECTORS.maxFlightDurationInput.val('').prop('disabled', true).addClass('disabled-input');
-            console.log("Max Flight Duration after:",SELECTORS.maxFlightDurationInput.val());
+            console.log("[Form] Max Flight Duration after:", SELECTORS.maxFlightDurationInput.val());
 
             // Remove the 'required' attribute when disabled
             SELECTORS.maxStopsInput.prop('required', false);
             SELECTORS.maxFlightDurationInput.prop('required', false);
 
         } else {
-            console.log("Direct flights only disabled!");
+            console.log("[Form] Direct flights only disabled");
 
             // Enable the inputs and remove the 'disabled-input' class
             SELECTORS.maxStopsInput.val('1').prop('disabled', false).removeClass('disabled-input');
@@ -1053,7 +1053,7 @@ $(document).ready(function () {
      * Handle changes in the flexible dates checkbox.
      */
     const handleFlexibleDatesChange = () => {
-        console.log('Flexible dates toggle changed.');
+        console.log('[Form] Flexible dates toggle changed');
         // Additional logic can be added here if needed
     };
 
@@ -1091,7 +1091,7 @@ $(document).ready(function () {
      * Handle the confirmation to track hotels.
      */
     const handleConfirmHotelTracker = () => {
-        console.log('User confirmed hotel tracking.');
+        console.log('[Modal] User confirmed hotel tracking');
         window.location.href = redirectUrl;  // Navigate to hotel site in current tab
     };
 
@@ -1100,7 +1100,7 @@ $(document).ready(function () {
      * Handle the "No" button click to reload the page.
      */
     const handleCancelHotelTracker = () => {
-        console.log('User declined hotel tracking. Reloading the page.');
+        console.log('[Modal] User declined hotel tracking, reloading page');
         window.location.href = 'https://flights.robotize.no/';  // Navigate to the original URL to refresh the form
     };
 
@@ -1109,7 +1109,7 @@ $(document).ready(function () {
      * Handle the "Ok" button click to reload the page.
      */
     const handleThankYouButton = () => {
-        console.log('User clicked OK. Reloading the page.');
+        console.log('[Modal] User clicked OK, reloading page');
         window.location.href = 'https://flights.robotize.no/';  // Navigate to the original URL to refresh the form
     };
 
@@ -1132,7 +1132,7 @@ $(document).ready(function () {
      */
     const toggleTooltip = (event) => {
         const tooltip = SELECTORS.tooltip;
-        console.log("Tooltip button clicked.");
+        console.log("[UI] Tooltip button clicked");
         tooltip.toggle();
         event.stopPropagation();
     };
@@ -1143,7 +1143,7 @@ $(document).ready(function () {
     const updatePriceBasedOnSelection = () => {
         // Get selected airlines from Choices.js instance
         const selectedAirlines = airlinesChoices ? airlinesChoices.getValue(true) : [];
-        console.log('Selected Airlines: ', selectedAirlines);
+        console.log('[Form] Selected airlines:', selectedAirlines);
 
         if (!globalTequilaResponse || !globalTequilaResponse.data) {
             return;
@@ -1166,10 +1166,10 @@ $(document).ready(function () {
             const lowestPrice = filteredFlights[0].price;
             const roundedPrice = Math.ceil(lowestPrice);
             SELECTORS.maxPricePerPerson.val(roundedPrice);
-            console.log('Updated the price to:',roundedPrice);
+            console.log('[Price] Updated price to:', roundedPrice);
         } else {
             SELECTORS.maxPricePerPerson.val('');
-            console.log('Updated the price to nothing');
+            console.log('[Price] Cleared price (no matching flights)');
 
         }
     };
@@ -1315,8 +1315,8 @@ $(document).ready(function () {
         }
 
         // Log the retrieved times for debugging
-        console.log('Outbound Times:', outboundTimes);
-        console.log('Inbound Times:', inboundTimes);
+        console.log('[Submit] Outbound times:', outboundTimes);
+        console.log('[Submit] Inbound times:', inboundTimes);
 
         return {
             price: {
@@ -1368,18 +1368,18 @@ $(document).ready(function () {
             
             // Apply URL parameters after data is loaded
             const queryParams = getQueryParams();
-            console.log(queryParams);
+            console.log('[Init] URL query params:', queryParams);
 
             // Check if a city is provided in the URL and fetch suggestions from the backend
             if (queryParams.city) {
                 const cityName = queryParams.city; // Get the city from the query parameters
-                console.log("City from URL:", cityName);
+                console.log("[Init] City from URL:", cityName);
 
                 // Send a request to your backend API with the city name
                 fetch(`/api/airport-suggestions?term=${cityName}&limit=10`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Backend Response:', data);
+                        console.log('[Init] Backend city lookup response:', data);
                         
                         // Ensure the response contains locations in the correct structure
                         if (data && data.data && data.data.locations && data.data.locations.length > 0) {
@@ -1389,16 +1389,16 @@ $(document).ready(function () {
                             if (cityData) {
                                 // Update the iataCodeTo field with the city data (formatted correctly)
                                 SELECTORS.iataCodeTo.val(`${cityData.code} - ${cityData.name} All Airports`).trigger('change');
-                                console.log('Updated city:', cityData.name);
+                                console.log('[Init] Updated city field:', cityData.name);
                             } else {
-                                console.log('No city data found in the locations.');
+                                console.log('[Init] No city data found in locations');
                             }
                         } else {
-                            console.log('No locations returned from the backend');
+                            console.log('[Init] No locations returned from backend');
                         }
                     })
                     .catch(error => {
-                        console.error('Error fetching city data:', error);
+                        console.error('[Init] Error fetching city data:', error);
                     });
             }
 
@@ -1415,10 +1415,10 @@ $(document).ready(function () {
                 // Update Flatpickr with the entire date range
                 flatpickrInstance.setDate([selectedStartDate, selectedEndDate]);
 
-                console.log('Updated depDate', depDate_From);
-                console.log('Updated returnDate', returnDate_From);
+                console.log('[Init] Updated depDate:', depDate_From);
+                console.log('[Init] Updated returnDate:', returnDate_From);
             } else {
-                console.log('Date parameters are missing in the URL');
+                console.log('[Init] Date parameters missing in URL');
             }
 
            // Fetch location info if currency is missing in the URL
@@ -1426,15 +1426,15 @@ $(document).ready(function () {
 
             // Check if currency is already in the URL
             if (!queryParams.currency) {
-                console.log("Currency not in the URL, updating from IP...");
+                console.log("[Init] Currency not in URL, updating from IP...");
 
                 // If currency is fetched from IP, set it in the input
                 if (currency) {
-                    console.log("Currency fetched from IP:", currency);
+                    console.log("[Init] Currency set from IP:", currency);
                     SELECTORS.currencyInput.val(currency).trigger('change');  // Set the currency input if needed
                 }
             } else {
-                console.log("Currency is already in the URL, skipping IP update...");
+                console.log("[Init] Currency already in URL, skipping IP update");
                 // Set the currency input based on the URL
                 SELECTORS.currencyInput.val(queryParams.currency).trigger('change');
             }
@@ -1445,11 +1445,11 @@ $(document).ready(function () {
 
             // Check if email is already in the URL
             if (queryParams.email) {
-                console.log("Email is in the URL, setting it in the email input...");
+                console.log("[Init] Email found in URL, setting input");
                 // Set the email input based on the URL
                 SELECTORS.emailInput.val(queryParams.email);
             } else {
-                console.log("Email is not in the URL");
+                console.log("[Init] Email not in URL");
             }
 
 
@@ -1468,7 +1468,7 @@ $(document).ready(function () {
             }
 
         } catch (error) {
-            console.error('Initialization error:', error);
+            console.error('[Init] Initialization error:', error);
         }
     };
 
@@ -1477,12 +1477,12 @@ $(document).ready(function () {
 
 
     window.addEventListener('load', () => {
-        console.log('Window has loaded!');
+        console.log('[Init] Window load complete');
         // Initialize Choices.js for airlines dropdown
         initializeChoices('Select airlines to exclude');
         // Initialize autocomplete
         initializeAutocomplete();
-        console.log('Autocomplete initialized!');
+        console.log('[Init] Autocomplete initialized');
     });
 
 });
