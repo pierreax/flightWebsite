@@ -16,6 +16,9 @@ $(document).ready(function () {
         loader: $('.loader'),
         maxStopsInput: $('#maxStops'),
         nbrPassengersInput: $('#nbrPassengers'),
+        travelersCount: $('#travelersCount'),
+        increaseTravelers: $('#increaseTravelers'),
+        decreaseTravelers: $('#decreaseTravelers'),
         maxFlightDurationInput: $('#maxFlightDuration'),
         oneWayTripCheckbox: $('#oneWayTrip'),
         directFlightCheckbox: $('#directFlight'),
@@ -1204,6 +1207,10 @@ $(document).ready(function () {
         // Attach event listener to advancedSettingsToggle
         SELECTORS.advancedSettingsToggle.on('click', handleAdvancedSettingsToggle);
 
+        // Attach event listeners to travelers +/- buttons
+        SELECTORS.increaseTravelers.on('click', () => updateTravelersCount(1));
+        SELECTORS.decreaseTravelers.on('click', () => updateTravelersCount(-1));
+
         // Close tooltip when clicking outside
         $(document).on('click', function (event) {
             if (!$(event.target).closest('#helpBtn, #tooltip').length) {
@@ -1212,6 +1219,16 @@ $(document).ready(function () {
         });
     };
 
+
+    /**
+     * Update the travelers count when +/- buttons are clicked.
+     */
+    const updateTravelersCount = (delta) => {
+        const currentVal = parseInt(SELECTORS.nbrPassengersInput.val()) || 1;
+        const newVal = Math.min(6, Math.max(1, currentVal + delta));
+        SELECTORS.nbrPassengersInput.val(newVal);
+        SELECTORS.travelersCount.text(newVal);
+    };
 
     /**
      * Update the currency suffix display when currency changes.

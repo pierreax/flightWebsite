@@ -342,6 +342,54 @@ form {
     box-shadow: var(--shadow-focus);
 }
 
+/* Travelers Counter Control */
+.travelers-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+}
+
+.travelers-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.travelers-btn:hover {
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+.travelers-btn:active {
+    background: var(--color-border-light);
+}
+
+.travelers-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 var(--space-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.travelers-display svg {
+    opacity: 0.7;
+}
+
 /* Hidden switches for backward compatibility */
 .form-group.switches {
     display: none;
@@ -396,7 +444,7 @@ form {
    ============================================ */
 .filters-grid {
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(4, auto);
     justify-content: center;
     gap: var(--space-sm);
 }
@@ -1311,6 +1359,7 @@ form {
 
     .explore-heading {
         padding: 0 var(--space-md);
+        text-align: center;
     }
 
     .explore-scroll {
@@ -1357,7 +1406,7 @@ form {
     }
 
     .filters-grid {
-        grid-template-columns: repeat(3, minmax(0, 100px));
+        grid-template-columns: repeat(2, minmax(0, 120px));
     }
 
     .filter-item select {
