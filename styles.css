@@ -1424,7 +1424,14 @@ form {
     }
 
     .option-chips {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: 6px;
+    }
+
+    .option-chips .chip,
+    .option-chips .travelers-control {
+        justify-self: center;
     }
 
     .chip-content {
