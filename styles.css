@@ -395,10 +395,10 @@ form {
    Filters Grid
    ============================================ */
 .filters-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
+    display: grid;
+    grid-template-columns: repeat(3, auto);
     justify-content: center;
+    gap: var(--space-sm);
 }
 
 .filter-item {
@@ -1357,14 +1357,7 @@ form {
     }
 
     .filters-grid {
-        display: grid;
         grid-template-columns: repeat(3, minmax(0, 100px));
-        justify-content: center;
-        gap: var(--space-sm);
-    }
-
-    .filter-item {
-        min-width: 0;
     }
 
     .filter-item select {
