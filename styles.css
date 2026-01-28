@@ -1314,12 +1314,15 @@ form {
     }
 
     .explore-scroll {
-        padding-left: var(--space-md);
-        padding-right: var(--space-md);
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 var(--space-md) var(--space-md);
+        overflow-x: visible;
     }
 
     .explore-card {
-        flex: 0 0 120px;
+        flex: 0 0 calc(50% - var(--space-sm));
+        max-width: 150px;
     }
 
     .hero {
