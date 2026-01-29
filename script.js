@@ -569,14 +569,16 @@ $(document).ready(function () {
      * @param {string} originCode - IATA code of the origin airport.
      */
     let lastExploreOrigin = '';
+    let lastExploreHadResults = false;
 
     const fetchTopDestinations = async (originCode) => {
         console.log('[Explore] fetchTopDestinations called with origin:', originCode);
-        if (originCode === lastExploreOrigin) {
+        if (originCode === lastExploreOrigin && lastExploreHadResults) {
             console.log('[Explore] Already showing results for this origin, skipping.');
             return;
         }
         lastExploreOrigin = originCode;
+        lastExploreHadResults = false;
         SELECTORS.exploreCards.empty();
         SELECTORS.exploreSection.hide();
         try {
@@ -590,13 +592,29 @@ $(document).ready(function () {
                 console.log('[Explore] Top destinations request failed');
                 return;
             }
-            const destinations = await response.json();
+            let destinations = await response.json();
             console.log('[Explore] Top destinations received:', destinations?.length || 0, 'results');
+
+            // Retry up to 3 times if no results (transient API issue)
+            if (!destinations || destinations.length === 0) {
+                for (let attempt = 1; attempt <= 3; attempt++) {
+                    console.log(`[Explore] No results, retrying (${attempt}/3)...`);
+                    await new Promise(r => setTimeout(r, 1000 * attempt));
+                    const retryResponse = await fetch(url);
+                    if (retryResponse.ok) {
+                        destinations = await retryResponse.json();
+                        console.log('[Explore] Retry received:', destinations?.length || 0, 'results');
+                        if (destinations && destinations.length > 0) break;
+                    }
+                }
+            }
+
             if (destinations && destinations.length > 0) {
+                lastExploreHadResults = true;
                 renderTopDestinations(destinations, originCode);
                 console.log('[Explore] Explore section rendered successfully');
             } else {
-                console.log('[Explore] No destinations returned from API');
+                console.log('[Explore] No destinations returned from API after retries');
             }
         } catch (error) {
             console.log('[Explore] Top destinations error:', error.message);
