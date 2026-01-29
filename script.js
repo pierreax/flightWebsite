@@ -598,17 +598,52 @@ $(document).ready(function () {
         SELECTORS.exploreCards.empty();
 
         destinations.forEach(dest => {
+            const formatShortDate = (dateStr) => {
+                if (!dateStr) return '';
+                const d = new Date(dateStr);
+                return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            };
+            const dateDisplay = dest.departureDate && dest.returnDate
+                ? `${formatShortDate(dest.departureDate)} - ${formatShortDate(dest.returnDate)}`
+                : '';
             const card = $(`
-                <div class="explore-card" data-city="${dest.cityCode}" data-name="${dest.cityName}">
+                <div class="explore-card" data-city="${dest.cityCode}" data-name="${dest.cityName}"
+                     data-departure="${dest.departureDate || ''}" data-return="${dest.returnDate || ''}"
+                     data-price="${dest.price}">
                     <div class="explore-card-city">${dest.cityName}</div>
                     <div class="explore-card-country">${dest.countryName}</div>
+                    ${dateDisplay ? `<div class="explore-card-dates">${dateDisplay}</div>` : ''}
                     <div class="explore-card-price">${dest.currency} ${dest.price}</div>
                 </div>
             `);
             card.on('click', function () {
                 const cityCode = $(this).data('city');
                 const cityName = $(this).data('name');
+                const departure = $(this).data('departure');
+                const returnDate = $(this).data('return');
+                const price = $(this).data('price');
+
+                // Set destination
                 SELECTORS.iataCodeTo.val(`${cityCode} - ${cityName} All Airports`).trigger('change');
+
+                // Set travel dates if available
+                if (departure && returnDate && flatpickrInstance) {
+                    const depDate = new Date(departure);
+                    const retDate = new Date(returnDate);
+                    flatpickrInstance.setDate([depDate, retDate], true);
+                    selectedStartDate = depDate;
+                    selectedEndDate = retDate;
+                    depDate_From = formatDate(selectedStartDate);
+                    depDate_To = formatDate(selectedStartDate);
+                    returnDate_From = formatDate(selectedEndDate);
+                    returnDate_To = formatDate(selectedEndDate);
+                }
+
+                // Set max price
+                if (price) {
+                    $('#maxPricePerPerson').val(price).trigger('input');
+                }
+
                 $('html, body').animate({ scrollTop: SELECTORS.iataCodeTo.offset().top - 100 }, 400);
             });
             SELECTORS.exploreCards.append(card);

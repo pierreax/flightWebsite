@@ -463,7 +463,9 @@ app.get('/api/topDestinations', async (req, res) => {
             cityCode: flight.cityCodeTo,
             countryName: flight.countryTo?.name || flight.countryTo || '',
             price: Math.ceil(flight.price),
-            currency: currency || 'NOK'
+            currency: currency || 'NOK',
+            departureDate: flight.local_departure?.split('T')[0] || '',
+            returnDate: flight.route?.length > 1 ? flight.route[flight.route.length - 1].local_departure?.split('T')[0] || '' : ''
         }));
 
         res.json(destinations);

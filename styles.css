@@ -1337,6 +1337,12 @@ form {
 .explore-card-country {
     font-size: var(--font-size-xs);
     color: var(--color-text-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.explore-card-dates {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
     margin-bottom: var(--space-sm);
 }
 
