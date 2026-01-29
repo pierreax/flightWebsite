@@ -882,6 +882,8 @@ $(document).ready(function () {
             const cabin = SELECTORS.cabinClassInput.val() || 'M';
             const cabinLabels = { M: 'Economy', W: 'Premium Economy', C: 'Business', F: 'First' };
             const cabinLabel = cabinLabels[cabin] || cabin;
+            const maxPrice = SELECTORS.maxPricePerPerson.val();
+            const currency = SELECTORS.currencyInput.val() || 'NOK';
             const email = SELECTORS.emailInput.val();
 
             const emailBody = `
@@ -930,9 +932,13 @@ $(document).ready(function () {
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="2" style="padding:6px 0;">
+                        <td width="50%" style="padding:6px 0;">
                           <p style="margin:0;font-size:12px;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;">Cabin Class</p>
                           <p style="margin:2px 0 0;font-size:15px;color:#202124;font-weight:600;">${cabinLabel}</p>
+                        </td>
+                        <td width="50%" style="padding:6px 0;">
+                          <p style="margin:0;font-size:12px;color:#5f6368;text-transform:uppercase;letter-spacing:0.5px;">Price Limit</p>
+                          <p style="margin:2px 0 0;font-size:15px;color:#202124;font-weight:600;">${maxPrice ? `${maxPrice} ${currency}` : 'Not set'}</p>
                         </td>
                       </tr>
                     </table>
