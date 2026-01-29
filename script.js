@@ -329,6 +329,11 @@ $(document).ready(function () {
      * Initialize the autocomplete functionality for IATA code and City fields.
      */
     const initializeAutocomplete = () => {
+        // Select all text on focus so users can immediately type to replace the value
+        $(".autocomplete-iata").on('focus', function () {
+            this.select();
+        });
+
         $(".autocomplete-iata").autocomplete({
             appendTo: "body",
             source: function (request, response) {
