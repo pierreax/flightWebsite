@@ -389,6 +389,12 @@ $(document).ready(function () {
                     : SELECTORS.iataCodeTo;
 
                 iataCodeField.val(label);
+
+                // Fetch explore destinations immediately when a From origin is selected
+                if ($(this).attr('id') === 'iataCodeFrom') {
+                    handleFromFieldChange();
+                }
+
                 return false; // Prevent default selection behavior
             }
         });
@@ -562,8 +568,17 @@ $(document).ready(function () {
      * Fetch top destinations from the user's detected airport.
      * @param {string} originCode - IATA code of the origin airport.
      */
+    let lastExploreOrigin = '';
+
     const fetchTopDestinations = async (originCode) => {
         console.log('[Explore] fetchTopDestinations called with origin:', originCode);
+        if (originCode === lastExploreOrigin) {
+            console.log('[Explore] Already showing results for this origin, skipping.');
+            return;
+        }
+        lastExploreOrigin = originCode;
+        SELECTORS.exploreCards.empty();
+        SELECTORS.exploreSection.hide();
         try {
             const curr = SELECTORS.currencyInput.val() || 'NOK';
             const params = new URLSearchParams({ origin: originCode, currency: curr });
