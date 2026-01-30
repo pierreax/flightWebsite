@@ -330,8 +330,12 @@ $(document).ready(function () {
      */
     const initializeAutocomplete = () => {
         // Select all text on focus so users can immediately type to replace the value
+        // Uses setSelectionRange with requestAnimationFrame for iOS Safari compatibility
         $(".autocomplete-iata").on('focus', function () {
-            this.select();
+            const input = this;
+            requestAnimationFrame(() => {
+                input.setSelectionRange(0, input.value.length);
+            });
         });
 
         $(".autocomplete-iata").autocomplete({
