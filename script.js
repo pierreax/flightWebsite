@@ -812,6 +812,7 @@ $(document).ready(function () {
             // Enable the Submit button and show sticky bar
             SELECTORS.submitFormButton.prop('disabled', false);
             SELECTORS.stickyBar.addClass('visible');
+            $('body').addClass('sticky-bar-open');
             SELECTORS.stickyBarStatus.text('Ready to track');
         } else {
             const cabinVal = SELECTORS.cabinClassInput.val();

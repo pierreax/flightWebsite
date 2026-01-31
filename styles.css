@@ -876,13 +876,19 @@ form {
    ============================================ */
 .submit-section {
     padding-top: var(--space-md);
+    padding-bottom: var(--space-md);
 }
 
 .input-group-stack {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-    margin-bottom: var(--space-lg);
+    margin-bottom: 0;
+}
+
+/* Reserve space so sticky bar doesn't cover the price input */
+body.sticky-bar-open {
+    padding-bottom: 120px;
 }
 
 /* Floating Label */
