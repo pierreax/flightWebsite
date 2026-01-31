@@ -1000,8 +1000,7 @@ body.sticky-bar-open {
 
 .sticky-bar-row input[type="email"] {
     flex: 1;
-    height: 48px;
-    padding: 0 var(--space-md);
+    padding: var(--space-md);
     border: 2px solid var(--color-border);
     border-radius: var(--radius-md);
     font-size: 16px;
@@ -1023,10 +1022,16 @@ body.sticky-bar-open {
 .sticky-bar-row .btn-submit {
     margin-top: 0;
     width: auto;
-    height: 48px;
-    padding: 0 var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
     white-space: nowrap;
     flex-shrink: 0;
+}
+
+.sticky-bar-hint {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: var(--space-sm);
 }
 
 @media (max-width: 480px) {
@@ -1034,14 +1039,8 @@ body.sticky-bar-open {
         flex-direction: column;
     }
 
-    .sticky-bar-row input[type="email"] {
-        height: 52px;
-        font-size: var(--font-size-lg);
-    }
-
     .sticky-bar-row .btn-submit {
         width: 100%;
-        height: 52px;
     }
 }
 

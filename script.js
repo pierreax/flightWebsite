@@ -814,6 +814,11 @@ $(document).ready(function () {
             SELECTORS.stickyBar.addClass('visible');
             $('body').addClass('sticky-bar-open');
             SELECTORS.stickyBarStatus.text('Ready to track');
+
+            // Scroll to the price field so the user sees it
+            $('html, body').animate({
+                scrollTop: SELECTORS.maxPricePerPerson.offset().top - 100
+            }, 400);
         } else {
             const cabinVal = SELECTORS.cabinClassInput.val();
             const cabinHint = cabinVal !== 'M'
