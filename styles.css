@@ -1025,8 +1025,14 @@ form {
         flex-direction: column;
     }
 
+    .sticky-bar-row input[type="email"] {
+        height: 52px;
+        font-size: var(--font-size-lg);
+    }
+
     .sticky-bar-row .btn-submit {
         width: 100%;
+        height: 52px;
     }
 }
 
