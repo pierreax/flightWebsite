@@ -974,6 +974,7 @@ body.sticky-bar-open {
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
     padding: var(--space-md) var(--space-lg);
+    padding-bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
     transform: translateY(100%);
     transition: transform 0.3s ease;
 }
@@ -1003,12 +1004,14 @@ body.sticky-bar-open {
     padding: 0 var(--space-md);
     border: 2px solid var(--color-border);
     border-radius: var(--radius-md);
-    font-size: var(--font-size-base);
+    font-size: 16px;
     font-family: inherit;
     color: var(--color-text);
     background: var(--color-surface);
     transition: var(--transition-fast);
     min-width: 0;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .sticky-bar-row input[type="email"]:focus {
