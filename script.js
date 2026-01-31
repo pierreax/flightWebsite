@@ -344,7 +344,7 @@ $(document).ready(function () {
             appendTo: "body",
             source: function (request, response) {
                 const term = request.term;
-                if (term.length < 3) return; // Trigger only after 3 or more characters
+                if (term.length < 3) { response([]); return; }
 
                 $.ajax({
                     url: '/api/airport-suggestions',
@@ -1541,6 +1541,10 @@ $(document).ready(function () {
             }
 
 
+            // Initialize autocomplete early so typing works immediately
+            initializeAutocomplete();
+            console.log('[Init] Autocomplete initialized');
+
             // Attach event listeners
             attachAllEventListeners();
 
@@ -1568,9 +1572,6 @@ $(document).ready(function () {
         console.log('[Init] Window load complete');
         // Initialize Choices.js for airlines dropdown
         initializeChoices('Select airlines to exclude');
-        // Initialize autocomplete
-        initializeAutocomplete();
-        console.log('[Init] Autocomplete initialized');
     });
 
 });
