@@ -310,7 +310,7 @@
                 </div>
             </section>
 
-            <!-- Price & Email -->
+            <!-- Price -->
             <section class="form-section submit-section">
                 <div class="input-group-stack">
                     <div class="form-group floating-label">
@@ -318,18 +318,7 @@
                         <label for="maxPricePerPerson">Maximum price per person</label>
                         <span class="input-suffix" id="currencySuffix">NOK</span>
                     </div>
-                    <div class="form-group floating-label">
-                        <input type="email" id="email" name="email" placeholder=" " required>
-                        <label for="email">Email for notifications</label>
-                    </div>
                 </div>
-                <button type="submit" id="submitFormButton" class="btn-submit" disabled>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 2L11 13"/>
-                        <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
-                    </svg>
-                    Start tracking
-                </button>
             </section>
         </form>
     </main>
@@ -338,6 +327,21 @@
     <footer class="footer">
         <p>Powered by <a href="https://www.robotize.no" target="_blank">Robotize</a></p>
     </footer>
+
+    <!-- Sticky Bottom Bar -->
+    <div id="stickyBar" class="sticky-bar">
+        <div class="sticky-bar-status">Ready to track</div>
+        <div class="sticky-bar-row">
+            <input type="email" id="email" name="email" placeholder="Email for notifications" required>
+            <button type="submit" id="submitFormButton" class="btn-submit" form="sheetyForm" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L11 13"/>
+                    <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+                </svg>
+                Start tracking
+            </button>
+        </div>
+    </div>
 
     <!-- Hotel Tracking Modal -->
     <div class="modal fade" id="hotelTrackingModal" tabindex="-1" aria-labelledby="hotelTrackingModalLabel" aria-hidden="true">

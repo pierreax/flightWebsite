@@ -911,11 +911,6 @@ form {
     font-variant-numeric: tabular-nums;
 }
 
-/* Email input - no suffix needed */
-.floating-label input#email {
-    padding-right: var(--space-md);
-}
-
 .floating-label input:hover {
     border-color: var(--color-text-muted);
 }
@@ -959,6 +954,80 @@ form {
     color: var(--color-text-secondary);
     pointer-events: none;
     user-select: none;
+}
+
+/* Sticky Bottom Bar */
+.sticky-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    padding: var(--space-md) var(--space-lg);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.sticky-bar.visible {
+    transform: translateY(0);
+}
+
+.sticky-bar-status {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+    text-align: center;
+}
+
+.sticky-bar-row {
+    display: flex;
+    gap: var(--space-sm);
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.sticky-bar-row input[type="email"] {
+    flex: 1;
+    height: 48px;
+    padding: 0 var(--space-md);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-family: inherit;
+    color: var(--color-text);
+    background: var(--color-surface);
+    transition: var(--transition-fast);
+    min-width: 0;
+}
+
+.sticky-bar-row input[type="email"]:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
+}
+
+.sticky-bar-row .btn-submit {
+    margin-top: 0;
+    width: auto;
+    height: 48px;
+    padding: 0 var(--space-lg);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+    .sticky-bar-row {
+        flex-direction: column;
+    }
+
+    .sticky-bar-row .btn-submit {
+        width: 100%;
+    }
 }
 
 /* Submit Button */

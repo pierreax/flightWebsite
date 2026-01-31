@@ -49,6 +49,8 @@ $(document).ready(function () {
         exploreSection: $('#exploreSection'),
         exploreHeading: $('#exploreHeading'),
         exploreCards: $('#exploreCards'),
+        stickyBar: $('#stickyBar'),
+        stickyBarStatus: $('#stickyBar .sticky-bar-status'),
     };
 
     const API_ENDPOINTS = {
@@ -807,8 +809,10 @@ $(document).ready(function () {
             const uniqueAirlines = [...new Set(tequilaResponse.data.flatMap(flight => flight.airlines))];
             updateExcludedAirlinesDropdown(uniqueAirlines);
 
-            // Enable the Submit button since a matching flight was found
+            // Enable the Submit button and show sticky bar
             SELECTORS.submitFormButton.prop('disabled', false);
+            SELECTORS.stickyBar.addClass('visible');
+            SELECTORS.stickyBarStatus.text('Ready to track');
         } else {
             const cabinVal = SELECTORS.cabinClassInput.val();
             const cabinHint = cabinVal !== 'M'
