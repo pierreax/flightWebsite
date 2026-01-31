@@ -1029,7 +1029,7 @@ body.sticky-bar-open {
 
 .sticky-bar-hint {
     font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
+    color: var(--color-success);
     text-align: center;
     margin-top: var(--space-sm);
 }
